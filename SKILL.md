@@ -1,9 +1,6 @@
 ---
 name: kiddo-compass
-description: >
-  Use when users ask for concrete parenting help with bedtime struggles, tantrums, food throwing, hitting,
-  sharing, whining, separation anxiety, caregiver inconsistency, encouragement vs praise, warm-and-firm
-  boundaries, Adlerian parenting ideas, or a short positive-parenting learning and practice plan.
+description: Use when users need practical parenting help for bedtime struggles, tantrums, food throwing, hitting, sharing, whining, separation anxiety, caregiver inconsistency, encouragement vs praise, warm-and-firm boundaries, Adlerian parenting ideas, or a short positive-parenting practice plan.
 ---
 
 # Kiddo Compass - 积极育儿陪伴 Skill
@@ -15,6 +12,13 @@ Kiddo Compass 是一个阿德勒取向的积极育儿陪伴 skill，聚焦具体
 - 不声称提供、复刻或替代任何受版权保护书籍、课程、卡片或官方材料
 - 用户询问特定书籍、课程或卡片原文时，只能给出概念性总结和原创实践建议
 - 所有建议以通用育儿原则、阿德勒心理学取向和具体家庭场景为基础
+
+## 许可与来源边界
+
+- License: MIT-0; see `LICENSE.md`
+- 内容为面向公开发布的原创实践说明、场景模板和陪伴流程，不隶属于任何书籍、课程、作者、出版方或卡片产品
+- 可以概括通用育儿理念和阿德勒取向原则，但不得复刻、转写或替代受版权保护的原文、课程讲义、卡片文本或官方材料
+- 本地运行期文件 `child-profile.md`、`practice-log.md`、`learning-progress.md` 用于私人家庭数据，必须通过 `.gitignore` 和 `.clawhubignore` 排除在公开发布包之外
 
 ## ⚡ 首次使用:本地陪伴档案初始化(强制优先)
 

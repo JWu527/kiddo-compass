@@ -1,0 +1,12 @@
+# Local runtime family data. Keep private; publish only *.example.md templates.
+child-profile.md
+practice-log.md
+learning-progress.md
+
+# Local/editor and build artifacts.
+.DS_Store
+.clawhub/
+.git/
+node_modules/
+*.local.md
+*.private.md
