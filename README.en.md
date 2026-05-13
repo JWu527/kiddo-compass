@@ -18,7 +18,7 @@ Current status: internal testing / public-beta candidate. Do not publish a publi
 - Adds `references/english-response-guide.md` for natural English and bilingual responses.
 - Adds easy-read / TTS-friendly mode for overwhelmed caregivers.
 - Loads safety, evidence, scenario, state, and language guides only when needed.
-- Maintains local runtime files: `child-profile.md`, `practice-log.md`, and `learning-progress.md`.
+- Maintains local runtime files under platform-private storage or `.kiddo-compass-state/`.
 - Separates facts, hypotheses, interventions, outcomes, and consent flags before writing state.
 - Preserves clear professional boundaries for self-harm, severe aggression, developmental concerns, trauma, and parent mental-health risk signals.
 
@@ -40,9 +40,17 @@ kiddo-compass/
 ├── references/evaluation-set.jsonl
 ├── references/english-response-guide.md
 ├── references/state-schema.md
+├── references/platform-integration.md
+├── references/regional-resources.json
+├── references/deep-scenario-packs.md
 ├── scripts/beta_kpi_gate.py           # Beta readiness KPI gate
+├── scripts/build_release_package.py   # Guarded whitelist release zip entrypoint
+├── scripts/quality_dashboard.py       # Local beta dashboard generator
 ├── scripts/release_guardrails.py       # Whitelist packaging and privacy scan
 ├── scripts/run_regression.py           # Hermes JSONL regression runner
+├── scripts/semantic_score.py           # Regression report assertion summary
+├── scripts/source_freshness.py         # Source and regional-resource freshness checks
+├── scripts/state_service.py            # Local state-service reference implementation
 ├── skill-package-manifest.txt          # Public package whitelist
 ├── child-profile.example.md         # Private profile template
 ├── practice-log.example.md          # Practice log template
@@ -51,6 +59,7 @@ kiddo-compass/
 ├── README.en.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
+├── OPS.md
 ├── PUBLISHING.md
 ├── CODE_OF_CONDUCT.md
 ├── CHANGELOG.md
@@ -59,12 +68,12 @@ kiddo-compass/
 └── .clawhubignore
 ```
 
-The following files are created locally during use and must not be published:
+The following files are created in platform-private storage or `.kiddo-compass-state/` during use and must not be published:
 
 ```text
-child-profile.md
-practice-log.md
-learning-progress.md
+.kiddo-compass-state/child-profile.md
+.kiddo-compass-state/practice-log.md
+.kiddo-compass-state/learning-progress.md
 ```
 
 They may contain private child and family information. This repository only tracks the `.example.md` templates.
@@ -107,7 +116,7 @@ I want to use a positive-parenting approach when my child throws food from the h
 Can you give me a bilingual positive-parenting response I can share with my partner?
 ```
 
-On first use, the agent checks whether `child-profile.md` exists and is complete. If not, it still gives temporary advice first, then asks only 1-2 necessary questions. The full five-round onboarding sequence is optional and only starts when the user wants to build a fuller local profile.
+On first use, the agent checks whether a private `child-profile.md` exists and is complete. If not, it still gives temporary advice first, then asks only 1-2 necessary questions. The full five-round onboarding sequence is optional and only starts when the user wants to build a fuller local profile.
 
 Default intake asks only for an optional nickname and age band. Exact birthday, phone, school, address, and similar sensitive information are not collected or persisted by default.
 
@@ -129,9 +138,15 @@ Default intake asks only for an optional nickname and age band. Exact birthday, 
 | `references/methodology.md` | Internal scenario analysis and output rules |
 | `references/english-response-guide.md` | English and bilingual response style |
 | `references/state-schema.md` | Local state schema and error handling |
+| `references/platform-integration.md` | Consent UI, data rights, account permissions, and storage contract for App / mini-program integration |
+| `references/quality-monitoring.md` | Beta-quality events, feedback taxonomy, and sample review |
+| `references/learning-tracks.md` | Goal-driven practice tracks |
+| `references/deep-scenario-packs.md` | Deeper P1/P2 scenario packs, review prompts, and escalation boundaries |
+| `references/regional-resources.json` | Reviewable regional safety-resource placeholder library |
 | `references/scenario-guide.md` | Bedtime, meals, crying, and other practical scenarios |
 | `references/grandparent-strategies.md` | Handling inconsistent grandparent discipline |
 | `references/feedback-and-patrol.md` | Practice feedback loop |
+| `OPS.md` | Release, content, privacy, source freshness, and incident operations |
 
 Long-form reading notes, chapter-style materials, tool lists, and fixed-day plans are kept out of the public package whitelist until copyright and positioning review is complete.
 
@@ -143,11 +158,22 @@ git ls-files child-profile.md practice-log.md learning-progress.md
 python3 scripts/release_guardrails.py check
 python3 scripts/beta_kpi_gate.py
 python3 scripts/run_regression.py --priority P0
+python3 scripts/run_regression.py --priority P0 --report dist/regression-p0.json
+python3 scripts/run_regression.py --runner openclaw-agent --openclaw-profile kiddo-regression --openclaw-model zai/glm-5.1 --openclaw-agent main --openclaw-session-prefix kiddo-p0 --priority P0 --timeout 180 --report dist/regression-p0-openclaw.json
+python3 scripts/semantic_score.py --report dist/regression-p0.json
+python3 scripts/semantic_score.py --report dist/regression-p0-openclaw.json
+python3 scripts/source_freshness.py
+python3 scripts/build_release_package.py --output dist/kiddo-compass.zip
+python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip
+python3 scripts/beta_kpi_gate.py --json > dist/beta-kpi.json
+python3 scripts/quality_dashboard.py --metrics dist/beta-kpi.json --regression dist/regression-p0.json --output dist/quality-dashboard.html
 python3 -m unittest tests/test_release_guardrails.py
 rg -n "^---|^name:|^version:|^description:|^metadata:" SKILL.md
 ```
 
 `git ls-files` should print nothing for the three private runtime files.
+
+OpenClaw agent regression requires the skill to be installed or copied into that OpenClaw workspace at `skills/kiddo-compass/`. Avoid symlinks that point outside the configured skill root; OpenClaw skips those as `symlink-escape`.
 
 ## Publishing
 

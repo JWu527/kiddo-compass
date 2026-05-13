@@ -1,0 +1,22 @@
+{
+  "schema_version": "1",
+  "reviewed_at": "2026-05-13",
+  "regions": [
+    {
+      "region": "generic",
+      "language": "zh",
+      "verified": true,
+      "reviewed_at": "2026-05-13",
+      "emergency_guidance": "Use local emergency medical services, nearest hospital emergency department, or trusted local child protection/domestic violence resources.",
+      "publishable_phone_numbers": []
+    },
+    {
+      "region": "generic",
+      "language": "en",
+      "verified": true,
+      "reviewed_at": "2026-05-13",
+      "emergency_guidance": "Use local emergency services, nearest emergency department, or trusted local child protection/domestic violence resources.",
+      "publishable_phone_numbers": []
+    }
+  ]
+}

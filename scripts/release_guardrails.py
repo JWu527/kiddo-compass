@@ -50,6 +50,16 @@ SKIP_STATIC_LINT_PATHS = {
     "references/evaluation-set.jsonl",
 }
 
+MAX_DESCRIPTION_CHARS = 220
+REQUIRED_FRONTMATTER_FIELDS = {
+    "name",
+    "version",
+    "description",
+    "metadata.openclaw.skillKey",
+    "metadata.openclaw.emoji",
+    "metadata.openclaw.homepage",
+}
+
 
 @dataclass(frozen=True)
 class LintRule:
@@ -90,7 +100,7 @@ LINT_RULES = (
     ),
     LintRule(
         "unverified-hotline-number",
-        re.compile(r"(热线|电话|拨打|打).{0,10}\d{5,}"),
+        re.compile(r"(热线|电话|拨打|打)[^\n\d]{0,40}\d{5,}"),
         "Do not publish unverified hotline or agency numbers.",
     ),
 )
@@ -138,6 +148,13 @@ def _is_blocked_package_path(path: str) -> bool:
     return any(pattern.search(path) for pattern in BLOCKED_PACKAGE_PATTERNS)
 
 
+def _strip_archive_root(path: str) -> str:
+    parts = Path(path).parts
+    if len(parts) > 1 and parts[0] == "kiddo-compass":
+        return Path(*parts[1:]).as_posix()
+    return path
+
+
 def build_package_file_list(root: Path, manifest_entries: Iterable[str]) -> list[str]:
     package_files: list[str] = []
     for entry in manifest_entries:
@@ -158,6 +175,71 @@ def build_package_file_list(root: Path, manifest_entries: Iterable[str]) -> list
         else:
             package_files.append(normalized)
     return sorted(dict.fromkeys(package_files))
+
+
+def _extract_frontmatter(text: str) -> tuple[str | None, str]:
+    if not text.startswith("---\n"):
+        return None, text
+    end = text.find("\n---", 4)
+    if end == -1:
+        return None, text
+    return text[4:end], text[end + 4 :]
+
+
+def _frontmatter_values(frontmatter: str) -> dict[str, str]:
+    values: dict[str, str] = {}
+    in_metadata = False
+    in_openclaw = False
+    for raw_line in frontmatter.splitlines():
+        line = raw_line.rstrip()
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        if not line.startswith(" "):
+            in_metadata = stripped == "metadata:"
+            in_openclaw = False
+            if ":" in stripped:
+                key, raw_value = stripped.split(":", 1)
+                value = raw_value.strip().strip('"').strip("'")
+                if value:
+                    values[key] = value
+            continue
+        if in_metadata and line.startswith("  ") and not line.startswith("    "):
+            in_openclaw = stripped == "openclaw:"
+            continue
+        if in_metadata and in_openclaw and line.startswith("    ") and ":" in stripped:
+            key, raw_value = stripped.split(":", 1)
+            value = raw_value.strip().strip('"').strip("'")
+            values[f"metadata.openclaw.{key}"] = value
+    return values
+
+
+def validate_skill_frontmatter(path: Path) -> list[str]:
+    errors: list[str] = []
+    frontmatter, _ = _extract_frontmatter(path.read_text(encoding="utf-8"))
+    if frontmatter is None:
+        return [f"{path}: missing YAML frontmatter"]
+
+    values = _frontmatter_values(frontmatter)
+    for field in sorted(REQUIRED_FRONTMATTER_FIELDS):
+        if not values.get(field):
+            errors.append(f"{path}: missing frontmatter field {field}")
+
+    description = values.get("description", "")
+    if len(description) > MAX_DESCRIPTION_CHARS:
+        errors.append(
+            f"{path}: description is {len(description)} chars; budget is {MAX_DESCRIPTION_CHARS}"
+        )
+    if not description.startswith("Use when "):
+        errors.append(f"{path}: description must start with 'Use when '")
+
+    if values.get("metadata.openclaw.skillKey") != values.get("name"):
+        errors.append(f"{path}: metadata.openclaw.skillKey must match name")
+
+    homepage = values.get("metadata.openclaw.homepage", "")
+    if homepage and not homepage.startswith(("https://", "http://")):
+        errors.append(f"{path}: metadata.openclaw.homepage must be an absolute URL")
+    return errors
 
 
 def _line_has_negative_context(line: str) -> bool:
@@ -195,6 +277,30 @@ def scan_paths(paths: Iterable[Path], *, answer_mode: bool = False) -> list[dict
         text = path.read_text(encoding="utf-8")
         findings.extend(lint_text(path.as_posix(), text, answer_mode=answer_mode))
     return findings
+
+
+def inspect_package_archive(path: Path) -> list[str]:
+    errors: list[str] = []
+    with zipfile.ZipFile(path) as archive:
+        for member in archive.infolist():
+            normalized = _strip_archive_root(member.filename.rstrip("/"))
+            if _is_blocked_package_path(normalized):
+                errors.append(f"blocked private path in archive: {member.filename}")
+            if member.is_dir() or Path(normalized).suffix not in {".md", ".jsonl"}:
+                continue
+            try:
+                text = archive.read(member).decode("utf-8")
+            except UnicodeDecodeError:
+                errors.append(f"non-utf8 text file in archive: {member.filename}")
+                continue
+            if normalized in SKIP_STATIC_LINT_PATHS:
+                continue
+            for finding in lint_text(member.filename, text):
+                errors.append(
+                    f"{finding['path']}:{finding['line']}: "
+                    f"{finding['rule']}: {finding['match']}"
+                )
+    return errors
 
 
 def validate_regression_jsonl(path: Path) -> list[str]:
@@ -238,6 +344,7 @@ def check_release(root: Path) -> int:
     package_files = build_package_file_list(root, manifest)
 
     errors: list[str] = []
+    errors.extend(validate_skill_frontmatter(root / "SKILL.md"))
     for rel in package_files:
         if _is_blocked_package_path(rel):
             errors.append(f"blocked private path in package list: {rel}")
@@ -281,6 +388,12 @@ def write_package(root: Path, output: Path) -> int:
     with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         for rel in package_files:
             archive.write(root / rel, arcname=f"kiddo-compass/{rel}")
+    archive_errors = inspect_package_archive(output)
+    if archive_errors:
+        print("Release archive inspection failed:", file=sys.stderr)
+        for error in archive_errors:
+            print(f"- {error}", file=sys.stderr)
+        return 1
     print(f"wrote {output} with {len(package_files)} files")
     return 0
 
@@ -292,6 +405,8 @@ def main(argv: list[str] | None = None) -> int:
 
     subparsers.add_parser("check", help="Run release privacy and packaging checks.")
     subparsers.add_parser("list", help="Print whitelisted package files.")
+    inspect_parser = subparsers.add_parser("inspect", help="Inspect an already-built release zip.")
+    inspect_parser.add_argument("archive", type=Path)
     package_parser = subparsers.add_parser("package", help="Write a zip package from the whitelist.")
     package_parser.add_argument("--output", type=Path, default=Path("dist/kiddo-compass.zip"))
 
@@ -304,6 +419,15 @@ def main(argv: list[str] | None = None) -> int:
         manifest = load_manifest(root / "skill-package-manifest.txt")
         for rel in build_package_file_list(root, manifest):
             print(rel)
+        return 0
+    if args.command == "inspect":
+        errors = inspect_package_archive(args.archive)
+        if errors:
+            print("Release archive inspection failed:", file=sys.stderr)
+            for error in errors:
+                print(f"- {error}", file=sys.stderr)
+            return 1
+        print(f"release archive ok: {args.archive}")
         return 0
     if args.command == "package":
         return write_package(root, args.output)

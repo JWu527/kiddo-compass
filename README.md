@@ -18,7 +18,7 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的积极育儿陪伴 skill
 - 支持英文和中英双语积极育儿回答。
 - 增加 easy-read / TTS 友好模式，适合崩溃现场和朗读。
 - 根据用户意图按需读取安全、证据、场景、状态和语言指南。
-- 自动维护本地 `child-profile.md`、`practice-log.md` 和 `learning-progress.md`。
+- 自动维护平台私有 storage 或 `.kiddo-compass-state/` 下的 `child-profile.md`、`practice-log.md` 和 `learning-progress.md`。
 - 写状态前区分 facts、hypotheses、interventions、outcomes 和 consent_flags。
 - 对自伤、严重攻击、发展迟缓、疑似神经发育问题等高风险信号保留专业边界。
 
@@ -40,9 +40,17 @@ kiddo-compass/
 ├── references/evaluation-set.jsonl
 ├── references/english-response-guide.md
 ├── references/state-schema.md
+├── references/platform-integration.md
+├── references/regional-resources.json
+├── references/deep-scenario-packs.md
 ├── scripts/beta_kpi_gate.py           # beta readiness KPI gate
+├── scripts/build_release_package.py   # 白名单 release zip 入口
+├── scripts/quality_dashboard.py       # 本地 beta dashboard 生成器
 ├── scripts/release_guardrails.py       # 白名单打包和隐私扫描
 ├── scripts/run_regression.py           # Hermes JSONL 回归 runner
+├── scripts/semantic_score.py           # 回归报告语义/断言结果汇总
+├── scripts/source_freshness.py         # 来源和地区资源巡检
+├── scripts/state_service.py            # 本地状态服务参考实现
 ├── skill-package-manifest.txt          # 公开包文件白名单
 ├── child-profile.example.md         # 私人画像模板
 ├── practice-log.example.md          # 实践日志模板
@@ -51,6 +59,7 @@ kiddo-compass/
 ├── README.en.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
+├── OPS.md
 ├── PUBLISHING.md
 ├── CODE_OF_CONDUCT.md
 ├── CHANGELOG.md
@@ -59,12 +68,12 @@ kiddo-compass/
 └── .clawhubignore
 ```
 
-运行期会生成下列本地私人文件。公开 artifact 必须通过 `skill-package-manifest.txt` 白名单生成，不能直接压缩整个工作区：
+运行期会在平台私有 storage 或 `.kiddo-compass-state/` 中生成下列私人文件。公开 artifact 必须通过 `skill-package-manifest.txt` 白名单生成，不能直接压缩整个工作区：
 
 ```text
-child-profile.md
-practice-log.md
-learning-progress.md
+.kiddo-compass-state/child-profile.md
+.kiddo-compass-state/practice-log.md
+.kiddo-compass-state/learning-progress.md
 ```
 
 ## 安装
@@ -135,9 +144,15 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 | `references/methodology.md` | 场景分析主框架和输出规则 |
 | `references/english-response-guide.md` | 英文和中英双语回应风格 |
 | `references/state-schema.md` | 本地状态 schema 与错误处理 |
+| `references/platform-integration.md` | App / 小程序接入的 consent UI、数据权利、账号权限和存储接口契约 |
+| `references/quality-monitoring.md` | 公测质量事件、反馈分类和周报抽样 |
+| `references/learning-tracks.md` | 目标驱动学习路径 |
+| `references/deep-scenario-packs.md` | P1/P2 深层场景包、复盘问题和升级边界 |
+| `references/regional-resources.json` | 可巡检的地区安全资源占位库 |
 | `references/scenario-guide.md` | 睡前、吃饭、哭闹等场景实操 |
 | `references/grandparent-strategies.md` | 祖辈管教不一致场景 |
 | `references/feedback-and-patrol.md` | 实践反馈和巡检闭环 |
+| `OPS.md` | release owner、content owner、privacy owner、来源巡检和事故处置 |
 
 仓库中保留的读书/学习笔记、章节式资料、工具清单和固定天数计划不进入公开发布白名单，需完成版权与定位审查后再决定是否公开。
 
@@ -150,10 +165,21 @@ git status --short
 python3 scripts/release_guardrails.py check
 python3 scripts/beta_kpi_gate.py
 python3 scripts/run_regression.py --priority P0
+python3 scripts/run_regression.py --priority P0 --report dist/regression-p0.json
+python3 scripts/run_regression.py --runner openclaw-agent --openclaw-profile kiddo-regression --openclaw-model zai/glm-5.1 --openclaw-agent main --openclaw-session-prefix kiddo-p0 --priority P0 --timeout 180 --report dist/regression-p0-openclaw.json
+python3 scripts/semantic_score.py --report dist/regression-p0.json
+python3 scripts/semantic_score.py --report dist/regression-p0-openclaw.json
+python3 scripts/source_freshness.py
+python3 scripts/build_release_package.py --output dist/kiddo-compass.zip
+python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip
+python3 scripts/beta_kpi_gate.py --json > dist/beta-kpi.json
+python3 scripts/quality_dashboard.py --metrics dist/beta-kpi.json --regression dist/regression-p0.json --output dist/quality-dashboard.html
 python3 -m unittest tests/test_release_guardrails.py
 rg -n "child-profile.md|practice-log.md|learning-progress.md" .gitignore .clawhubignore README.md SKILL.md
 rg -n "^---|^name:|^version:|^description:|^metadata:" SKILL.md
 ```
+
+OpenClaw agent 回归需要先把 skill 安装或复制到对应 OpenClaw workspace 的 `skills/kiddo-compass/` 下。不要用指向仓库外部的 symlink；OpenClaw 会因 `symlink-escape` 跳过该 skill。
 
 发布前还应确认：
 

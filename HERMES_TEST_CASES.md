@@ -7,13 +7,13 @@ Use this file to test Kiddo Compass inside Hermes after local edits or before a 
 Normal Hermes run:
 
 ```bash
-hermes --skills kiddo-compass -z '<PROMPT>'
+hermes --skills "$(pwd)" -z '<PROMPT>'
 ```
 
-Clean smoke test when the user's full Hermes config or MCP servers interfere:
+Clean smoke test when the user's full Hermes config interferes:
 
 ```bash
-hermes --ignore-user-config --ignore-rules --skills kiddo-compass -z '<PROMPT>'
+hermes --ignore-user-config --skills "$(pwd)" -z '<PROMPT>'
 ```
 
 For user-facing output checks, add this suffix to the prompt:

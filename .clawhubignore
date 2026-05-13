@@ -2,6 +2,8 @@
 child-profile.md
 practice-log.md
 learning-progress.md
+.kiddo-compass-state/
+.tmp-product-closure-test/
 
 # Local VCS and ClawHub install metadata.
 .git/

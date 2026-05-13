@@ -1,7 +1,7 @@
 ---
 name: kiddo-compass
 version: 0.4.2
-description: Use when users need practical parenting help for bedtime struggles, tantrums, food throwing, hitting, sharing, whining, separation anxiety, caregiver inconsistency, encouragement vs praise, warm-and-firm boundaries, bilingual parenting support, safety triage, age/scenario/caregiver routing, or a short positive-parenting practice plan.
+description: Use when users need practical, safety-aware positive-parenting help for child behavior, caregiver alignment, bilingual responses, optional local state management, or short practice plans.
 metadata:
   openclaw:
     skillKey: kiddo-compass
@@ -28,7 +28,7 @@ Kiddo Compass 当前定位是 public-beta candidate：方向可行，但在发�
 - License: MIT-0; see `LICENSE.md`
 - 内容为面向公开发布的原创实践说明、场景模板和陪伴流程，不隶属于任何书籍、课程、作者、出版方或卡片产品
 - 可以概括通用育儿理念和阿德勒取向原则，但不得复刻、转写或替代受版权保护的原文、课程讲义、卡片文本或官方材料
-- 本地运行期文件 `child-profile.md`、`practice-log.md`、`learning-progress.md` 用于私人家庭数据，公开发布包必须使用 `skill-package-manifest.txt` 白名单打包，只能包含对应 `.example.md` 示例
+- 本地运行期文件必须放在平台私有 storage 或 `.kiddo-compass-state/`，例如 `child-profile.md`、`practice-log.md`、`learning-progress.md`。公开发布包必须使用 `skill-package-manifest.txt` 白名单打包，只能包含对应 `.example.md` 示例。
 
 ### 主流程顺序（强制）
 
@@ -54,8 +54,20 @@ Kiddo Compass 当前定位是 public-beta candidate：方向可行，但在发�
 - 默认只问可选昵称、年龄段、照护模式和场景标签。
 - 精确生日只在确有发育阈值判断需要时才解释原因并让用户自愿提供；默认只保存推导出的年龄段。
 - 不默认持久化精确生日、电话、学校、地址、医疗识别信息或其他可识别家庭信息。
+- 即使用户主动提供真实姓名、精确生日、学校、电话或地址，也先降敏为昵称、年龄段和场景标签；不要复述这些识别信息，不要说"可以记录"，除非用户在明确用途说明后再次确认保存。
 - 如果用户尚未建立 `child-profile.md`，也要先给临时建议，不把建档作为首答前置条件。
-- 运行期文件只在本地维护：`child-profile.md`、`practice-log.md`、`learning-progress.md`。开源仓库只提交 `.example.md`。
+- 运行期文件只在私有 state root 维护，例如 `.kiddo-compass-state/child-profile.md`、`.kiddo-compass-state/practice-log.md`、`.kiddo-compass-state/learning-progress.md`。开源仓库只提交 `.example.md`。
+
+### 用户要求记录识别信息时的固定分支
+
+如果用户说"帮我记录"并同时给出真实姓名、精确生日、学校、电话或地址，必须这样处理：
+
+1. 先说明："我先不直接记录这些可识别信息。"
+2. 只给降敏版本："我可以只记：称呼/昵称、年龄段、当前育儿场景。"
+3. 请求确认："你确认只按这个降敏版本记录吗？"
+4. 年龄段只能写 `0-12 个月`、`12-24 个月`、`24-36 个月`、`3-5 岁` 或 `6 岁以上`，不要写出生年份、月份或日期。
+5. 照护模式只能写"家人照护 / 托班或幼儿园 / 学校 / 多照护者"这类泛化标签，不写机构名。
+6. 不复述原始生日、学校、电话或地址，不说"已经记录"或"可以记录"。
 
 ## Language Mode / 语言模式
 
@@ -86,6 +98,8 @@ Kiddo Compass 当前定位是 public-beta candidate：方向可行，但在发�
 
 → 写入 child-profile.md 基本信息
 
+第一轮只能使用上面这句或等价说法。禁止问"什么时候来到这个世界"、"什么时候出生"、"出生时间"、"完整生日"或"精确生日"。
+
 **第二轮:了解成长环境**
 > "宝贝平时主要由谁陪伴成长呢?
 > 是在家里由家人照顾,还是已经开始上托班或幼儿园了?"
@@ -111,13 +125,13 @@ Kiddo Compass 当前定位是 public-beta candidate：方向可行，但在发�
 ### 生成的本地档案文件
 
 ```
-skills/kiddo-compass/
-├── child-profile.md       # 孩子画像 + 实践记录(自动维护)
-├── practice-log.md        # 实践日记(用户口述,Agent 整理写入)
-└── learning-progress.md   # 可选学习进度
+private-state-root/
+├── child-profile.md       # ChildProfile + confirmed facts
+├── practice-log.md        # Case / Intervention / Outcome
+└── learning-progress.md   # LearningTrack
 ```
 
-这些文件包含家庭和孩子的私人信息,属于本地运行期数据。开源仓库只应提交对应的 `.example.md` 模板,不要提交真实画像或实践日志。
+这些文件包含家庭和孩子的私人信息,属于本地运行期数据。默认 state root 是平台提供的私有存储；没有平台存储时才使用 `.kiddo-compass-state/`。开源仓库只应提交对应的 `.example.md` 模板,不要提交真实画像或实践日志。
 
 ### 画像更新规则
 
@@ -175,6 +189,7 @@ skills/kiddo-compass/
 | 对话模式规范 | `references/dialogue-modes.md` |
 | 睡眠/喂养/如厕/攻击/分离/屏幕等证据校准 | `references/evidence-matrix.md` |
 | 场景卡片标准结构 | `references/scenario-template.md` |
+| 深度计划、复盘、P1/P2 场景包 | `references/deep-scenario-packs.md` |
 | 祖辈管教不一致 | `references/grandparent-strategies.md` |
 | 睡前/吃饭具体场景 | `references/scenario-guide.md` |
 | 和家人分享 | `references/sharing-note.md` |
@@ -182,8 +197,13 @@ skills/kiddo-compass/
 | 英文或双语回答 | `references/english-response-guide.md` |
 | easy-read / TTS / 无障碍文本 | `references/accessibility-i18n.md` |
 | 状态写入、事实/推断分离 | `references/state-schema.md` |
+| App / 小程序 consent UI、数据权利和账号权限 | `references/platform-integration.md` |
+| 目标驱动学习路径 | `references/learning-tracks.md` |
+| 质量事件、反馈分类、周报抽样 | `references/quality-monitoring.md` |
+| 地区安全资源占位与巡检 | `references/regional-resources.json` |
 | 回归评测 | `references/evaluation-set.md` |
 | 公测覆盖审计 | `PUBLIC_BETA_COVERAGE.md` |
+| 发布治理、来源巡检、事故处置 | `OPS.md` |
 
 ### Step 7:更新本地档案
 根据反馈更新实践记录。只有用户确认的信息可以写入 facts；模型判断写入 hypotheses；方法写入 interventions；反馈写入 outcomes。详细闭环规则见 `references/state-schema.md` 和 `references/feedback-and-patrol.md`。

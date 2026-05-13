@@ -7,6 +7,7 @@ README.en.md
 CONTRIBUTING.md
 SECURITY.md
 PUBLISHING.md
+OPS.md
 CHANGELOG.md
 CODE_OF_CONDUCT.md
 LICENSE
@@ -33,10 +34,20 @@ references/english-response-guide.md
 references/methodology.md
 references/state-schema.md
 references/feedback-and-patrol.md
+references/quality-monitoring.md
+references/learning-tracks.md
+references/deep-scenario-packs.md
+references/platform-integration.md
+references/regional-resources.json
 references/evaluation-set.md
 references/evaluation-set.jsonl
 
 scripts/__init__.py
 scripts/beta_kpi_gate.py
+scripts/build_release_package.py
+scripts/quality_dashboard.py
 scripts/release_guardrails.py
 scripts/run_regression.py
+scripts/semantic_score.py
+scripts/source_freshness.py
+scripts/state_service.py

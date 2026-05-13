@@ -20,12 +20,12 @@ Kiddo Compass 是本地运行的育儿知识 skill。它不需要 API key、外�
 
 ## 隐私边界
 
-以下文件必须只存在于用户本地：
+以下文件必须只存在于用户本地的私有 state root（平台私有 storage 或 `.kiddo-compass-state/`）：
 
 ```text
-child-profile.md
-practice-log.md
-learning-progress.md
+.kiddo-compass-state/child-profile.md
+.kiddo-compass-state/practice-log.md
+.kiddo-compass-state/learning-progress.md
 ```
 
 维护者和贡献者应只提交：
@@ -48,8 +48,10 @@ learning-progress.example.md
 git status --short --ignored
 python3 scripts/release_guardrails.py check
 python3 scripts/release_guardrails.py list
+python3 scripts/build_release_package.py --output dist/kiddo-compass.zip
+python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip
 rg -n "token|api[_ -]?key|password|secret|手机号|电话|地址|身份证|真实姓名" .
-rg -n "child-profile.md|practice-log.md|learning-progress.md" .gitignore .clawhubignore
+rg -n "child-profile.md|practice-log.md|learning-progress.md|.kiddo-compass-state" .gitignore .clawhubignore
 ```
 
 如果使用 ClawHub 发布，请先通过 `skill-package-manifest.txt` 生成白名单包，确认私人运行期文件没有进入发布包。不要直接压缩整个工作区。

@@ -32,12 +32,12 @@
 
 ## 本地私人文件
 
-以下文件是运行期私人数据，只能本地存在，不得提交：
+以下文件是运行期私人数据，只能在平台私有 storage 或 `.kiddo-compass-state/` 中存在，不得提交：
 
 ```text
-child-profile.md
-practice-log.md
-learning-progress.md
+.kiddo-compass-state/child-profile.md
+.kiddo-compass-state/practice-log.md
+.kiddo-compass-state/learning-progress.md
 ```
 
 如果需要展示结构，请修改对应的 `.example.md` 模板。
@@ -47,14 +47,14 @@ learning-progress.md
 ```bash
 git status --short
 python3 scripts/release_guardrails.py check
-python3 -m unittest tests/test_release_guardrails.py
+python3 -m unittest tests/test_release_guardrails.py tests/test_beta_kpi_gate.py
 rg -n "^---|^name:|^version:|^description:|^metadata:" SKILL.md
 ```
 
 如果修改了发布相关内容，也请检查：
 
 ```bash
-rg -n "child-profile.md|practice-log.md|learning-progress.md" .gitignore .clawhubignore
+rg -n "child-profile.md|practice-log.md|learning-progress.md|.kiddo-compass-state" .gitignore .clawhubignore
 ```
 
 ## 文档风格

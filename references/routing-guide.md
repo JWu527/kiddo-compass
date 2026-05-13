@@ -13,6 +13,51 @@ Ask only when the answer changes safety or the advice:
 
 If missing, give a temporary answer and ask one concise follow-up.
 
+## Intent taxonomy
+
+Use one primary intent and at most one secondary intent.
+
+| Intent | Trigger | Default mode |
+| --- | --- | --- |
+| `safety_help` | harm, self-harm, shaking, abuse, severe regression, medical/development concern | `crisis-support` or yellow support |
+| `scene_help` | a concrete parenting moment: sleep, feeding, aggression, separation, screens, toileting | `ordinary-advice` |
+| `learning_mode` | asks why, principles, plan, or practice path | `deep-learning` |
+| `tool_lookup` | asks for a specific script, card, or checklist | `ordinary-advice` or `family-sharing` |
+| `family_alignment` | partner, grandparent, teacher, nanny, or multiple caregivers need consistency | `family-sharing` |
+| `profile_manage` | asks to create, view, correct, export, delete, or anonymize records | `full-intake` or state operation |
+| `feedback_update` | reports that a prior intervention helped, partly helped, or failed | `review` |
+
+## Slot schema
+
+| Slot | Values | Required when |
+| --- | --- | --- |
+| `age_band` | `0-12m`, `12-24m`, `24-36m`, `3-5y`, `6+y`, `unknown` | Advice would change by developmental expectation. |
+| `scene_type` | `sleep`, `feeding`, `toileting`, `aggression`, `separation`, `screens`, `siblings`, `public-meltdown`, `caregiver-alignment`, `other` | Always infer if possible. |
+| `caregiver_role` | `parent`, `grandparent`, `teacher`, `nanny`, `multi-caregiver`, `unknown` | Needed for tone and feasible action. |
+| `risk_level` | `red`, `yellow`, `green`, `unknown` | Always set after safety triage. |
+| `pattern_frequency` | `first-time`, `repeated`, `escalating`, `already-tried`, `unknown` | Needed for escalation and review. |
+| `language_mode` | `zh`, `en`, `bilingual`, `tts` | Needed for visible output shape. |
+
+## Route precedence
+
+1. `safety_help` beats every other intent.
+2. `feedback_update` beats a fresh generic suggestion because the user already tried something.
+3. `profile_manage` runs only after answering urgent scene or safety needs.
+4. `family_alignment` changes output into a shareable card and omits private logs.
+5. `learning_mode` can expand only after safety boundaries are handled.
+6. `scene_help` is the default for ordinary green cases.
+
+## Decision table
+
+| Primary signal | Required slots | Load | Output rule |
+| --- | --- | --- | --- |
+| Immediate harm or adult may hurt child | `risk_level=red` | `safety-triage.md` | Safety action first; no ordinary discipline advice. |
+| Development, medical, or months-long escalating concern | `risk_level=yellow`, `scene_type` | `safety-triage.md`, `evidence-matrix.md` | Recommend evaluation; give while-waiting support. |
+| Green concrete scene, missing age | `scene_type`, `age_band=unknown` | `evidence-matrix.md`, matching scenario file | Give temporary advice, then ask one age-band question. |
+| User asks to build profile | `profile_manage`, `language_mode` | `state-schema.md` | Ask optional nickname and age band first; no exact birthday by default. |
+| User reports tried advice | `feedback_update`, `pattern_frequency=already-tried` | `state-schema.md`, `feedback-and-patrol.md` | Name outcome, adjust intervention, ask one key detail. |
+| Message for partner/grandparent/teacher | `family_alignment`, `caregiver_role` | `sharing-note.md`, `grandparent-strategies.md` when relevant | Share one rule and exact sentence; omit private records. |
+
 ## Age routing
 
 | Age band | Default stance | Avoid |

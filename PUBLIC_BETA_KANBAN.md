@@ -21,23 +21,24 @@
 
 | 阶段 | 状态 | ID | 卡片 | 当前产出 |
 | --- | --- | --- | --- | --- |
-| P0 发布安全闸门 | Done (internal beta gate) | H-01 | 去种子化复核 | `.gitignore` / `.clawhubignore` 保护运行期文件；`skill-package-manifest.txt` 白名单打包；`scripts/release_guardrails.py` 做隐私与红线扫描 |
-| P0 发布安全闸门 | Partial | H-07 | 安全分诊前置 | `references/safety-triage.md`，并接入 `SKILL.md` 主流程；仍缺地区资源位和安全规则运营更新机制 |
+| P0 发布安全闸门 | Done (internal beta gate) | H-01 | 去种子化复核 | `.gitignore` / `.clawhubignore` 保护运行期文件和 `.kiddo-compass-state/`；`skill-package-manifest.txt` 白名单打包；`scripts/build_release_package.py` + `scripts/release_guardrails.py inspect` 做 artifact 级扫描 |
+| P0 发布安全闸门 | Done (skill beta gate) | H-07 | 安全分诊前置 | `references/safety-triage.md` 接入 `SKILL.md` 主流程；`references/regional-resources.json`、`scripts/source_freshness.py` 和 `OPS.md` 补地区资源位与运营更新机制 |
 | P0 发布安全闸门 | Done (skill beta) | H-03 | 渐进式建档 | `SKILL.md` 改为先答后补档，完整五轮建档变为可选路径；补档后需让用户确认事实 |
 | P1 内容稳定层 | Done (skill beta) | H-05 | 证据矩阵 | `references/evidence-matrix.md` 覆盖 30 个高频主题；长文笔记更深的来源标签留作后续增强 |
-| P1 内容稳定层 | Partial | H-06 | 年龄-场景-照护者路由 | `references/routing-guide.md` 已定义三维路由；仍需更多路由样例和回归验证 |
-| P1 内容稳定层 | Partial | M-01 | 场景模板标准化 | `references/scenario-template.md` 扩展为 20 个公测场景卡；仍需深写内容包、来源标签和变体测试 |
-| P2 质量与回归 | Done (skill beta gate) | H-09 | 轻量评测集 | `references/evaluation-set.jsonl` + `scripts/run_regression.py` + `scripts/beta_kpi_gate.py` 覆盖 P0/P1 回归数据、模式/语言覆盖和静态 KPI gate；真实埋点、仪表盘和周报延期到平台层 |
+| P1 内容稳定层 | Done (skill beta gate) | H-06 | 年龄-场景-照护者路由 | `references/routing-guide.md` 已定义三维路由、intent taxonomy、slot schema、优先级和决策表；`scripts/run_regression.py` + `scripts/semantic_score.py` 提供语义断言入口 |
+| P1 内容稳定层 | Done (skill beta) | M-01 | 场景模板标准化 | `references/scenario-template.md` 扩展为 20 个公测场景卡；`references/deep-scenario-packs.md` 补睡眠、喂养、如厕、攻击、分离和祖辈协同的深层包 |
+| P2 质量与回归 | Done (skill beta gate) | H-09 | 轻量评测集 | `references/evaluation-set.jsonl` + `scripts/run_regression.py` + `scripts/beta_kpi_gate.py` + `scripts/semantic_score.py` + `.github/workflows/public-beta.yml` 覆盖 P0/P1 回归数据、required/forbidden regex、模式/语言覆盖、计划产物检查、静态 KPI gate 和 CI 门禁；真实埋点延期到平台层 |
+| P2 质量与回归 | Done (skill beta) | KD-009 | 监控与反馈闭环 | `references/quality-monitoring.md` 定义事件 schema、反馈分类、周报抽样和 release metrics；`scripts/quality_dashboard.py` 生成本地静态 dashboard |
 | P2 质量与回归 | Done (skill beta) | - | 发布检查清单 | `PUBLISHING.md` 补充公测版检查命令 |
 | P3 体验增强 | Done (text beta) | M-02 | 低认知负荷输出 | `references/dialogue-modes.md` 和 `references/accessibility-i18n.md` 明确 easy-read / TTS、中文、英文和双语模板；UI 可访问性和可用性测试延期 |
 | P3 体验增强 | Partial | M-03 | 家庭协同卡片 | `references/scenario-template.md` 增加家庭规则卡和祖辈沟通卡；共享权限和 co-parent 视图延期 |
-| Parking Lot | Deferred | H-02 / H-04 / H-08 | 同意 UI、结构化状态服务、平台存储抽象 | 等进入 App / 小程序阶段再设计 |
-| Parking Lot | Deferred | M-04 / M-05 / L-01 | 目标驱动学习、商业化、专家网络、社区 | 不进入当前 skill 公测范围 |
+| Parking Lot | Contract done / Platform deferred | H-02 / H-04 / H-08 | 同意 UI、结构化状态服务、平台存储抽象 | `references/platform-integration.md` 与 `scripts/state_service.py` 已给 consent、数据权利、角色权限和本地状态服务契约；真正 UI、账号、权限和多用户隔离进入 App / 小程序阶段实现 |
+| Parking Lot | Done (skill beta) / Deferred | M-04 / M-05 / L-01 | 目标驱动学习、商业化、专家网络、社区 | `references/learning-tracks.md` 与 `references/deep-scenario-packs.md` 已补目标驱动学习和深场景内容；商业化、专家网络、社区不进入当前 skill 公测范围 |
 
 ## 后续版本建议
 
-- `0.4.x`：把 20 个公测场景卡补上更细的证据标签、年龄差异和更多失败后路径。
-- `0.5.x`：把 JSONL 回归接入语义评分 harness。
-- `1.0.0`：冻结公测版触发、分诊、路由、评测规则，发布稳定版。
+- `0.4.x`：继续补更多深场景变体和人工抽样记录。
+- `0.5.x`：把 JSONL 回归接入真实 model-graded semantic harness。
+- `1.0.0`：在目标平台完成 consent UI、数据权利、账号权限和线上监控后冻结稳定版。
 
 完整覆盖度见 `PUBLIC_BETA_COVERAGE.md`。

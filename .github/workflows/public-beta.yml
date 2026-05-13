@@ -1,0 +1,41 @@
+name: Public Beta Gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  guardrails:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Run release guardrails
+        run: python3 scripts/release_guardrails.py check
+
+      - name: Run beta KPI gate
+        run: python3 scripts/beta_kpi_gate.py
+
+      - name: Build release package
+        run: python3 scripts/build_release_package.py --output dist/kiddo-compass.zip
+
+      - name: Inspect release package
+        run: python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip
+
+      - name: Score regression report when present
+        run: |
+          if [ -f dist/regression-p0.json ]; then
+            python3 scripts/semantic_score.py --report dist/regression-p0.json
+          else
+            echo "dist/regression-p0.json not present; skipping semantic score in CI"
+          fi

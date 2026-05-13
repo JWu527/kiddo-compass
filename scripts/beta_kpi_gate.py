@@ -94,7 +94,7 @@ def compute_metrics(root: Path) -> dict[str, object]:
     }
 
 
-def evaluate(metrics: dict[str, object]) -> list[str]:
+def evaluate(metrics: dict[str, object], root: Path | None = None) -> list[str]:
     failures: list[str] = []
     if int(metrics["evidence_topics"]) < 30:
         failures.append("evidence_topics must be >= 30")
@@ -110,7 +110,151 @@ def evaluate(metrics: dict[str, object]) -> list[str]:
         failures.append(f"missing required languages: {metrics['missing_required_languages']}")
     if int(metrics["privacy_static_findings"]) != 0:
         failures.append("privacy_static_findings must be 0")
+    if root is not None:
+        failures.extend(validate_planned_work_artifacts(root))
     return failures
+
+
+def _file_contains(path: Path, needles: list[str]) -> list[str]:
+    if not path.exists():
+        return [f"missing {path.name}"]
+    text = path.read_text(encoding="utf-8")
+    return [f"{path}: missing {needle}" for needle in needles if needle not in text]
+
+
+def validate_planned_work_artifacts(root: Path) -> list[str]:
+    checks: list[str] = []
+    checks.extend(
+        _file_contains(
+            root / ".github" / "workflows" / "public-beta.yml",
+            [
+                "python3 -m unittest discover -s tests -p 'test_*.py'",
+                "python3 scripts/release_guardrails.py check",
+                "python3 scripts/beta_kpi_gate.py",
+                "python3 scripts/build_release_package.py --output dist/kiddo-compass.zip",
+                "python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip",
+                "python3 scripts/semantic_score.py --report dist/regression-p0.json",
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
+            root / "references" / "state-schema.md",
+            [
+                "Household",
+                "ChildProfile",
+                "Case",
+                "Intervention",
+                "Outcome",
+                "ConsentLog",
+                "LearningTrack",
+                "schema_version",
+                "user_confirmed",
+                "assistant_inferred",
+                "view/export/correct/delete/anonymize",
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
+            root / "references" / "routing-guide.md",
+            [
+                "Intent taxonomy",
+                "Slot schema",
+                "Route precedence",
+                "Decision table",
+                "scene_help",
+                "profile_manage",
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
+            root / "references" / "quality-monitoring.md",
+            [
+                "Event schema",
+                "Feedback taxonomy",
+                "Weekly sample review",
+                "incident_escalated",
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
+            root / "references" / "learning-tracks.md",
+            [
+                "Goal-driven tracks",
+                "sleep",
+                "feeding",
+                "toileting",
+                "aggression",
+                "separation",
+                "grandparent-alignment",
+                "progress_state",
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
+            root / "references" / "platform-integration.md",
+            [
+                "Consent UI",
+                "Data Rights UI",
+                "role",
+                "create_profile",
+                "Every write must append a ConsentLog entry",
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
+            root / "references" / "deep-scenario-packs.md",
+            [
+                "sleep",
+                "feeding",
+                "toileting",
+                "aggression",
+                "separation",
+                "grandparent-alignment",
+                "review prompt",
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
+            root / "references" / "regional-resources.json",
+            [
+                '"reviewed_at"',
+                '"verified"',
+                '"publishable_phone_numbers"',
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
+            root / "OPS.md",
+            [
+                "release owner",
+                "content owner",
+                "privacy owner",
+                "Incident playbook",
+                "Source freshness",
+                "GitHub Actions",
+                "Quality dashboard",
+                "Rollback",
+            ],
+        )
+    )
+    for script in [
+        "build_release_package.py",
+        "quality_dashboard.py",
+        "semantic_score.py",
+        "source_freshness.py",
+        "state_service.py",
+    ]:
+        if not (root / "scripts" / script).exists():
+            checks.append(f"missing scripts/{script}")
+    return checks
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -119,8 +263,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
 
-    metrics = compute_metrics(args.root.resolve())
-    failures = evaluate(metrics)
+    root = args.root.resolve()
+    metrics = compute_metrics(root)
+    failures = evaluate(metrics, root)
     if args.json:
         print(json.dumps({"metrics": metrics, "failures": failures}, ensure_ascii=False, indent=2))
     else:

@@ -11,13 +11,29 @@
 - `references/state-schema.md`：本地状态 facts / hypotheses / interventions / outcomes / consent_flags 结构和错误处理规则。
 - `references/evaluation-set.jsonl`：P0/P1 可执行回归数据格式。
 - `references/dialogue-modes.md` 和 `references/accessibility-i18n.md`：对话模式、中文/英文/双语和 TTS 友好模板。
+- `scripts/build_release_package.py`：统一白名单 release zip 入口，并在打包后检查实际 artifact。
+- `references/quality-monitoring.md`、`references/learning-tracks.md` 和 `OPS.md`：补齐质量事件、目标驱动学习、owner、来源巡检和事故处置流程。
+- `.github/workflows/public-beta.yml`：把单元测试、release guardrails、beta KPI、白名单打包、artifact inspect 和 regression scoring 接入 GitHub Actions。
+- `references/platform-integration.md`、`scripts/state_service.py`：补 App / 小程序 consent UI、数据权利、角色权限和本地状态服务参考实现。
+- `references/regional-resources.json`、`scripts/source_freshness.py`：补地区安全资源占位库和来源巡检门禁。
+- `references/deep-scenario-packs.md`、`scripts/semantic_score.py`、`scripts/quality_dashboard.py`：补 P1/P2 深场景包、回归报告断言汇总和本地 beta dashboard。
+- `scripts/run_regression.py`：增加 OpenClaw infer / OpenClaw agent runner，支持 profile、model、agent 和逐 case session 前缀，作为 Hermes 不可用时的 P0 回归 fallback。
 
 ### Changed
 
+- `SKILL.md` description 压缩到 prompt 预算内，长触发词改由 README 和 routing docs 承接。
 - 渐进式建档默认只问可选昵称和年龄段，不再询问出生时间；精确生日仅在发育阈值判断确有需要且用户主动提供时使用。
+- 运行态数据边界改为平台私有 storage 或 `.kiddo-compass-state/`，skill 根目录只保留示例模板。
+- `references/state-schema.md` 升级为 Household / ChildProfile / Case / Intervention / Outcome / ConsentLog / LearningTrack schema，并补充查看、导出、更正、删除和匿名化操作。
+- `references/routing-guide.md` 增加 intent taxonomy、slot schema、route precedence 和 decision table。
+- `scripts/run_regression.py` 默认加载当前仓库路径的 skill，避免误测已安装副本；同时识别 provider/API 失败、支持 required regex 和 JSON 报告。
 - `references/evidence-matrix.md` 扩展到 30 个高频主题，并补充年龄段、证据等级、来源类别、reviewed_at、适用边界和升级阈值。
+- `references/chapter-03-birth-order.md` 与 `references/chapter-04-misbehavior.md` 将高风险定性表述改成非诊断、非定型的启发式镜头。
 - 安全分诊补充诊断请求、攻击/自伤、睡眠、语言和如厕退行阈值；HEARTBEAT 巡检降级为可选集成。
 - README 和发布文档明确当前为内部测试 / public-beta candidate，公开发布必须通过白名单包和 P0 回归。
+- `scripts/beta_kpi_gate.py` 扩展为检查 CI、平台契约、深场景包、地区资源、状态服务、dashboard 和来源巡检脚本。
+- `PUBLIC_BETA_COVERAGE.md` 和 `PUBLIC_BETA_KANBAN.md` 将剩余缺口重新区分为 skill beta 已覆盖、平台契约已覆盖和真实 App / 小程序延期项。
+- `references/evaluation-set.jsonl` 增强英文诊断、中文建档和热线红线断言，拦截内部过程话术、中文混入英文答案和未验证热线号码。
 
 ## 0.4.2 - 2026-05-13
 
