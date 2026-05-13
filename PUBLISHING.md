@@ -10,12 +10,13 @@
 4. 检查 `.clawhubignore` 是否覆盖运行期私人文件。
 5. 检查没有真实孩子、家庭、联系方式或密钥信息。
 6. 抽样跑 `references/evaluation-set.md`，确认安全分诊、渐进建档和中英文路由符合预期。
+7. 对照 `PUBLIC_BETA_COVERAGE.md`，确认本次发布没有把 `Partial` 或 `Deferred` 项误写成已完成。
 
 ```bash
 git status --short --ignored
 git ls-files child-profile.md practice-log.md learning-progress.md
 ruby -ryaml -e 's=File.read("SKILL.md"); fm=s.match(/\A---\n(.*?)\n---/m)[1]; data=YAML.safe_load(fm); abort("missing skill metadata") unless data["name"] && data["description"] && data["version"] && data.dig("metadata","openclaw","skillKey"); puts "frontmatter ok"'
-ruby -e 'Dir["*.md"].each { |f| File.read(f).scan(/\[[^\]]+\]\(([^)]+)\)/).flatten.each { |link| next if link =~ /\Ahttps?:/; target=link.split("#",2)[0]; next if target.empty?; abort("missing #{target} referenced from #{f}") unless File.exist?(target) } }; puts "markdown local links ok"'
+ruby -e 'Dir["**/*.md"].each { |f| File.read(f).scan(/\[[^\]]+\]\(([^)]+)\)/).flatten.each { |link| next if link =~ /\Ahttps?:/; target=link.split("#",2)[0]; next if target.empty?; path=File.expand_path(target, File.dirname(f)); abort("missing #{target} referenced from #{f}") unless File.exist?(path) } }; puts "markdown local links ok"'
 rg -n "真实姓名[:：]\\S|精确生日[:：]\\S|手机号[:：]?\\s*[0-9]|电话[:：]?\\s*[0-9]|地址[:：]\\S|学校[:：]\\S|token\\s*=|api[_-]?key\\s*=|password\\s*=|secret\\s*=" .
 ```
 
@@ -48,8 +49,8 @@ clawhub login
 clawhub skill publish . \
   --slug kiddo-compass \
   --name "Kiddo Compass" \
-  --version 0.3.0 \
-  --changelog "Add public beta safety triage, routing, evidence calibration, scenario templates, and evaluation set." \
+  --version 0.4.0 \
+  --changelog "Add deep research coverage matrix, recalibrate public beta kanban, expand scenario cards, and soften unsupported absolute wording." \
   --tags latest,parenting,positive-discipline,bilingual,public-beta
 ```
 
@@ -59,8 +60,8 @@ clawhub skill publish . \
 clawhub publish . \
   --slug kiddo-compass \
   --name "Kiddo Compass" \
-  --version 0.3.0 \
-  --changelog "Add public beta safety triage, routing, evidence calibration, scenario templates, and evaluation set." \
+  --version 0.4.0 \
+  --changelog "Add deep research coverage matrix, recalibrate public beta kanban, expand scenario cards, and soften unsupported absolute wording." \
   --tags latest,parenting,positive-discipline,bilingual,public-beta
 ```
 

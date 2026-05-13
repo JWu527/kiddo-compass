@@ -1,6 +1,6 @@
 ---
 name: kiddo-compass
-version: 0.3.0
+version: 0.4.0
 description: >
   Kiddo Compass 是面向父母和照顾者的中英双语正面管教(Positive Discipline)育儿顾问与知识库。基于简·尼尔森《正面管教》全书笔记、阿德勒心理学基础、52个工具卡、场景实操指南、30天学习计划、安全分诊、年龄场景路由和证据校准层。
   适用于:(1) 任何育儿场景的应对策略分析(孩子不睡觉、扔食物、发脾气、不分享、打人、拖延等);
@@ -61,6 +61,7 @@ Kiddo Compass 的公测版目标是先给家长一条能马上使用、边界清
 - 信息不足时：最多追问 1-2 个必要问题，例如年龄段、危险程度、是否持续发生。
 - 明确说明："我先按你给的信息给一个临时做法，补充年龄/场景后我可以再帮你调准。"
 - 用户愿意继续时，才进入完整建档。
+- 每次补档后，用 1-3 条项目符号复述"我会先这样记录"，请用户确认这是事实；不要把系统推断写成用户事实。
 
 ### 可选 5 轮完整建档
 
@@ -111,6 +112,7 @@ skills/kiddo-compass/
 - 用户描述育儿场景 → 追加 practice-log.md
 - 用户反馈方法效果 → 更新实践记录
 - 用户完成学习 → 更新 learning-progress.md
+- 用户补充或纠正画像 → 先复述事实并获得确认，再写入本地记录
 - 详细规则见 `references/feedback-and-patrol.md`
 
 ---
@@ -127,7 +129,7 @@ skills/kiddo-compass/
 读取 `references/routing-guide.md`。对高频场景读取 `references/evidence-matrix.md`，确认年龄适用性、官方共识和转介阈值。
 
 ### Step 4:按方法论分析
-读取 `references/methodology.md`,严格按 6 步框架走:
+读取 `references/methodology.md`，优先按 6 步框架做内部分析:
 1. 行为解码(四个错误目的)
 2. 管教前三问
 3. 三步应对法(共情→平复→坚定)
@@ -137,7 +139,7 @@ skills/kiddo-compass/
 
 ### Step 5：输出给用户
 
-读取 `references/methodology.md` 的「输出规则」章节，**严格按规则控制格式和长度**。
+读取 `references/methodology.md` 的「输出规则」章节，按用户状态控制格式和长度。
 默认模式 = 朋友聊天，150-300 字，不暴露内部 6 步结构。
 如果用户使用英文或要求双语，额外读取 `references/english-response-guide.md`。
 
@@ -166,6 +168,7 @@ skills/kiddo-compass/
 | 常见问题速查 | `references/faq.md` |
 | 英文或双语回答 | `references/english-response-guide.md` |
 | 回归评测 | `references/evaluation-set.md` |
+| 公测覆盖审计 | `PUBLIC_BETA_COVERAGE.md` |
 
 ### Step 7:更新知识库
 根据反馈更新实践记录。详细闭环规则见 `references/feedback-and-patrol.md`。

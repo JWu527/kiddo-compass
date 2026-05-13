@@ -2,6 +2,20 @@
 
 本项目遵循 semver。面向 ClawHub 发布时，每个版本都应记录主要变化和迁移注意事项。
 
+## 0.4.0 - 2026-05-13
+
+### Added
+
+- `PUBLIC_BETA_COVERAGE.md`：按 deep research 报告逐项记录 Covered / Partial / Deferred / Not covered。
+- `references/scenario-template.md` 扩展为 20 个公测版高频场景卡。
+
+### Changed
+
+- `PUBLIC_BETA_KANBAN.md` 状态从全量 `Done` 校准为 `Done (skill beta)`、`Partial` 和 `Deferred`。
+- `SKILL.md` 版本更新为 `0.4.0`，并要求补档后先让用户确认事实。
+- 清理旧 reference 中部分保证效果、绝对化和过强承诺式表述。
+- `PUBLISHING.md` 发布命令与检查清单同步更新到 `0.4.0`。
+
 ## 0.3.0 - 2026-05-13
 
 ### Added

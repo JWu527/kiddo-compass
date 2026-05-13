@@ -9,10 +9,10 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的正面管教育儿 skill
 ## 功能
 
 - 按 `SKILL.md` 触发正面管教育儿顾问能力。
-- 首次使用时通过 5 轮问答建立本地孩子画像。
-- 公测版默认先安全分诊、先给临时建议，再邀请用户补充画像。
+- 公测版默认先安全分诊、先给临时建议，再邀请用户补充画像；完整 5 轮建档是可选路径。
 - 按 `references/methodology.md` 的 6 步框架分析育儿场景。
 - 增加年龄、场景、照护者路由和证据校准层。
+- 维护 deep research 覆盖矩阵，明确哪些已覆盖、部分覆盖或延期。
 - 支持英文和中英双语 Positive Discipline 回答。
 - 根据用户意图按需读取章节笔记、工具卡、场景指南、学习计划和 FAQ。
 - 自动维护本地 `child-profile.md`、`practice-log.md` 和 `learning-progress.md`。
@@ -24,6 +24,7 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的正面管教育儿 skill
 kiddo-compass/
 ├── SKILL.md                         # OpenClaw / AgentSkills 入口
 ├── PUBLIC_BETA_KANBAN.md            # 公测版优化看板
+├── PUBLIC_BETA_COVERAGE.md          # deep research 覆盖矩阵
 ├── references/                      # 按需加载的知识库
 ├── references/safety-triage.md
 ├── references/routing-guide.md
@@ -106,6 +107,7 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 | 文件 | 用途 |
 | --- | --- |
 | `PUBLIC_BETA_KANBAN.md` | 公测版分阶段优化看板 |
+| `PUBLIC_BETA_COVERAGE.md` | deep research 报告覆盖矩阵 |
 | `references/safety-triage.md` | 红/黄/绿安全分诊 |
 | `references/routing-guide.md` | 年龄、场景、照护者路由 |
 | `references/evidence-matrix.md` | 睡眠、喂养、如厕、攻击、分离证据校准 |
@@ -140,6 +142,7 @@ rg -n "真实姓名[:：]\\S|精确生日[:：]\\S|手机号[:：]?\\s*[0-9]|电
 - `SKILL.md` frontmatter 可以被 YAML 解析。
 - 不包含真实孩子画像、家庭信息、联系方式或其他私人内容。
 - 新增 reference 已在 `SKILL.md` 或 README 的导航中说明何时读取。
+- `PUBLIC_BETA_COVERAGE.md` 中的 `Partial` / `Deferred` 项没有被误标为已完成。
 - `references/evaluation-set.md` 中的安全场景和渐进建档场景人工抽样通过。
 - 变更记录已写入 `CHANGELOG.md`。
 

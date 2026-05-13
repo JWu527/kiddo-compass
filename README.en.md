@@ -12,6 +12,7 @@ This skill is for parents, caregivers, and educators who want responses that are
 - Runs safety triage first, then gives a temporary answer before optional onboarding.
 - Uses `references/methodology.md` as the internal six-step analysis framework.
 - Adds age, scenario, caregiver routing and evidence calibration.
+- Tracks deep research coverage so public-beta scope is not confused with full product scope.
 - Adds `references/english-response-guide.md` for natural English and bilingual responses.
 - Loads chapter notes, tool cards, scenario guides, learning plans, and FAQ files only when needed.
 - Maintains local runtime files: `child-profile.md`, `practice-log.md`, and `learning-progress.md`.
@@ -23,6 +24,7 @@ This skill is for parents, caregivers, and educators who want responses that are
 kiddo-compass/
 ├── SKILL.md                         # OpenClaw / AgentSkills entrypoint
 ├── PUBLIC_BETA_KANBAN.md            # Public beta roadmap board
+├── PUBLIC_BETA_COVERAGE.md          # Deep research coverage matrix
 ├── references/                      # On-demand knowledge base
 ├── references/safety-triage.md
 ├── references/routing-guide.md
@@ -99,6 +101,7 @@ On first use, the agent checks whether `child-profile.md` exists and is complete
 | File | Purpose |
 | --- | --- |
 | `PUBLIC_BETA_KANBAN.md` | Public beta optimization board |
+| `PUBLIC_BETA_COVERAGE.md` | Deep research coverage matrix |
 | `references/safety-triage.md` | Red/yellow/green safety triage |
 | `references/routing-guide.md` | Age, scene, and caregiver routing |
 | `references/evidence-matrix.md` | Evidence calibration for sleep, feeding, toileting, aggression, separation |
