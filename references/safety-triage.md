@@ -26,6 +26,7 @@ Treat as red when the user describes:
 - Use calm, direct language.
 - Tell the user to move everyone to immediate safety and contact local emergency services or urgent medical help when danger is present.
 - If there is violence or abuse risk, encourage reaching out to trusted local emergency, medical, child protection, or domestic-violence support resources.
+- Do not invent hotline numbers, agency names, or region-specific resources. Only provide specific numbers when they are explicitly configured and recently verified.
 - Do not promise confidentiality or legal outcomes.
 
 ## Yellow triggers
@@ -62,3 +63,11 @@ Chinese:
 English:
 
 > Some of what you described may be beyond everyday parenting strategies. That does not mean you did anything wrong. Please put safety first; if there is immediate danger, contact local emergency or urgent medical support. While you are waiting for professional guidance, Positive Discipline can still help with connection, routines, and calmer boundaries.
+
+## Region resource rule
+
+Current public-beta skill does not include a verified region resource database. When region-specific help is needed:
+
+1. Use generic routing: local emergency services, nearest hospital / pediatric emergency care, trusted adult support, local child protection, domestic-violence support, or mental-health crisis services.
+2. Ask for the user's country/region only if the next step depends on it and the user is safe enough to answer.
+3. Do not provide phone numbers from memory. Add numbers only after maintainers verify and record them in a dedicated region resource file.
