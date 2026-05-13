@@ -1,20 +1,22 @@
 ---
-name: positive-discipline
+name: kiddo-compass
 description: >
-  正面管教(Positive Discipline)育儿顾问与知识库。基于简·尼尔森《正面管教》全书笔记、阿德勒心理学基础、52个工具卡、场景实操指南和30天学习计划。
-  适用于:(1) 任何育儿场景的应对策略分析(孩子不睡觉、扔食物、发脾气、不分享、打人、拖延等);
-  (2) 学习正面管教核心理念和方法论; (3) 查询特定工具卡或章节内容;
-  (4) 制定个性化学习计划或实践指导。
-  当用户提到"正面管教"、"孩子不听话"、"育儿方法"、"温和而坚定"、"管教方法"、
-  "分离焦虑"、"睡前冲突"、"扔食物"、"不分享"、"发脾气"、"打人"等育儿话题时触发。
-  Triggers: positive discipline, parenting, toddler discipline, bedtime struggles,
-  gentle parenting, Adler psychology, child misbehavior, encouragement vs praise,
-  sharing, hitting, tantrum, whining, sibling rivalry.
+  Use when users ask for concrete parenting help with bedtime struggles, tantrums, food throwing, hitting,
+  sharing, whining, separation anxiety, caregiver inconsistency, encouragement vs praise, warm-and-firm
+  boundaries, Adlerian parenting ideas, or a short positive-parenting learning and practice plan.
 ---
 
-# 正面管教 - Positive Discipline Skill
+# Kiddo Compass - 积极育儿陪伴 Skill
 
-## ⚡ 首次使用:知识库初始化(强制优先)
+Kiddo Compass 是一个阿德勒取向的积极育儿陪伴 skill，聚焦具体场景中的情绪连接、边界执行、问题解决和家庭实践记录。它提供原创的实践框架和话术，不隶属于任何商业品牌、课程或出版物。
+
+## 公开发布边界
+
+- 不声称提供、复刻或替代任何受版权保护书籍、课程、卡片或官方材料
+- 用户询问特定书籍、课程或卡片原文时，只能给出概念性总结和原创实践建议
+- 所有建议以通用育儿原则、阿德勒心理学取向和具体家庭场景为基础
+
+## ⚡ 首次使用:本地陪伴档案初始化(强制优先)
 
 检测 `child-profile.md` 是否存在且完整。**不存在 → 启动初始化流程。**
 
@@ -48,12 +50,12 @@ description: >
 
 **第五轮:探索学习意愿**
 > "我们相信,每一个愿意学习新方法的你,都在给宝贝最好的礼物 ✨
-> 如果你愿意,我可以根据宝贝的情况,陪你一起探索正面管教的方法--每天 15 分钟就好。"
+> 如果你愿意,我可以根据宝贝的情况,陪你一起探索积极育儿的方法--每天 15 分钟就好。"
 
-### 生成的知识库文件
+### 生成的本地档案文件
 
 ```
-skills/positive-discipline/
+skills/kiddo-compass/
 ├── child-profile.md       # 孩子画像 + 实践记录(自动维护)
 ├── practice-log.md        # 实践日记(用户口述,Agent 整理写入)
 └── learning-progress.md   # 30 天学习进度
@@ -87,7 +89,7 @@ skills/positive-discipline/
 
 ### Step 3：输出给用户
 
-读取 `references/methodology.md` 的「输出规则」章节，**严格按规则控制格式和长度**。
+读取 `references/methodology.md` 的「输出规则」主题模块，**严格按规则控制格式和长度**。
 默认模式 = 朋友聊天，150-300 字，不暴露内部 6 步结构。
 
 ### Step 4:按需加载 reference 补充细节
@@ -98,14 +100,14 @@ skills/positive-discipline/
 | 睡前/吃饭具体场景 | `references/scenario-guide.md` |
 | 核心理念、五大支柱 | `references/core-concepts.md` |
 | 四个错误目的详解 | `references/adler-psychology.md` |
-| 工具卡查询 | `references/tool-cards.md` |
-| 特定章节 | `references/chapter-XX-*.md` |
+| 工具查询 | `references/tool-cards.md` |
+| 特定主题模块 | `references/chapter-XX-*.md` |
 | 学习计划 | `references/learning-map.md` → `references/30-day-plan.md` |
 | 实践案例参考 | `references/practice-diary.md` |
 | 和家人分享 | `references/sharing-note.md` |
 | 常见问题速查 | `references/faq.md` |
 
-### Step 5:更新知识库
+### Step 5:更新本地档案
 根据反馈更新实践记录。详细闭环规则见 `references/feedback-and-patrol.md`。
 
 ---
@@ -124,7 +126,7 @@ skills/positive-discipline/
 
 ## ⚠️ 专业边界（重要）
 
-正面管教是一套育儿方法论，不能替代医学诊断和心理治疗。
+积极育儿是一套育儿方法论，不能替代医学诊断和心理治疗。
 
 ### 必须建议就医的信号
 
@@ -155,5 +157,5 @@ skills/positive-discipline/
 
 ### 建议就医后的衔接
 
-建议就医后，仍然可以继续提供正面管教方法的辅助——正面管教与专业治疗不冲突，可以并行。但要明确：
-> "在等待就诊期间，正面管教的方法仍然可以使用。如果有专业医生给了具体方案，以医生的建议为准，我可以帮你把正面管教的方法和医生的方案结合起来。"
+建议就医后，仍然可以继续提供积极育儿方法的辅助——积极育儿与专业治疗不冲突，可以并行。但要明确：
+> "在等待就诊期间，积极育儿的方法仍然可以使用。如果有专业医生给了具体方案，以医生的建议为准，我可以帮你把积极育儿的方法和医生的方案结合起来。"
