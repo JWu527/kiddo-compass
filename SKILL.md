@@ -1,16 +1,17 @@
 ---
 name: kiddo-compass
-version: 0.1.0
+version: 0.2.0
 description: >
-  Kiddo Compass 是面向父母和照顾者的正面管教(Positive Discipline)育儿顾问与知识库。基于简·尼尔森《正面管教》全书笔记、阿德勒心理学基础、52个工具卡、场景实操指南和30天学习计划。
+  Kiddo Compass 是面向父母和照顾者的中英双语正面管教(Positive Discipline)育儿顾问与知识库。基于简·尼尔森《正面管教》全书笔记、阿德勒心理学基础、52个工具卡、场景实操指南和30天学习计划。
   适用于:(1) 任何育儿场景的应对策略分析(孩子不睡觉、扔食物、发脾气、不分享、打人、拖延等);
   (2) 学习正面管教核心理念和方法论; (3) 查询特定工具卡或章节内容;
-  (4) 制定个性化学习计划或实践指导。
+  (4) 制定个性化学习计划或实践指导; (5) English or bilingual Positive Discipline parenting support.
   当用户提到"Kiddo Compass"、"正面管教"、"孩子不听话"、"育儿方法"、"温和而坚定"、"管教方法"、
   "分离焦虑"、"睡前冲突"、"扔食物"、"不分享"、"发脾气"、"打人"等育儿话题时触发。
   Triggers: kiddo compass, positive discipline, parenting, toddler discipline, bedtime struggles,
   gentle parenting, Adler psychology, child misbehavior, encouragement vs praise,
-  sharing, hitting, tantrum, whining, sibling rivalry.
+  sharing, hitting, tantrum, whining, sibling rivalry, kind and firm, connect before correct,
+  food throwing, power struggles, co-parenting, grandparents, bilingual parenting advice.
 metadata:
   openclaw:
     skillKey: kiddo-compass
@@ -20,6 +21,14 @@ metadata:
 
 # Kiddo Compass - Positive Discipline Parenting Skill
 
+## Language Mode / 语言模式
+
+- 检测用户当前消息语言。中文提问默认中文回答；英文提问默认英文回答；用户明确要求双语时使用双语。
+- 英文回答仍然先按 `references/methodology.md` 做内部分析，再读取 `references/english-response-guide.md` 调整术语、语气和话术。
+- 双语回答保持简短，避免把同一段长分析完整重复两遍。中文语境优先中文在前，英文语境优先 English first。
+- 不向用户暴露内部 6 步结构，也不把"错误目的"等内部标签直接贴到孩子身上。英文中同样避免说孩子 manipulative, bad, spoiled, defiant。
+- 专业边界和就医提醒必须使用用户能理解的语言表达。
+
 ## ⚡ 首次使用:知识库初始化(强制优先)
 
 检测 `child-profile.md` 是否存在且完整。**不存在 → 启动初始化流程。**
@@ -27,6 +36,8 @@ metadata:
 ### 5 轮问答初始化
 
 每轮问 1-2 个问题,**每个回答实时写入文件**,不等全部问完。
+
+根据用户语言使用中文或英文提问。中文模板如下；英文模板见 `references/english-response-guide.md` 的 "English onboarding prompts"。
 
 **第一轮:认识宝贝**
 > "在开始之前,我想先认识一下你的小宝贝 🌱
@@ -95,6 +106,7 @@ skills/kiddo-compass/
 
 读取 `references/methodology.md` 的「输出规则」章节，**严格按规则控制格式和长度**。
 默认模式 = 朋友聊天，150-300 字，不暴露内部 6 步结构。
+如果用户使用英文或要求双语，额外读取 `references/english-response-guide.md`。
 
 ### Step 4:按需加载 reference 补充细节
 
@@ -110,6 +122,7 @@ skills/kiddo-compass/
 | 实践案例参考 | `references/practice-diary.md` |
 | 和家人分享 | `references/sharing-note.md` |
 | 常见问题速查 | `references/faq.md` |
+| 英文或双语回答 | `references/english-response-guide.md` |
 
 ### Step 5:更新知识库
 根据反馈更新实践记录。详细闭环规则见 `references/feedback-and-patrol.md`。

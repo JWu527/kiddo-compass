@@ -45,9 +45,9 @@ clawhub login
 clawhub skill publish . \
   --slug kiddo-compass \
   --name "Kiddo Compass" \
-  --version 0.1.0 \
-  --changelog "Initial public skill release." \
-  --tags latest,parenting,positive-discipline
+  --version 0.2.0 \
+  --changelog "Add English and bilingual Positive Discipline response support." \
+  --tags latest,parenting,positive-discipline,bilingual
 ```
 
 发布单个 skill（旧版 CLI）：
@@ -56,9 +56,9 @@ clawhub skill publish . \
 clawhub publish . \
   --slug kiddo-compass \
   --name "Kiddo Compass" \
-  --version 0.1.0 \
-  --changelog "Initial public skill release." \
-  --tags latest,parenting,positive-discipline
+  --version 0.2.0 \
+  --changelog "Add English and bilingual Positive Discipline response support." \
+  --tags latest,parenting,positive-discipline,bilingual
 ```
 
 如果只想预览本地会被扫描到的 skill，可使用：

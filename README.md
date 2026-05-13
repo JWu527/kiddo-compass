@@ -4,11 +4,14 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的正面管教育儿 skill
 
 这个项目适合父母、照顾者和教育者在日常对话中获得更具体、更温和也更有边界的育儿回应。它不是医疗、心理诊断或治疗工具。
 
+[English README](README.en.md)
+
 ## 功能
 
 - 按 `SKILL.md` 触发正面管教育儿顾问能力。
 - 首次使用时通过 5 轮问答建立本地孩子画像。
 - 按 `references/methodology.md` 的 6 步框架分析育儿场景。
+- 支持英文和中英双语 Positive Discipline 回答。
 - 根据用户意图按需读取章节笔记、工具卡、场景指南、学习计划和 FAQ。
 - 自动维护本地 `child-profile.md`、`practice-log.md` 和 `learning-progress.md`。
 - 对自伤、严重攻击、发展迟缓、疑似神经发育问题等高风险信号保留专业边界。
@@ -19,10 +22,12 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的正面管教育儿 skill
 kiddo-compass/
 ├── SKILL.md                         # OpenClaw / AgentSkills 入口
 ├── references/                      # 按需加载的知识库
+├── references/english-response-guide.md
 ├── child-profile.example.md         # 私人画像模板
 ├── practice-log.example.md          # 实践日志模板
 ├── learning-progress.example.md     # 学习进度模板
 ├── README.md
+├── README.en.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
 ├── PUBLISHING.md
@@ -66,6 +71,8 @@ openclaw skills install kiddo-compass
 
 在对话中提到 `Kiddo Compass`、`正面管教`、`孩子不听话`、`温和而坚定`、`睡前冲突`、`发脾气`、`打人`、`不分享` 等话题即可触发。
 
+用户用英文提问时默认英文回答；明确要求双语时输出简短中英双语版本。
+
 首次使用时，agent 会先检查 `child-profile.md` 是否存在且完整。如果没有，会按 `SKILL.md` 中定义的 5 轮问答初始化孩子画像和实践日志。初始化信息只应保存在本地私人文件中，不应提交到开源仓库或发布到 ClawHub。
 
 示例问题：
@@ -82,11 +89,16 @@ Kiddo Compass，我家 3 岁孩子睡前一直拖延，讲完故事还要继续�
 帮我做一个每天 15 分钟的正面管教学习计划。
 ```
 
+```text
+Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries when I stop. What should I do?
+```
+
 ## 知识库导航
 
 | 文件 | 用途 |
 | --- | --- |
 | `references/methodology.md` | 场景分析主框架和输出规则 |
+| `references/english-response-guide.md` | 英文和中英双语回应风格 |
 | `references/core-concepts.md` | 正面管教核心理念 |
 | `references/adler-psychology.md` | 阿德勒心理学和四个错误目的 |
 | `references/tool-cards.md` | 52 个正面管教工具卡 |
