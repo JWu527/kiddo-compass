@@ -9,8 +9,9 @@ This skill is for parents, caregivers, and educators who want responses that are
 ## What It Does
 
 - Triggers a Positive Discipline parenting coach from `SKILL.md`.
-- Builds a local child profile through a short onboarding conversation.
+- Runs safety triage first, then gives a temporary answer before optional onboarding.
 - Uses `references/methodology.md` as the internal six-step analysis framework.
+- Adds age, scenario, caregiver routing and evidence calibration.
 - Adds `references/english-response-guide.md` for natural English and bilingual responses.
 - Loads chapter notes, tool cards, scenario guides, learning plans, and FAQ files only when needed.
 - Maintains local runtime files: `child-profile.md`, `practice-log.md`, and `learning-progress.md`.
@@ -21,7 +22,13 @@ This skill is for parents, caregivers, and educators who want responses that are
 ```text
 kiddo-compass/
 ├── SKILL.md                         # OpenClaw / AgentSkills entrypoint
+├── PUBLIC_BETA_KANBAN.md            # Public beta roadmap board
 ├── references/                      # On-demand knowledge base
+├── references/safety-triage.md
+├── references/routing-guide.md
+├── references/evidence-matrix.md
+├── references/scenario-template.md
+├── references/evaluation-set.md
 ├── references/english-response-guide.md
 ├── child-profile.example.md         # Private profile template
 ├── practice-log.example.md          # Practice log template
@@ -85,12 +92,18 @@ I want to use Positive Discipline when my child throws food from the high chair.
 Can you give me a bilingual Positive Discipline response I can share with my partner?
 ```
 
-On first use, the agent checks whether `child-profile.md` exists and is complete. If not, it asks a short five-round onboarding sequence and writes the answers locally.
+On first use, the agent checks whether `child-profile.md` exists and is complete. If not, it still gives temporary advice first, then asks only 1-2 necessary questions. The full five-round onboarding sequence is optional and only starts when the user wants to build a fuller local profile.
 
 ## Knowledge Base
 
 | File | Purpose |
 | --- | --- |
+| `PUBLIC_BETA_KANBAN.md` | Public beta optimization board |
+| `references/safety-triage.md` | Red/yellow/green safety triage |
+| `references/routing-guide.md` | Age, scene, and caregiver routing |
+| `references/evidence-matrix.md` | Evidence calibration for sleep, feeding, toileting, aggression, separation |
+| `references/scenario-template.md` | Standard scenario card template |
+| `references/evaluation-set.md` | Lightweight public beta regression set |
 | `references/methodology.md` | Internal scenario analysis and output rules |
 | `references/english-response-guide.md` | English and bilingual response style |
 | `references/core-concepts.md` | Core Positive Discipline concepts |

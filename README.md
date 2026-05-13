@@ -10,7 +10,9 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的正面管教育儿 skill
 
 - 按 `SKILL.md` 触发正面管教育儿顾问能力。
 - 首次使用时通过 5 轮问答建立本地孩子画像。
+- 公测版默认先安全分诊、先给临时建议，再邀请用户补充画像。
 - 按 `references/methodology.md` 的 6 步框架分析育儿场景。
+- 增加年龄、场景、照护者路由和证据校准层。
 - 支持英文和中英双语 Positive Discipline 回答。
 - 根据用户意图按需读取章节笔记、工具卡、场景指南、学习计划和 FAQ。
 - 自动维护本地 `child-profile.md`、`practice-log.md` 和 `learning-progress.md`。
@@ -21,7 +23,13 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的正面管教育儿 skill
 ```text
 kiddo-compass/
 ├── SKILL.md                         # OpenClaw / AgentSkills 入口
+├── PUBLIC_BETA_KANBAN.md            # 公测版优化看板
 ├── references/                      # 按需加载的知识库
+├── references/safety-triage.md
+├── references/routing-guide.md
+├── references/evidence-matrix.md
+├── references/scenario-template.md
+├── references/evaluation-set.md
 ├── references/english-response-guide.md
 ├── child-profile.example.md         # 私人画像模板
 ├── practice-log.example.md          # 实践日志模板
@@ -73,7 +81,7 @@ openclaw skills install kiddo-compass
 
 用户用英文提问时默认英文回答；明确要求双语时输出简短中英双语版本。
 
-首次使用时，agent 会先检查 `child-profile.md` 是否存在且完整。如果没有，会按 `SKILL.md` 中定义的 5 轮问答初始化孩子画像和实践日志。初始化信息只应保存在本地私人文件中，不应提交到开源仓库或发布到 ClawHub。
+首次使用时，agent 会先检查 `child-profile.md` 是否存在且完整。如果没有，公测版不会强制用户先完整建档，而是先给临时建议，再只追问 1-2 个必要问题。用户愿意继续时，才按 `SKILL.md` 中定义的 5 轮问答初始化孩子画像和实践日志。初始化信息只应保存在本地私人文件中，不应提交到开源仓库或发布到 ClawHub。
 
 示例问题：
 
@@ -97,6 +105,12 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 
 | 文件 | 用途 |
 | --- | --- |
+| `PUBLIC_BETA_KANBAN.md` | 公测版分阶段优化看板 |
+| `references/safety-triage.md` | 红/黄/绿安全分诊 |
+| `references/routing-guide.md` | 年龄、场景、照护者路由 |
+| `references/evidence-matrix.md` | 睡眠、喂养、如厕、攻击、分离证据校准 |
+| `references/scenario-template.md` | 高频场景卡片标准模板 |
+| `references/evaluation-set.md` | 公测版轻量回归评测集 |
 | `references/methodology.md` | 场景分析主框架和输出规则 |
 | `references/english-response-guide.md` | 英文和中英双语回应风格 |
 | `references/core-concepts.md` | 正面管教核心理念 |
@@ -118,6 +132,7 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 git status --short
 rg -n "child-profile.md|practice-log.md|learning-progress.md" .gitignore .clawhubignore README.md SKILL.md
 rg -n "^---|^name:|^version:|^description:|^metadata:" SKILL.md
+rg -n "真实姓名[:：]\\S|精确生日[:：]\\S|手机号[:：]?\\s*[0-9]|电话[:：]?\\s*[0-9]|地址[:：]\\S|学校[:：]\\S|token\\s*=|api[_-]?key\\s*=|password\\s*=|secret\\s*=" .
 ```
 
 发布前还应确认：
@@ -125,6 +140,7 @@ rg -n "^---|^name:|^version:|^description:|^metadata:" SKILL.md
 - `SKILL.md` frontmatter 可以被 YAML 解析。
 - 不包含真实孩子画像、家庭信息、联系方式或其他私人内容。
 - 新增 reference 已在 `SKILL.md` 或 README 的导航中说明何时读取。
+- `references/evaluation-set.md` 中的安全场景和渐进建档场景人工抽样通过。
 - 变更记录已写入 `CHANGELOG.md`。
 
 ## 发布

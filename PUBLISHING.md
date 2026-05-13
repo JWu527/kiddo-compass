@@ -9,14 +9,17 @@
 3. 更新 `CHANGELOG.md`。
 4. 检查 `.clawhubignore` 是否覆盖运行期私人文件。
 5. 检查没有真实孩子、家庭、联系方式或密钥信息。
+6. 抽样跑 `references/evaluation-set.md`，确认安全分诊、渐进建档和中英文路由符合预期。
 
 ```bash
 git status --short --ignored
 git ls-files child-profile.md practice-log.md learning-progress.md
-rg -n "token|api[_ -]?key|password|secret|手机号|电话|地址|真实姓名" .
+ruby -ryaml -e 's=File.read("SKILL.md"); fm=s.match(/\A---\n(.*?)\n---/m)[1]; data=YAML.safe_load(fm); abort("missing skill metadata") unless data["name"] && data["description"] && data["version"] && data.dig("metadata","openclaw","skillKey"); puts "frontmatter ok"'
+ruby -e 'Dir["*.md"].each { |f| File.read(f).scan(/\[[^\]]+\]\(([^)]+)\)/).flatten.each { |link| next if link =~ /\Ahttps?:/; target=link.split("#",2)[0]; next if target.empty?; abort("missing #{target} referenced from #{f}") unless File.exist?(target) } }; puts "markdown local links ok"'
+rg -n "真实姓名[:：]\\S|精确生日[:：]\\S|手机号[:：]?\\s*[0-9]|电话[:：]?\\s*[0-9]|地址[:：]\\S|学校[:：]\\S|token\\s*=|api[_-]?key\\s*=|password\\s*=|secret\\s*=" .
 ```
 
-`git ls-files` 对私人文件应无输出。
+`git ls-files` 对私人文件应无输出。隐私扫描命令如有输出，需要逐条确认是否为真实私人数据；发布检查命令本身、隐私说明文字不算泄露。
 
 ## 版本规则
 
@@ -45,9 +48,9 @@ clawhub login
 clawhub skill publish . \
   --slug kiddo-compass \
   --name "Kiddo Compass" \
-  --version 0.2.0 \
-  --changelog "Add English and bilingual Positive Discipline response support." \
-  --tags latest,parenting,positive-discipline,bilingual
+  --version 0.3.0 \
+  --changelog "Add public beta safety triage, routing, evidence calibration, scenario templates, and evaluation set." \
+  --tags latest,parenting,positive-discipline,bilingual,public-beta
 ```
 
 发布单个 skill（旧版 CLI）：
@@ -56,9 +59,9 @@ clawhub skill publish . \
 clawhub publish . \
   --slug kiddo-compass \
   --name "Kiddo Compass" \
-  --version 0.2.0 \
-  --changelog "Add English and bilingual Positive Discipline response support." \
-  --tags latest,parenting,positive-discipline,bilingual
+  --version 0.3.0 \
+  --changelog "Add public beta safety triage, routing, evidence calibration, scenario templates, and evaluation set." \
+  --tags latest,parenting,positive-discipline,bilingual,public-beta
 ```
 
 如果只想预览本地会被扫描到的 skill，可使用：

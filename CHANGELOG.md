@@ -2,6 +2,23 @@
 
 本项目遵循 semver。面向 ClawHub 发布时，每个版本都应记录主要变化和迁移注意事项。
 
+## 0.3.0 - 2026-05-13
+
+### Added
+
+- 公测版优化看板 `PUBLIC_BETA_KANBAN.md`。
+- `references/safety-triage.md`：红/黄/绿安全分诊。
+- `references/routing-guide.md`：年龄、场景、照护者三维路由。
+- `references/evidence-matrix.md`：睡眠、喂养、如厕、攻击、分离的证据校准层。
+- `references/scenario-template.md`：高频场景四层卡片模板和家庭协同卡片骨架。
+- `references/evaluation-set.md`：中英文路由、安全分诊、渐进建档轻量评测集。
+
+### Changed
+
+- `SKILL.md` 主流程改为安全分诊优先、先答后补档、再反馈记录。
+- 示例孩子画像模板改为隐私友好字段，默认使用昵称和年龄段。
+- 发布检查清单增加 YAML、链接、隐私扫描和评测集抽样。
+
 ## 0.2.0 - 2026-05-13
 
 ### Added
