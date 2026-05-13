@@ -1,0 +1,19 @@
+# Runtime private files. These are created locally by the skill.
+child-profile.md
+practice-log.md
+learning-progress.md
+
+# Local VCS and ClawHub install metadata.
+.git/
+.clawhub/
+.clawdhub/
+
+# Local machine and editor noise.
+.DS_Store
+*.swp
+*.swo
+
+# Local secrets and logs.
+.env
+.env.*
+*.log

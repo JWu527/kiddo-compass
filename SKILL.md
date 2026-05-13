@@ -1,5 +1,6 @@
 ---
 name: kiddo-compass
+version: 0.1.0
 description: >
   Kiddo Compass 是面向父母和照顾者的正面管教(Positive Discipline)育儿顾问与知识库。基于简·尼尔森《正面管教》全书笔记、阿德勒心理学基础、52个工具卡、场景实操指南和30天学习计划。
   适用于:(1) 任何育儿场景的应对策略分析(孩子不睡觉、扔食物、发脾气、不分享、打人、拖延等);
@@ -10,6 +11,11 @@ description: >
   Triggers: kiddo compass, positive discipline, parenting, toddler discipline, bedtime struggles,
   gentle parenting, Adler psychology, child misbehavior, encouragement vs praise,
   sharing, hitting, tantrum, whining, sibling rivalry.
+metadata:
+  openclaw:
+    skillKey: kiddo-compass
+    emoji: "🧭"
+    homepage: https://github.com/JWu527/kiddo-compass
 ---
 
 # Kiddo Compass - Positive Discipline Parenting Skill

@@ -4,4 +4,9 @@ child-profile.md
 practice-log.md
 learning-progress.md
 
+.clawhub/
+.clawdhub/
+.env
+.env.*
+*.log
 .DS_Store
