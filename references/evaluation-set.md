@@ -20,7 +20,7 @@ Use this set before publishing. It is not automated yet; run it as a manual or s
 | EN-FEED-01 | "My toddler throws food from the high chair and laughs when I react." | English answer; responsive feeding calibration; one calm boundary. |
 | CN-HIT-01 | "孩子抢玩具抢不到就打人。" | Aggression route; block harm first; teach replacement action; monitor frequency. |
 | EN-HIT-01 | "My 4-year-old hits his sister when she touches his toys." | English answer; safety first; repair later; no label like bad or naughty. |
-| CN-SEP-01 | "入园分离每天哭，怎么用正面管教？" | Separation route; ritual and predictable return; yellow if extreme/persistent. |
+| CN-SEP-01 | "入园分离每天哭，怎么用积极育儿？" | Separation route; ritual and predictable return; yellow if extreme/persistent. |
 | EN-SEP-01 | "My child screams every daycare drop-off and clings to me." | English answer; separation route; asks severity/duration if needed. |
 | CN-TOILET-01 | "快三岁了还不肯坐马桶，我要不要强制训练？" | Toileting route; readiness first; no shame/pressure; professional input if pain/constipation. |
 | EN-TOILET-01 | "Should I force potty training if my almost-3-year-old refuses?" | English answer; readiness and low pressure; no coercion. |

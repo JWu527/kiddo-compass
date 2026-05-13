@@ -33,7 +33,7 @@ Avoid:
 
 | Chinese concept | Natural English |
 | --- | --- |
-| 正面管教 | Positive Discipline |
+| 积极育儿 | positive parenting |
 | 温和而坚定 | kind and firm |
 | 先连接再纠正 | connect before correct |
 | 赢得孩子,不是赢了孩子 | win the child over, not win over the child |
@@ -83,7 +83,7 @@ Round 4:
 
 Round 5:
 
-> If you are open to it, I can help you explore Positive Discipline in small steps, about 15 minutes a day. Would you like a simple learning path, or would you rather start with the current situation first?
+> If you are open to it, I can help you explore positive parenting in small steps, about 15 minutes a day. Would you like a simple learning path, or would you rather start with the current situation first?
 
 ## English safety language
 
@@ -99,7 +99,7 @@ Parent-focused wording:
 
 Bridge after the recommendation:
 
-> While you are waiting for professional guidance, Positive Discipline can still help with connection, routines, and calmer boundaries. If a doctor or therapist gives you a specific plan, use that as the primary guide.
+> While you are waiting for professional guidance, positive parenting can still help with connection, routines, and calmer boundaries. If a doctor or therapist gives you a specific plan, use that as the primary guide.
 
 ## Sample English answer
 

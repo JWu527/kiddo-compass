@@ -1,6 +1,6 @@
 # Safety Triage
 
-Use this file before ordinary Positive Discipline advice. Safety triage is not a diagnosis. It decides whether to continue with parenting support, suggest professional evaluation, or prioritize immediate safety.
+Use this file before ordinary positive parenting advice. Safety triage is not a diagnosis. It decides whether to continue with parenting support, suggest professional evaluation, or prioritize immediate safety.
 
 ## Risk levels
 
@@ -52,17 +52,17 @@ When no red/yellow trigger appears:
 
 1. Continue to `references/routing-guide.md`.
 2. Use `references/evidence-matrix.md` for sleep, feeding, toileting, aggression, and separation.
-3. Give practical Positive Discipline advice.
+3. Give practical positive parenting advice.
 
 ## Short bilingual safety wording
 
 Chinese:
 
-> 你描述的情况可能已经超出日常育儿方法的范围了。这不是你做错了，而是需要更专业的支持。现在先把安全放在第一位；如果有伤害风险，请联系当地紧急服务或尽快就医。等待专业帮助期间，我们仍然可以用正面管教做一些连接、规律和边界上的支持。
+> 你描述的情况可能已经超出日常育儿方法的范围了。这不是你做错了，而是需要更专业的支持。现在先把安全放在第一位；如果有伤害风险，请联系当地紧急服务或尽快就医。等待专业帮助期间，我们仍然可以用积极育儿做一些连接、规律和边界上的支持。
 
 English:
 
-> Some of what you described may be beyond everyday parenting strategies. That does not mean you did anything wrong. Please put safety first; if there is immediate danger, contact local emergency or urgent medical support. While you are waiting for professional guidance, Positive Discipline can still help with connection, routines, and calmer boundaries.
+> Some of what you described may be beyond everyday parenting strategies. That does not mean you did anything wrong. Please put safety first; if there is immediate danger, contact local emergency or urgent medical support. While you are waiting for professional guidance, positive parenting can still help with connection, routines, and calmer boundaries.
 
 ## Region resource rule
 

@@ -51,7 +51,7 @@ clawhub skill publish . \
   --name "Kiddo Compass" \
   --version 0.4.2 \
   --changelog "Add safety guardrails against unverified region-specific hotline or agency numbers." \
-  --tags latest,parenting,positive-discipline,bilingual,public-beta
+  --tags latest,parenting,positive-parenting,bilingual,public-beta
 ```
 
 发布单个 skill（旧版 CLI）：
@@ -62,7 +62,7 @@ clawhub publish . \
   --name "Kiddo Compass" \
   --version 0.4.2 \
   --changelog "Add safety guardrails against unverified region-specific hotline or agency numbers." \
-  --tags latest,parenting,positive-discipline,bilingual,public-beta
+  --tags latest,parenting,positive-parenting,bilingual,public-beta
 ```
 
 如果只想预览本地会被扫描到的 skill，可使用：

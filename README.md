@@ -1,6 +1,6 @@
 # Kiddo Compass
 
-Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的正面管教育儿 skill。它把《正面管教》学习笔记、阿德勒心理学基础、52 个工具卡、常见育儿场景和 30 天练习计划组织成可被 AI agent 按需加载的本地知识库。
+Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的积极育儿陪伴 skill。它把原创主题笔记、阿德勒取向基础、通用育儿工具指南、常见育儿场景、安全分诊和 30 天练习计划组织成可被 AI agent 按需加载的本地知识库。
 
 这个项目适合父母、照顾者和教育者在日常对话中获得更具体、更温和也更有边界的育儿回应。它不是医疗、心理诊断或治疗工具。
 
@@ -8,13 +8,13 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的正面管教育儿 skill
 
 ## 功能
 
-- 按 `SKILL.md` 触发正面管教育儿顾问能力。
+- 按 `SKILL.md` 触发积极育儿陪伴能力。
 - 公测版默认先安全分诊、先给临时建议，再邀请用户补充画像；完整 5 轮建档是可选路径。
 - 按 `references/methodology.md` 的 6 步框架分析育儿场景。
 - 增加年龄、场景、照护者路由和证据校准层。
 - 维护 deep research 覆盖矩阵，明确哪些已覆盖、部分覆盖或延期。
-- 支持英文和中英双语 Positive Discipline 回答。
-- 根据用户意图按需读取章节笔记、工具卡、场景指南、学习计划和 FAQ。
+- 支持英文和中英双语积极育儿回答。
+- 根据用户意图按需读取主题笔记、工具指南、场景指南、学习计划和 FAQ。
 - 自动维护本地 `child-profile.md`、`practice-log.md` 和 `learning-progress.md`。
 - 对自伤、严重攻击、发展迟缓、疑似神经发育问题等高风险信号保留专业边界。
 
@@ -79,7 +79,7 @@ openclaw skills install kiddo-compass
 
 ## 使用
 
-在对话中提到 `Kiddo Compass`、`正面管教`、`孩子不听话`、`温和而坚定`、`睡前冲突`、`发脾气`、`打人`、`不分享` 等话题即可触发。
+在对话中提到 `Kiddo Compass`、`积极育儿`、`孩子不听话`、`温和而坚定`、`睡前冲突`、`发脾气`、`打人`、`不分享` 等话题即可触发。
 
 用户用英文提问时默认英文回答；明确要求双语时输出简短中英双语版本。
 
@@ -92,11 +92,11 @@ Kiddo Compass，我家 3 岁孩子睡前一直拖延，讲完故事还要继续�
 ```
 
 ```text
-我想用正面管教处理孩子吃饭时扔食物的问题。
+我想用积极育儿的方法处理孩子吃饭时扔食物的问题。
 ```
 
 ```text
-帮我做一个每天 15 分钟的正面管教学习计划。
+帮我做一个每天 15 分钟的积极育儿学习计划。
 ```
 
 ```text
@@ -117,16 +117,16 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 | `references/evaluation-set.md` | 公测版轻量回归评测集 |
 | `references/methodology.md` | 场景分析主框架和输出规则 |
 | `references/english-response-guide.md` | 英文和中英双语回应风格 |
-| `references/core-concepts.md` | 正面管教核心理念 |
+| `references/core-concepts.md` | 积极育儿核心理念 |
 | `references/adler-psychology.md` | 阿德勒心理学和四个错误目的 |
-| `references/tool-cards.md` | 52 个正面管教工具卡 |
+| `references/tool-cards.md` | 通用积极育儿工具指南 |
 | `references/scenario-guide.md` | 睡前、吃饭、哭闹等场景实操 |
 | `references/grandparent-strategies.md` | 祖辈管教不一致场景 |
 | `references/learning-map.md` | 学习地图 |
 | `references/30-day-plan.md` | 30 天学习计划 |
 | `references/feedback-and-patrol.md` | 实践反馈和巡检闭环 |
 | `references/faq.md` | 常见问题速查 |
-| `references/chapter-*.md` | 《正面管教》逐章学习笔记 |
+| `references/chapter-*.md` | 主题学习笔记 |
 
 ## 维护与验证
 

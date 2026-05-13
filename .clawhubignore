@@ -7,13 +7,16 @@ learning-progress.md
 .git/
 .clawhub/
 .clawdhub/
+node_modules/
 
 # Local machine and editor noise.
 .DS_Store
 *.swp
 *.swo
 
-# Local secrets and logs.
+# Local secrets, logs, and private notes.
 .env
 .env.*
 *.log
+*.local.md
+*.private.md

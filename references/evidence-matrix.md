@@ -6,12 +6,12 @@ This matrix keeps Kiddo Compass from treating every issue as only a "discipline"
 
 1. Local safety and legal requirements for children's information and emergency risk.
 2. Official health and child-development guidance.
-3. Positive Discipline / Adlerian method sources.
+3. positive parenting / Adlerian method sources.
 4. Experience-based scripts and practice notes.
 
 ## High-frequency topics
 
-| Topic | Official calibration | Positive Discipline lens | Refer / escalate when |
+| Topic | Official calibration | positive parenting lens | Refer / escalate when |
 | --- | --- | --- | --- |
 | Sleep | CDC guidance for toddlers 2-3 lists 11-14 hours of sleep in 24 hours including naps. Sleep issues may reflect routine, fear, illness, overtiredness, or separation needs. | Connect before correct; predictable bedtime routine; limited choices; special time before the limit. | Severe sleep disruption for months, night terrors, breathing concerns, injury risk, or caregiver exhaustion affecting safety. |
 | Feeding / throwing food | WHO responsive feeding emphasizes responding to hunger/satiety cues, encouraging without forcing, and using warm interaction. Food throwing can mean "done", exploration, attention, or limit testing. | Calm limit: food is for eating; if throwing continues, meal ends respectfully. Avoid turning meals into power struggles. | Poor growth, choking, persistent refusal, vomiting, extreme restriction, or suspected feeding disorder. |
@@ -24,7 +24,7 @@ This matrix keeps Kiddo Compass from treating every issue as only a "discipline"
 Use these labels internally when selecting advice:
 
 - `official-consensus`: aligned with official public-health or child-development guidance.
-- `method-source`: Positive Discipline / Adlerian method guidance.
+- `method-source`: positive parenting / Adlerian method guidance.
 - `practice-pattern`: practical script from this skill's scenario library.
 - `needs-evaluation`: professional evaluation may be needed.
 - `experience-only`: useful as a parent script, but not a universal claim.

@@ -1,6 +1,6 @@
 # Kiddo Compass
 
-Kiddo Compass is an OpenClaw / AgentSkills-compatible Positive Discipline parenting skill. It turns Chinese study notes, Adlerian psychology basics, 52 Positive Discipline tool cards, practical parenting scenarios, and a 30-day learning path into a local knowledge base an AI agent can load as needed.
+Kiddo Compass is an OpenClaw / AgentSkills-compatible positive-parenting companion skill. It turns original topic notes, Adlerian-oriented concepts, general parenting tools, practical parenting scenarios, safety triage, and a 30-day learning path into a local knowledge base an AI agent can load as needed.
 
 This skill is for parents, caregivers, and educators who want responses that are warm, specific, kind and firm. It is not a medical, psychological, legal, or diagnostic tool.
 
@@ -8,13 +8,13 @@ This skill is for parents, caregivers, and educators who want responses that are
 
 ## What It Does
 
-- Triggers a Positive Discipline parenting coach from `SKILL.md`.
+- Triggers a positive-parenting companion from `SKILL.md`.
 - Runs safety triage first, then gives a temporary answer before optional onboarding.
 - Uses `references/methodology.md` as the internal six-step analysis framework.
 - Adds age, scenario, caregiver routing and evidence calibration.
 - Tracks deep research coverage so public-beta scope is not confused with full product scope.
 - Adds `references/english-response-guide.md` for natural English and bilingual responses.
-- Loads chapter notes, tool cards, scenario guides, learning plans, and FAQ files only when needed.
+- Loads topic notes, tool guides, scenario guides, learning plans, and FAQ files only when needed.
 - Maintains local runtime files: `child-profile.md`, `practice-log.md`, and `learning-progress.md`.
 - Preserves clear professional boundaries for self-harm, severe aggression, developmental concerns, trauma, and parent mental-health risk signals.
 
@@ -88,11 +88,11 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 ```
 
 ```text
-I want to use Positive Discipline when my child throws food from the high chair.
+I want to use a positive-parenting approach when my child throws food from the high chair.
 ```
 
 ```text
-Can you give me a bilingual Positive Discipline response I can share with my partner?
+Can you give me a bilingual positive-parenting response I can share with my partner?
 ```
 
 On first use, the agent checks whether `child-profile.md` exists and is complete. If not, it still gives temporary advice first, then asks only 1-2 necessary questions. The full five-round onboarding sequence is optional and only starts when the user wants to build a fuller local profile.
@@ -111,16 +111,16 @@ On first use, the agent checks whether `child-profile.md` exists and is complete
 | `references/evaluation-set.md` | Lightweight public beta regression set |
 | `references/methodology.md` | Internal scenario analysis and output rules |
 | `references/english-response-guide.md` | English and bilingual response style |
-| `references/core-concepts.md` | Core Positive Discipline concepts |
+| `references/core-concepts.md` | Core positive-parenting concepts |
 | `references/adler-psychology.md` | Adlerian psychology and mistaken goals |
-| `references/tool-cards.md` | 52 Positive Discipline tools |
+| `references/tool-cards.md` | General positive-parenting tools |
 | `references/scenario-guide.md` | Bedtime, meals, crying, and other practical scenarios |
 | `references/grandparent-strategies.md` | Handling inconsistent grandparent discipline |
 | `references/learning-map.md` | Learning map |
 | `references/30-day-plan.md` | 30-day learning plan |
 | `references/feedback-and-patrol.md` | Practice feedback loop |
 | `references/faq.md` | FAQ |
-| `references/chapter-*.md` | Chapter-by-chapter Chinese study notes |
+| `references/chapter-*.md` | Topic-by-topic Chinese notes |
 
 Most long-form reference notes are currently Chinese. The English response guide helps the agent translate the method into natural English during conversation without duplicating the whole knowledge base.
 

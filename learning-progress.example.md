@@ -13,7 +13,7 @@
 | Day 0 | 启动日 | learning-map.md | ⬜ | |
 | Day 1 | 核心理念概述 | core-concepts.md | ⬜ | |
 | Day 2 | 阿德勒心理学基础 | adler-psychology.md | ⬜ | |
-| Day 3 | 第1章：正面的方法 | chapter-01-positive-methods.md | ⬜ | |
+| Day 3 | 主题 1：正面的方法 | chapter-01-positive-methods.md | ⬜ | |
 
 ## 学习笔记
 
