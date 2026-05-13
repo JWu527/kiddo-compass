@@ -42,6 +42,7 @@ kiddo-compass/
 ├── PUBLISHING.md
 ├── CODE_OF_CONDUCT.md
 ├── CHANGELOG.md
+├── HERMES_TEST_CASES.md             # Hermes 手动测试案例
 ├── LICENSE
 └── .clawhubignore
 ```
@@ -106,6 +107,7 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 
 | 文件 | 用途 |
 | --- | --- |
+| `HERMES_TEST_CASES.md` | Hermes 手动测试案例与发布前抽样建议 |
 | `PUBLIC_BETA_KANBAN.md` | 公测版分阶段优化看板 |
 | `PUBLIC_BETA_COVERAGE.md` | deep research 报告覆盖矩阵 |
 | `references/safety-triage.md` | 红/黄/绿安全分诊 |

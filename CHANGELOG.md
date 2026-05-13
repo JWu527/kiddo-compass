@@ -2,6 +2,12 @@
 
 本项目遵循 semver。面向 ClawHub 发布时，每个版本都应记录主要变化和迁移注意事项。
 
+## Unreleased
+
+### Added
+
+- `HERMES_TEST_CASES.md`：Hermes 手动测试案例，覆盖冒烟、路由、安全、隐私、双语和措辞红线。
+
 ## 0.4.2 - 2026-05-13
 
 ### Changed

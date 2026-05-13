@@ -42,6 +42,7 @@ kiddo-compass/
 ├── PUBLISHING.md
 ├── CODE_OF_CONDUCT.md
 ├── CHANGELOG.md
+├── HERMES_TEST_CASES.md             # Hermes manual test cases
 ├── LICENSE
 └── .clawhubignore
 ```
@@ -100,6 +101,7 @@ On first use, the agent checks whether `child-profile.md` exists and is complete
 
 | File | Purpose |
 | --- | --- |
+| `HERMES_TEST_CASES.md` | Hermes manual test cases and release sampling guide |
 | `PUBLIC_BETA_KANBAN.md` | Public beta optimization board |
 | `PUBLIC_BETA_COVERAGE.md` | Deep research coverage matrix |
 | `references/safety-triage.md` | Red/yellow/green safety triage |
