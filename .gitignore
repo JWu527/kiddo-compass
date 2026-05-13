@@ -6,7 +6,14 @@ learning-progress.md
 
 .clawhub/
 .clawdhub/
+dist/
+__pycache__/
+*.pyc
 .env
 .env.*
 *.log
+*.private.md
+*.local.md
 .DS_Store
+__MACOSX/
+._*

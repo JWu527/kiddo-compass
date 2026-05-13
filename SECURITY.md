@@ -46,8 +46,10 @@ learning-progress.example.md
 
 ```bash
 git status --short --ignored
+python3 scripts/release_guardrails.py check
+python3 scripts/release_guardrails.py list
 rg -n "token|api[_ -]?key|password|secret|手机号|电话|地址|身份证|真实姓名" .
 rg -n "child-profile.md|practice-log.md|learning-progress.md" .gitignore .clawhubignore
 ```
 
-如果使用 ClawHub 发布，请先执行 dry run 或本地文件清单检查，确认私人运行期文件没有进入发布包。
+如果使用 ClawHub 发布，请先通过 `skill-package-manifest.txt` 生成白名单包，确认私人运行期文件没有进入发布包。不要直接压缩整个工作区。

@@ -7,6 +7,17 @@
 ### Added
 
 - `HERMES_TEST_CASES.md`：Hermes 手动测试案例，覆盖冒烟、路由、安全、隐私、双语和措辞红线。
+- `skill-package-manifest.txt`、`scripts/release_guardrails.py`、`scripts/beta_kpi_gate.py` 和 `scripts/run_regression.py`：公开包白名单打包、隐私扫描、beta KPI gate、JSONL 回归 schema 检查和 Hermes forbidden-regex runner。
+- `references/state-schema.md`：本地状态 facts / hypotheses / interventions / outcomes / consent_flags 结构和错误处理规则。
+- `references/evaluation-set.jsonl`：P0/P1 可执行回归数据格式。
+- `references/dialogue-modes.md` 和 `references/accessibility-i18n.md`：对话模式、中文/英文/双语和 TTS 友好模板。
+
+### Changed
+
+- 渐进式建档默认只问可选昵称和年龄段，不再询问出生时间；精确生日仅在发育阈值判断确有需要且用户主动提供时使用。
+- `references/evidence-matrix.md` 扩展到 30 个高频主题，并补充年龄段、证据等级、来源类别、reviewed_at、适用边界和升级阈值。
+- 安全分诊补充诊断请求、攻击/自伤、睡眠、语言和如厕退行阈值；HEARTBEAT 巡检降级为可选集成。
+- README 和发布文档明确当前为内部测试 / public-beta candidate，公开发布必须通过白名单包和 P0 回归。
 
 ## 0.4.2 - 2026-05-13
 

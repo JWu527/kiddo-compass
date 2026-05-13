@@ -10,6 +10,16 @@ Use this file before ordinary positive parenting advice. Safety triage is not a 
 | Yellow | Needs professional evaluation or closer monitoring | Recommend pediatrician / child psychologist / counselor, then give temporary support. |
 | Green | Everyday parenting support is appropriate | Continue to routing and scenario advice. |
 
+## Response templates
+
+Use these as shape, not canned text.
+
+| Level | First sentence | Then do | Avoid |
+| --- | --- | --- | --- |
+| Red | "先把安全放在第一位。" / "Safety comes first right now." | Move people away from danger; contact local emergency, urgent medical, trusted adult, child protection, domestic-violence, or crisis support as appropriate. | Ordinary discipline advice, motive analysis, hotline numbers from memory. |
+| Yellow | "这可能需要专业人员帮你一起判断。" / "This may need a professional evaluation." | Recommend the relevant professional, then give while-waiting supports and tracking. | Diagnosis, reassurance that it is only a behavior issue, fixed timelines. |
+| Green | "我先给你一个现在能用的做法。" / "Here is something you can try now." | Give one concrete script/action, then ask 1-2 questions only if needed. | Intake before answering, internal labels, theory dump. |
+
 ## Red triggers
 
 Treat as red when the user describes:
@@ -34,9 +44,13 @@ Treat as red when the user describes:
 Treat as yellow when the user describes:
 
 - Aggression that lasts for months, increases in frequency or severity, or causes injury.
+- Diagnosis requests about autism, ADHD, sensory processing, developmental delay, anxiety, sleep disorder, feeding disorder, or trauma. Avoid diagnosing; route to evaluation.
 - Possible developmental delay, such as no words around age 2, major social communication concerns, or loss of skills.
-- Extreme sensory sensitivity, persistent sleep disruption, feeding refusal, choking fear, or weight/growth concerns.
-- Toileting accidents after age 5 when frequent and persistent.
+- Sensory processing-related difficulty or sensory sensitivity that persistently disrupts meals, clothing, sleep, hygiene, school, outings, or caregiving.
+- Persistent sleep disruption for months, night terrors with injury risk, loud snoring/breathing pauses, severe insomnia, or caregiver exhaustion affecting safety.
+- Feeding refusal, choking fear, vomiting, extreme restriction, or weight/growth concerns.
+- Toileting pain, constipation, blood, frequent accidents after age 5, or sudden toileting regression after a stable period.
+- Language concerns such as no words around age 2, loss of language, or major social communication concerns.
 - Parent anxiety, depression, rage, exhaustion, or avoidance that affects daily function.
 - Parenting conflict that is severe, escalating, or unsafe.
 
@@ -45,13 +59,14 @@ Treat as yellow when the user describes:
 - Recommend a pediatrician, child psychologist, therapist, or relevant professional.
 - Then give "while waiting" supports: connection, predictable routines, reducing triggers, protecting safety, and tracking patterns.
 - Keep language non-blaming: this is not proof that the child or parent is "bad."
+- If the user asks "is this X diagnosis?", say you cannot diagnose and name the observable concern instead.
 
 ## Green flow
 
 When no red/yellow trigger appears:
 
 1. Continue to `references/routing-guide.md`.
-2. Use `references/evidence-matrix.md` for sleep, feeding, toileting, aggression, and separation.
+2. Use `references/evidence-matrix.md` for high-frequency topics and escalation thresholds.
 3. Give practical positive parenting advice.
 
 ## Short bilingual safety wording

@@ -8,9 +8,14 @@ learning-progress.md
 .clawhub/
 .clawdhub/
 node_modules/
+dist/
+__pycache__/
+*.pyc
 
 # Local machine and editor noise.
 .DS_Store
+__MACOSX/
+._*
 *.swp
 *.swo
 

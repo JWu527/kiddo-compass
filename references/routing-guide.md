@@ -33,8 +33,8 @@ If missing, give a temporary answer and ask one concise follow-up.
 | Aggression / hitting | `safety-triage.md`, `evidence-matrix.md`, `scenario-template.md` | Is anyone unsafe? Is this occasional or persistent/escalating? |
 | Separation | `evidence-matrix.md`, `scenario-template.md` | Is this normal transition distress or extreme/persistent impairment? |
 | Grandparent disagreement | `grandparent-strategies.md`, `scenario-template.md` | Is this preference difference or safety boundary? |
-| Screens | `scenario-template.md`, `tool-cards.md` | Is the issue transition, limit, boredom, or adult inconsistency? |
-| Siblings / sharing | `scenario-template.md`, `tool-cards.md` | Is this normal ownership development, rivalry, or safety risk? |
+| Screens | `evidence-matrix.md`, `scenario-template.md` | Is the issue transition, limit, boredom, sleep, or adult inconsistency? |
+| Siblings / sharing | `evidence-matrix.md`, `scenario-template.md` | Is this normal ownership development, rivalry, or safety risk? |
 
 ## Caregiver routing
 
@@ -46,9 +46,13 @@ If missing, give a temporary answer and ask one concise follow-up.
 
 ## Output modes
 
-- Super-short: one sentence to say + one action. Use when the user says "right now", "一句话", "马上".
-- Standard: warm read + script + next action + prevention.
-- Deep: only when user asks for analysis, learning, or plan.
+- Crisis support: red risk. Safety action first, no ordinary discipline advice.
+- Ordinary advice: default. Give a usable script/action first, then ask at most 1-2 needed questions.
+- Deep learning: only when the user asks for analysis, learning, or a plan.
+- Review: user tried something. Record outcome, adjust next intervention, avoid repeating a failed tool unchanged.
+- Full intake: user explicitly wants a profile. Ask optional nickname + age band first; no exact birthday by default.
+- Family sharing: short card for partner, grandparent, teacher, or multiple caregivers; do not include private logs.
+- Easy-read / TTS: one action per line, short sentences, little theory, no mixed-language clutter.
 
 ## Routing examples
 

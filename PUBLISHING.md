@@ -5,22 +5,29 @@
 ## 发布前检查
 
 1. 确认 `SKILL.md` 存在，并包含 `name`、`description`、`version` 和 `metadata.openclaw`。
-2. 确认 `child-profile.md`、`practice-log.md`、`learning-progress.md` 没有被 Git 跟踪。
-3. 更新 `CHANGELOG.md`。
-4. 检查 `.clawhubignore` 是否覆盖运行期私人文件。
-5. 检查没有真实孩子、家庭、联系方式或密钥信息。
-6. 抽样跑 `references/evaluation-set.md`，确认安全分诊、渐进建档和中英文路由符合预期。
-7. 对照 `PUBLIC_BETA_COVERAGE.md`，确认本次发布没有把 `Partial` 或 `Deferred` 项误写成已完成。
+2. 确认公开包使用 `skill-package-manifest.txt` 白名单打包，不直接发布整个工作区。
+3. 确认 `child-profile.md`、`practice-log.md`、`learning-progress.md` 没有被 Git 跟踪，也不在 manifest 中。
+4. 更新 `CHANGELOG.md`。
+5. 检查 `.gitignore`、`.clawhubignore` 和 manifest 是否覆盖 `.git/`、`__MACOSX/`、`._*`、`.env*`、`*.log`、`*.private.md`。
+6. 运行发布前隐私与红线扫描。
+7. 抽样跑 `references/evaluation-set.md` 或用 `references/evaluation-set.jsonl` 接入回归 harness，确认 P0 对话用例 100% 通过。
+8. 对照 `PUBLIC_BETA_COVERAGE.md`，确认本次发布没有把 `Partial` 或 `Deferred` 项误写成已完成。
 
 ```bash
 git status --short --ignored
 git ls-files child-profile.md practice-log.md learning-progress.md
+python3 scripts/release_guardrails.py check
+python3 scripts/beta_kpi_gate.py
+python3 scripts/release_guardrails.py list
+python3 scripts/run_regression.py --priority P0
 ruby -ryaml -e 's=File.read("SKILL.md"); fm=s.match(/\A---\n(.*?)\n---/m)[1]; data=YAML.safe_load(fm); abort("missing skill metadata") unless data["name"] && data["description"] && data["version"] && data.dig("metadata","openclaw","skillKey"); puts "frontmatter ok"'
 ruby -e 'Dir["**/*.md"].each { |f| File.read(f).scan(/\[[^\]]+\]\(([^)]+)\)/).flatten.each { |link| next if link =~ /\Ahttps?:/; target=link.split("#",2)[0]; next if target.empty?; path=File.expand_path(target, File.dirname(f)); abort("missing #{target} referenced from #{f}") unless File.exist?(path) } }; puts "markdown local links ok"'
-rg -n "真实姓名[:：]\\S|精确生日[:：]\\S|手机号[:：]?\\s*[0-9]|电话[:：]?\\s*[0-9]|地址[:：]\\S|学校[:：]\\S|token\\s*=|api[_-]?key\\s*=|password\\s*=|secret\\s*=" .
+python3 scripts/release_guardrails.py package --output dist/kiddo-compass.zip
 ```
 
-`git ls-files` 对私人文件应无输出。隐私扫描命令如有输出，需要逐条确认是否为真实私人数据；发布检查命令本身、隐私说明文字不算泄露。
+`git ls-files` 对私人文件应无输出。`release_guardrails.py` 会从白名单生成包文件列表，扫描隐私过采集、近诊断词、固定天数承诺、未验证热线和单因果标签。失败时不要发布。
+
+当前仓库可保留本地运行期文件供维护者测试，但公开 artifact 必须来自白名单 zip，而不是直接压缩整个目录。
 
 ## 版本规则
 

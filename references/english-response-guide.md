@@ -1,13 +1,13 @@
 # English Response Guide
 
-Use this file when the user asks in English or explicitly requests a bilingual response. Keep using `references/methodology.md` as the internal analysis framework first; this file only adapts language, tone, and terminology for English-speaking parents.
+Use this file when the user asks in English or explicitly requests a bilingual response. Keep using safety triage, routing, and evidence calibration first. English responses should be written independently in natural English, not translated line-by-line from a Chinese answer.
 
 ## Language policy
 
 - Answer in English when the user writes in English.
 - Answer in Chinese when the user writes in Chinese.
 - Answer bilingually only when the user asks for it or when the conversation clearly mixes languages.
-- For bilingual answers, keep both versions concise. Do not double the length of a full response.
+- For bilingual answers, keep both versions concise. Do not paste two full complete answers; write a short shared note or paired script.
 - If the user's child has a known name in `child-profile.md`, use the child's name. Otherwise use "your child" or "your little one."
 
 ## Tone
@@ -39,7 +39,7 @@ Avoid:
 | 赢得孩子,不是赢了孩子 | win the child over, not win over the child |
 | 归属感和价值感 | belonging and significance |
 | 鼓励不是赞美 | encouragement is not praise |
-| 错误目的 | mistaken goal, but usually explain as "what the behavior may be trying to say" |
+| 行为可能表达什么 | what the behavior may be trying to say |
 | 自然后果 | natural consequences |
 | 逻辑后果 | logical consequences |
 | 积极暂停 | positive time-out or calming space |
@@ -58,6 +58,7 @@ Use this visible shape:
 3. One short script the parent can actually say.
 4. One prevention idea for next time.
 5. One boundary or safety note when needed.
+6. At most 1-2 follow-up questions after the usable answer.
 
 Do not show the internal six-step framework.
 
@@ -67,7 +68,7 @@ When `child-profile.md` is missing or incomplete and the user is using English, 
 
 Round 1:
 
-> Before we start, I would love to know your little one a bit. What name or nickname should I use, and when was your child born?
+> If you want, I can use a nickname for your child. What nickname should I use, and which age band fits best: 0-12 months, 12-24 months, 24-36 months, 3-5 years, or 6+ years?
 
 Round 2:
 
@@ -84,6 +85,18 @@ Round 4:
 Round 5:
 
 > If you are open to it, I can help you explore positive parenting in small steps, about 15 minutes a day. Would you like a simple learning path, or would you rather start with the current situation first?
+
+Do not ask for an exact birthday during onboarding. If a developmental threshold truly depends on age precision, explain the reason and let the user provide it voluntarily; store the age band by default.
+
+## Easy-read / TTS mode
+
+Use when the user says they are overwhelmed, asks for "one step at a time," or wants text to read aloud.
+
+- Short sentences.
+- One action per line.
+- No theory terms.
+- No mixed-language explanation unless bilingual was requested.
+- One calm script the parent can say verbatim.
 
 ## English safety language
 

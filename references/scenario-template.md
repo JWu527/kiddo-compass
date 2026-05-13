@@ -92,7 +92,7 @@ Quick help: Stop the body first, teach one replacement after calm returns.
 Script: "我不会让你打人。你很生气，可以跺脚，不能打。"
 Prevention: Practice replacement actions when calm, reduce known triggers, and plan repair language.
 If it fails: Track frequency, injury, trigger, and repair; months-long or injurious aggression needs professional evaluation.
-Load: safety-triage.md, evidence-matrix.md, tool-cards.md.
+Load: safety-triage.md, evidence-matrix.md.
 ```
 
 ### 6. Grabbing toys or not sharing
@@ -106,7 +106,7 @@ Quick help: Protect ownership and turn-taking without moral labeling.
 Script: "你还没准备好给。我们等你玩完，再轮到妹妹。妹妹现在可以选这辆车。"
 Prevention: Put special toys away before playdates; use turn signals like timer or "when you are done."
 If it fails: Reduce shared-toy pressure and practice trading when calm; repeated injury moves to safety triage.
-Load: routing-guide.md, tool-cards.md.
+Load: routing-guide.md.
 ```
 
 ### 7. Tantrum or emotional meltdown
@@ -120,7 +120,7 @@ Quick help: Fewer words, lower body, calm presence, and one boundary.
 Script: "你真的很想要。现在不能买。我在这里陪你哭一会儿。"
 Prevention: Preview transitions, check snack/rest, and offer limited choices before the hard moment.
 If it fails: Track duration and triggers; extreme, frequent, or escalating meltdowns may need professional input.
-Load: evidence-matrix.md, routing-guide.md, tool-cards.md.
+Load: evidence-matrix.md, routing-guide.md.
 ```
 
 ### 8. Public-place meltdown
@@ -190,7 +190,7 @@ Quick help: Preview ending and give a concrete after-screen action.
 Script: "还有两分钟。结束后你选搭积木还是洗澡玩水。"
 Prevention: Visual timer, same ending routine, charging place outside reach, and adult alignment.
 If it fails: Change access rules before the next session instead of debating at every ending.
-Load: routing-guide.md, tool-cards.md.
+Load: routing-guide.md.
 ```
 
 ### 13. Dressing or leaving the house refusal
@@ -204,7 +204,7 @@ Quick help: Offer two acceptable choices and keep the destination boundary clear
 Script: "我们要出门了。你选蓝鞋还是白鞋？你选，或者我帮你选。"
 Prevention: Prepare clothes the night before, build a picture routine, and add buffer time.
 If it fails: Reduce choices and check sensory triggers; car-seat safety remains a non-negotiable safety boundary.
-Load: routing-guide.md, tool-cards.md.
+Load: routing-guide.md.
 ```
 
 ### 14. Morning rush
@@ -218,7 +218,7 @@ Quick help: Move from verbal reminders to a visible routine.
 Script: "惯例表上下一步是什么？你指给我看。"
 Prevention: Fewer morning decisions, prep the night before, and one connection moment before instructions.
 If it fails: Remove one morning task from the schedule and review bedtime; recurring chaos is often a system problem, not only child behavior.
-Load: routing-guide.md, tool-cards.md.
+Load: routing-guide.md.
 ```
 
 ### 15. Whining or repeated demands
@@ -232,7 +232,7 @@ Quick help: Acknowledge once, hold the limit, and show the acceptable way to ask
 Script: "你很想要。现在不能买。你可以用普通声音说：我很失望。"
 Prevention: Predictable yes/no rules, special time, and practice asking when calm.
 If it fails: Track when whining works; if adults sometimes give in after escalation, align the adult response first.
-Load: routing-guide.md, tool-cards.md.
+Load: routing-guide.md.
 ```
 
 ### 16. Sibling conflict
@@ -246,7 +246,7 @@ Quick help: Stop harm, avoid instant judge mode, and name both needs.
 Script: "我不会让你们伤害对方。你想要车，妹妹也想要车。我们先分开一下，再想办法。"
 Prevention: Separate special time, fewer comparison words, and clear repair routines.
 If it fails: Track patterns by time/trigger; persistent injury or fear moves to yellow triage.
-Load: safety-triage.md, routing-guide.md, tool-cards.md.
+Load: safety-triage.md, routing-guide.md.
 ```
 
 ### 17. Lying or hiding mistakes
@@ -260,7 +260,7 @@ Quick help: Make truth safer than cover-up.
 Script: "我看到杯子碎了。我们先处理玻璃。你告诉我发生了什么，我会帮你一起想办法。"
 Prevention: Repair-focused consequences, adult apology modeling, and less interrogation.
 If it fails: Look at the adult response after mistakes; if lying protects the child from harsh reactions, change the repair routine first.
-Load: routing-guide.md, tool-cards.md.
+Load: routing-guide.md.
 ```
 
 ### 18. Homework or practice resistance
@@ -274,7 +274,7 @@ Quick help: Shrink the first step and give agency inside the boundary.
 Script: "今天先做 10 分钟。你选先写语文还是先读英语。10 分钟后我们看下一步。"
 Prevention: Predictable routine, visible progress, and problem-solving meeting when calm.
 If it fails: Check skill mismatch and workload; ongoing distress may need teacher or professional assessment.
-Load: routing-guide.md, tool-cards.md.
+Load: routing-guide.md.
 ```
 
 ### 19. Grandparent disagreement

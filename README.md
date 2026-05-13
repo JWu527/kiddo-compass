@@ -1,8 +1,10 @@
 # Kiddo Compass
 
-Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的积极育儿陪伴 skill。它把原创主题笔记、阿德勒取向基础、通用育儿工具指南、常见育儿场景、安全分诊和 30 天练习计划组织成可被 AI agent 按需加载的本地知识库。
+Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的积极育儿陪伴 skill。它把原创实践卡、常见育儿场景、安全分诊、证据校准和可选练习路径组织成可被 AI agent 按需加载的本地知识库。
 
 这个项目适合父母、照顾者和教育者在日常对话中获得更具体、更温和也更有边界的育儿回应。它不是医疗、心理诊断或治疗工具。
+
+当前仓库处于内部测试 / public-beta candidate 阶段。未通过白名单打包、隐私扫描和 P0 回归前，不应公开发布。
 
 [English README](README.en.md)
 
@@ -10,12 +12,14 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的积极育儿陪伴 skill
 
 - 按 `SKILL.md` 触发积极育儿陪伴能力。
 - 公测版默认先安全分诊、先给临时建议，再邀请用户补充画像；完整 5 轮建档是可选路径。
-- 按 `references/methodology.md` 的 6 步框架分析育儿场景。
+- 按 `references/methodology.md` 做内部分析，但普通回答不暴露理论标签或 6 步结构。
 - 增加年龄、场景、照护者路由和证据校准层。
 - 维护 deep research 覆盖矩阵，明确哪些已覆盖、部分覆盖或延期。
 - 支持英文和中英双语积极育儿回答。
-- 根据用户意图按需读取主题笔记、工具指南、场景指南、学习计划和 FAQ。
+- 增加 easy-read / TTS 友好模式，适合崩溃现场和朗读。
+- 根据用户意图按需读取安全、证据、场景、状态和语言指南。
 - 自动维护本地 `child-profile.md`、`practice-log.md` 和 `learning-progress.md`。
+- 写状态前区分 facts、hypotheses、interventions、outcomes 和 consent_flags。
 - 对自伤、严重攻击、发展迟缓、疑似神经发育问题等高风险信号保留专业边界。
 
 ## 目录结构
@@ -28,10 +32,18 @@ kiddo-compass/
 ├── references/                      # 按需加载的知识库
 ├── references/safety-triage.md
 ├── references/routing-guide.md
+├── references/dialogue-modes.md
+├── references/accessibility-i18n.md
 ├── references/evidence-matrix.md
 ├── references/scenario-template.md
 ├── references/evaluation-set.md
+├── references/evaluation-set.jsonl
 ├── references/english-response-guide.md
+├── references/state-schema.md
+├── scripts/beta_kpi_gate.py           # beta readiness KPI gate
+├── scripts/release_guardrails.py       # 白名单打包和隐私扫描
+├── scripts/run_regression.py           # Hermes JSONL 回归 runner
+├── skill-package-manifest.txt          # 公开包文件白名单
 ├── child-profile.example.md         # 私人画像模板
 ├── practice-log.example.md          # 实践日志模板
 ├── learning-progress.example.md     # 学习进度模板
@@ -47,7 +59,7 @@ kiddo-compass/
 └── .clawhubignore
 ```
 
-运行期会生成下列本地私人文件，仓库通过 `.gitignore` 和 `.clawhubignore` 避免发布它们：
+运行期会生成下列本地私人文件。公开 artifact 必须通过 `skill-package-manifest.txt` 白名单生成，不能直接压缩整个工作区：
 
 ```text
 child-profile.md
@@ -85,6 +97,8 @@ openclaw skills install kiddo-compass
 
 首次使用时，agent 会先检查 `child-profile.md` 是否存在且完整。如果没有，公测版不会强制用户先完整建档，而是先给临时建议，再只追问 1-2 个必要问题。用户愿意继续时，才按 `SKILL.md` 中定义的 5 轮问答初始化孩子画像和实践日志。初始化信息只应保存在本地私人文件中，不应提交到开源仓库或发布到 ClawHub。
 
+默认只问可选昵称和年龄段。精确生日、电话、学校、地址等敏感信息不会默认采集或持久化。
+
 示例问题：
 
 ```text
@@ -96,7 +110,7 @@ Kiddo Compass，我家 3 岁孩子睡前一直拖延，讲完故事还要继续�
 ```
 
 ```text
-帮我做一个每天 15 分钟的积极育儿学习计划。
+帮我做一个每天 15 分钟的积极育儿练习路径。
 ```
 
 ```text
@@ -112,21 +126,20 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 | `PUBLIC_BETA_COVERAGE.md` | deep research 报告覆盖矩阵 |
 | `references/safety-triage.md` | 红/黄/绿安全分诊 |
 | `references/routing-guide.md` | 年龄、场景、照护者路由 |
+| `references/dialogue-modes.md` | 危机、普通建议、深度学习、复盘、intake、家庭共享和 easy-read 模式 |
+| `references/accessibility-i18n.md` | 中文、英文、双语和 TTS 友好模板 |
 | `references/evidence-matrix.md` | 睡眠、喂养、如厕、攻击、分离证据校准 |
 | `references/scenario-template.md` | 高频场景卡片标准模板 |
 | `references/evaluation-set.md` | 公测版轻量回归评测集 |
+| `references/evaluation-set.jsonl` | 可执行回归数据格式 |
 | `references/methodology.md` | 场景分析主框架和输出规则 |
 | `references/english-response-guide.md` | 英文和中英双语回应风格 |
-| `references/core-concepts.md` | 积极育儿核心理念 |
-| `references/adler-psychology.md` | 阿德勒心理学和四个错误目的 |
-| `references/tool-cards.md` | 通用积极育儿工具指南 |
+| `references/state-schema.md` | 本地状态 schema 与错误处理 |
 | `references/scenario-guide.md` | 睡前、吃饭、哭闹等场景实操 |
 | `references/grandparent-strategies.md` | 祖辈管教不一致场景 |
-| `references/learning-map.md` | 学习地图 |
-| `references/30-day-plan.md` | 30 天学习计划 |
 | `references/feedback-and-patrol.md` | 实践反馈和巡检闭环 |
-| `references/faq.md` | 常见问题速查 |
-| `references/chapter-*.md` | 主题学习笔记 |
+
+仓库中保留的读书/学习笔记、章节式资料、工具清单和固定天数计划不进入公开发布白名单，需完成版权与定位审查后再决定是否公开。
 
 ## 维护与验证
 
@@ -134,15 +147,19 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 
 ```bash
 git status --short
+python3 scripts/release_guardrails.py check
+python3 scripts/beta_kpi_gate.py
+python3 scripts/run_regression.py --priority P0
+python3 -m unittest tests/test_release_guardrails.py
 rg -n "child-profile.md|practice-log.md|learning-progress.md" .gitignore .clawhubignore README.md SKILL.md
 rg -n "^---|^name:|^version:|^description:|^metadata:" SKILL.md
-rg -n "真实姓名[:：]\\S|精确生日[:：]\\S|手机号[:：]?\\s*[0-9]|电话[:：]?\\s*[0-9]|地址[:：]\\S|学校[:：]\\S|token\\s*=|api[_-]?key\\s*=|password\\s*=|secret\\s*=" .
 ```
 
 发布前还应确认：
 
 - `SKILL.md` frontmatter 可以被 YAML 解析。
-- 不包含真实孩子画像、家庭信息、联系方式或其他私人内容。
+- 公开包不包含真实孩子画像、家庭信息、联系方式或其他私人内容。
+- P0 JSONL/Hermes 回归 100% 通过。
 - 新增 reference 已在 `SKILL.md` 或 README 的导航中说明何时读取。
 - `PUBLIC_BETA_COVERAGE.md` 中的 `Partial` / `Deferred` 项没有被误标为已完成。
 - `references/evaluation-set.md` 中的安全场景和渐进建档场景人工抽样通过。

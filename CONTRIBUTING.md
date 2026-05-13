@@ -7,7 +7,7 @@
 欢迎提交：
 
 - 更清晰的 `SKILL.md` 触发描述和工作流说明。
-- 新增或修正 `references/` 下的积极育儿主题笔记、场景指南和工具指南。
+- 新增或修正 `references/` 下的原创实践卡、场景指南、安全和证据指南。
 - 英文或中英双语回应指南，但要优先保持自然表达，不做生硬逐句直译。
 - 更好的示例模板。
 - 隐私、安全、专业边界相关改进。
@@ -19,6 +19,7 @@
 - 将积极育儿包装成医学诊断、心理治疗或保证有效的方案。
 - 与 `SKILL.md` 中专业边界冲突的建议。
 - 大段未经授权复制的版权材料。
+- 未经版权与定位审查就公开章节式读书笔记、固定天数计划或高度贴近原体系的工具清单。
 
 ## 开发原则
 
@@ -27,6 +28,7 @@
 3. 回答风格应贴近日常父母对话，少用术语堆砌。
 4. 场景建议必须具体，不写泛泛的“多陪伴、多沟通”。
 5. 涉及高风险信号时，优先建议专业帮助。
+6. 默认只采集可选昵称和年龄段；不要把精确生日、电话、学校、地址写成默认字段。
 
 ## 本地私人文件
 
@@ -44,7 +46,8 @@ learning-progress.md
 
 ```bash
 git status --short
-rg -n "真实|姓名|出生日期|手机号|电话|地址|token|api[_ -]?key|password|secret" .
+python3 scripts/release_guardrails.py check
+python3 -m unittest tests/test_release_guardrails.py
 rg -n "^---|^name:|^version:|^description:|^metadata:" SKILL.md
 ```
 
