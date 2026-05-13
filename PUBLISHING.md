@@ -49,8 +49,8 @@ clawhub login
 clawhub skill publish . \
   --slug kiddo-compass \
   --name "Kiddo Compass" \
-  --version 0.4.0 \
-  --changelog "Add deep research coverage matrix, recalibrate public beta kanban, expand scenario cards, and soften unsupported absolute wording." \
+  --version 0.4.1 \
+  --changelog "Add front-loaded wording guardrails against fixed-time result promises and single-cause behavior claims." \
   --tags latest,parenting,positive-discipline,bilingual,public-beta
 ```
 
@@ -60,8 +60,8 @@ clawhub skill publish . \
 clawhub publish . \
   --slug kiddo-compass \
   --name "Kiddo Compass" \
-  --version 0.4.0 \
-  --changelog "Add deep research coverage matrix, recalibrate public beta kanban, expand scenario cards, and soften unsupported absolute wording." \
+  --version 0.4.1 \
+  --changelog "Add front-loaded wording guardrails against fixed-time result promises and single-cause behavior claims." \
   --tags latest,parenting,positive-discipline,bilingual,public-beta
 ```
 
