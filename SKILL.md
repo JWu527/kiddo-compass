@@ -1,18 +1,18 @@
 ---
-name: positive-discipline
+name: kiddo-compass
 description: >
-  正面管教(Positive Discipline)育儿顾问与知识库。基于简·尼尔森《正面管教》全书笔记、阿德勒心理学基础、52个工具卡、场景实操指南和30天学习计划。
+  Kiddo Compass 是面向父母和照顾者的正面管教(Positive Discipline)育儿顾问与知识库。基于简·尼尔森《正面管教》全书笔记、阿德勒心理学基础、52个工具卡、场景实操指南和30天学习计划。
   适用于:(1) 任何育儿场景的应对策略分析(孩子不睡觉、扔食物、发脾气、不分享、打人、拖延等);
   (2) 学习正面管教核心理念和方法论; (3) 查询特定工具卡或章节内容;
   (4) 制定个性化学习计划或实践指导。
-  当用户提到"正面管教"、"孩子不听话"、"育儿方法"、"温和而坚定"、"管教方法"、
+  当用户提到"Kiddo Compass"、"正面管教"、"孩子不听话"、"育儿方法"、"温和而坚定"、"管教方法"、
   "分离焦虑"、"睡前冲突"、"扔食物"、"不分享"、"发脾气"、"打人"等育儿话题时触发。
-  Triggers: positive discipline, parenting, toddler discipline, bedtime struggles,
+  Triggers: kiddo compass, positive discipline, parenting, toddler discipline, bedtime struggles,
   gentle parenting, Adler psychology, child misbehavior, encouragement vs praise,
   sharing, hitting, tantrum, whining, sibling rivalry.
 ---
 
-# 正面管教 - Positive Discipline Skill
+# Kiddo Compass - Positive Discipline Parenting Skill
 
 ## ⚡ 首次使用:知识库初始化(强制优先)
 
@@ -53,7 +53,7 @@ description: >
 ### 生成的知识库文件
 
 ```
-skills/positive-discipline/
+skills/kiddo-compass/
 ├── child-profile.md       # 孩子画像 + 实践记录(自动维护)
 ├── practice-log.md        # 实践日记(用户口述,Agent 整理写入)
 └── learning-progress.md   # 30 天学习进度
