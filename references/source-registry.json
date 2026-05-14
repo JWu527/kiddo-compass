@@ -1,0 +1,290 @@
+{
+  "schema_version": "1",
+  "review_policy": {
+    "official_health_and_development": "review monthly during beta, then at least quarterly",
+    "legal_and_privacy": "review before each public release and when law or platform scope changes",
+    "method_and_practice": "review quarterly or when an incident exposes ambiguity"
+  },
+  "sources": [
+    {
+      "source_id": "cdc-sleep-about",
+      "source_title": "About Sleep",
+      "issuer": "Centers for Disease Control and Prevention",
+      "source_url": "https://www.cdc.gov/sleep/about/index.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Sleep duration, sleep quality, and sleep-problem escalation calibration."
+    },
+    {
+      "source_id": "cdc-positive-parenting-toddlers",
+      "source_title": "Positive Parenting Tips: Toddlers 2-3 Years",
+      "issuer": "Centers for Disease Control and Prevention",
+      "source_url": "https://www.cdc.gov/child-development/positive-parenting-tips/toddlers-2-3-years.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Developmentally appropriate toddler support and caregiver routines."
+    },
+    {
+      "source_id": "cdc-act-early-2y",
+      "source_title": "Milestones by 2 Years",
+      "issuer": "Centers for Disease Control and Prevention",
+      "source_url": "https://www.cdc.gov/act-early/milestones/2-years.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Developmental milestone calibration for language and social communication concerns."
+    },
+    {
+      "source_id": "cdc-developmental-monitoring-screening",
+      "source_title": "Developmental Monitoring and Screening",
+      "issuer": "Centers for Disease Control and Prevention",
+      "source_url": "https://www.cdc.gov/act-early/about/developmental-monitoring-and-screening.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Professional screening and evaluation boundary for developmental concerns."
+    },
+    {
+      "source_id": "cdc-child-abuse-prevention",
+      "source_title": "Preventing Child Abuse and Neglect",
+      "issuer": "Centers for Disease Control and Prevention",
+      "source_url": "https://www.cdc.gov/child-abuse-neglect/prevention/index.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Child safety, caregiver stress, and violence-prevention boundary."
+    },
+    {
+      "source_id": "cdc-abusive-head-trauma",
+      "source_title": "About Abusive Head Trauma",
+      "issuer": "Centers for Disease Control and Prevention",
+      "source_url": "https://www.cdc.gov/child-abuse-neglect/about/about-abusive-head-trauma.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Shaking, urgent safety separation, and medical evaluation boundary."
+    },
+    {
+      "source_id": "cdc-suicide-facts",
+      "source_title": "Facts About Suicide",
+      "issuer": "Centers for Disease Control and Prevention",
+      "source_url": "https://www.cdc.gov/suicide/facts/index.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Self-harm and suicidal-language safety routing."
+    },
+    {
+      "source_id": "cdc-child-passenger-safety",
+      "source_title": "Child Passenger Safety",
+      "issuer": "Centers for Disease Control and Prevention",
+      "source_url": "https://www.cdc.gov/child-passenger-safety/about/index.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Car-seat and restraint safety boundary."
+    },
+    {
+      "source_id": "cdc-oral-health-children",
+      "source_title": "Oral Health Tips for Children",
+      "issuer": "Centers for Disease Control and Prevention",
+      "source_url": "https://www.cdc.gov/oral-health/prevention/oral-health-tips-for-children.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Toothbrushing and oral-health routine calibration."
+    },
+    {
+      "source_id": "who-responsive-feeding",
+      "source_title": "Nurturing young children through responsive feeding: thematic brief",
+      "issuer": "World Health Organization and UNICEF",
+      "source_url": "https://iris.who.int/handle/10665/367886",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Responsive feeding and hunger/satiety respect."
+    },
+    {
+      "source_id": "who-nurturing-care-practice-guide",
+      "source_title": "Nurturing Care Practice Guide",
+      "issuer": "World Health Organization",
+      "source_url": "https://www.who.int/publications/i/item/9789240058651",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "General nurturing-care calibration for early childhood support."
+    },
+    {
+      "source_id": "aap-responsive-feeding",
+      "source_title": "How Often and How Much Should Your Baby Eat?",
+      "issuer": "American Academy of Pediatrics / HealthyChildren.org",
+      "source_url": "https://www.healthychildren.org/English/ages-stages/baby/feeding-nutrition/Pages/How-Often-and-How-Much-Should-Your-Baby-Eat.aspx",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Feeding cues and responsive feeding for infants."
+    },
+    {
+      "source_id": "aap-picky-eaters",
+      "source_title": "10 Tips for Parents of Picky Eaters",
+      "issuer": "American Academy of Pediatrics / HealthyChildren.org",
+      "source_url": "https://www.healthychildren.org/English/ages-stages/toddler/nutrition/Pages/Picky-Eaters.aspx",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Picky-eating normalization and escalation calibration."
+    },
+    {
+      "source_id": "aap-potty-training",
+      "source_title": "Potty Training",
+      "issuer": "American Academy of Pediatrics / HealthyChildren.org",
+      "source_url": "https://www.healthychildren.org/English/ages-stages/toddler/toilet-training/Pages/default.aspx",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Toileting training and pressure boundary."
+    },
+    {
+      "source_id": "aap-potty-ready",
+      "source_title": "How to Tell When Your Child is Ready",
+      "issuer": "American Academy of Pediatrics / HealthyChildren.org",
+      "source_url": "https://www.healthychildren.org/English/ages-stages/toddler/toilet-training/Pages/How-to-Tell-When-Your-Child-is-Ready.aspx",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Toileting readiness calibration."
+    },
+    {
+      "source_id": "aap-family-media-plan",
+      "source_title": "AAP Family Media Plan",
+      "issuer": "American Academy of Pediatrics / HealthyChildren.org",
+      "source_url": "https://www.healthychildren.org/English/fmp/Pages/MediaPlan.aspx",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Family media rules and screen transition calibration."
+    },
+    {
+      "source_id": "aap-childhood-fears-anxiety",
+      "source_title": "Fears and Phobias in Children: How Parents Can Help",
+      "issuer": "American Academy of Pediatrics / HealthyChildren.org",
+      "source_url": "https://www.healthychildren.org/English/health-issues/conditions/emotional-problems/Pages/Understanding-Childhood-Fears-and-Anxieties.aspx",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Fear, anxiety, and professional-support threshold."
+    },
+    {
+      "source_id": "aap-child-suicide-response",
+      "source_title": "What should I do if my child or teen is thinking about suicide?",
+      "issuer": "American Academy of Pediatrics / HealthyChildren.org",
+      "source_url": "https://www.healthychildren.org/English/tips-tools/ask-the-pediatrician/Pages/what-should-i-do-if-my-child-is-thinking-about-suicide.aspx",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Urgent routing for suicidal thoughts or statements."
+    },
+    {
+      "source_id": "aap-toothbrushing-young-children",
+      "source_title": "Toothbrushing Tips for Young Children",
+      "issuer": "American Academy of Pediatrics / HealthyChildren.org",
+      "source_url": "https://www.healthychildren.org/English/healthy-living/oral-health/Pages/Toothbrushing-Tips-for-Young-Children.aspx",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Toothbrushing routine and caregiver support."
+    },
+    {
+      "source_id": "sg-moh-childhood-developmental-screening",
+      "source_title": "Childhood developmental screening",
+      "issuer": "Ministry of Health Singapore",
+      "source_url": "https://www.moh.gov.sg/others/resources-and-statistics/childhood-developmental-screening",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Singapore developmental screening pathway."
+    },
+    {
+      "source_id": "sg-moh-grow-well",
+      "source_title": "Grow Well SG to support families in building healthy habits in children",
+      "issuer": "Ministry of Health Singapore",
+      "source_url": "https://www.moh.gov.sg/newsroom/grow-well-sg-to-support-families--in-building-healthy-habits-in-children-",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "Singapore screen-use, sleep, nutrition, movement, and child-health habit strategy."
+    },
+    {
+      "source_id": "cn-nhc-under3-care",
+      "source_title": "3岁以下婴幼儿健康养育照护指南（试行）",
+      "issuer": "中华人民共和国国家卫生健康委员会",
+      "source_url": "https://www.gov.cn/zhengce/zhengceku/2022-11/29/content_5729421.htm",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "official-consensus",
+      "notes": "China infant and toddler care guidance."
+    },
+    {
+      "source_id": "cn-child-info-protection",
+      "source_title": "儿童个人信息网络保护规定",
+      "issuer": "国家互联网信息办公室",
+      "source_url": "https://www.gov.cn/zhengce/2019-10/08/content_5728947.htm",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "legal-requirement",
+      "notes": "China children's personal information protection requirements."
+    },
+    {
+      "source_id": "cn-pipl",
+      "source_title": "中华人民共和国个人信息保护法",
+      "issuer": "全国人民代表大会",
+      "source_url": "https://www.npc.gov.cn/npc/c2597/c5854/bfflywwb/202311/t20231117_433007.html",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "legal-requirement",
+      "notes": "China personal information protection law for privacy boundary calibration."
+    },
+    {
+      "source_id": "pd-positive-discipline-overview",
+      "source_title": "Products - Positive Discipline",
+      "issuer": "Positive Discipline",
+      "source_url": "https://www.positivediscipline.com/store",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "method-source",
+      "notes": "Official Positive Discipline description for non-punitive, respectful, encouraging discipline."
+    },
+    {
+      "source_id": "pd-positive-discipline-tools-book",
+      "source_title": "Positive Discipline Parenting Tools Book",
+      "issuer": "Positive Discipline",
+      "source_url": "https://www.positivediscipline.com/products/positive-discipline-parenting-tools-book",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "method-source",
+      "notes": "Official Positive Discipline tool source for method calibration."
+    },
+    {
+      "source_id": "internal-scenario-library",
+      "source_title": "Kiddo Compass scenario library",
+      "issuer": "Kiddo Compass",
+      "source_ref": "references/scenario-template.md; references/scenario-guide.md; references/deep-scenario-packs.md",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "practice-pattern",
+      "notes": "Internal practice scripts and scenario routing. Not an official health source."
+    },
+    {
+      "source_id": "regional-resource-slots",
+      "source_title": "Kiddo Compass regional resource slots",
+      "issuer": "Kiddo Compass",
+      "source_ref": "references/regional-resources.json",
+      "reviewed_at": "2026-05-13",
+      "next_review_at": "2026-08-13",
+      "evidence_level": "safety-routing",
+      "notes": "Region/language emergency-resource slot library. It intentionally contains no publishable unverified phone numbers."
+    }
+  ]
+}

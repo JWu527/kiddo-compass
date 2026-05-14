@@ -1,12 +1,16 @@
 import sys
 import unittest
+import json
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from scripts import release_gate
 from scripts.quality_dashboard import build_dashboard
 from scripts.semantic_score import score_results
+from scripts.run_regression import compute_file_sha256, read_skill_version
 from scripts.source_freshness import check_freshness
 from scripts.state_service import StateStore
 from scripts.weekly_quality_report import build_weekly_report
@@ -30,12 +34,60 @@ class ProductClosureTests(unittest.TestCase):
         workflow = root / ".github" / "workflows" / "public-beta.yml"
         text = workflow.read_text(encoding="utf-8")
 
-        self.assertIn("python3 -m unittest discover -s tests -p 'test_*.py'", text)
-        self.assertIn("python3 scripts/release_guardrails.py check", text)
-        self.assertIn("python3 scripts/beta_kpi_gate.py", text)
-        self.assertIn("python3 scripts/build_release_package.py --output dist/kiddo-compass.zip", text)
-        self.assertIn("python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip", text)
-        self.assertIn("python3 scripts/semantic_score.py --report dist/regression-p0.json", text)
+        self.assertIn("python3 scripts/release_gate.py", text)
+        self.assertNotIn("skipping semantic score", text)
+
+    def test_release_gate_plan_contains_public_beta_hard_checks(self):
+        plan = release_gate.build_gate_plan(
+            ROOT,
+            report=Path("dist/regression-p0.json"),
+            bundle=Path("audit-bundle/kiddo-compass-audit-bundle.zip"),
+        )
+        names = [step.name for step in plan]
+
+        for expected in [
+            "unit tests",
+            "release guardrails check",
+            "source freshness",
+            "build audit bundle",
+            "inspect audit bundle",
+            "audit bundle allowlist",
+            "run P0 regression",
+            "require regression report",
+            "semantic score",
+        ]:
+            self.assertIn(expected, names)
+
+        for step in plan:
+            self.assertTrue(step.hard_fail, step.name)
+
+        guardrail = next(step for step in plan if step.name == "release guardrails check")
+        self.assertIn("SKILL.md runtime reference lint", guardrail.covers)
+        self.assertIn("live state leak check", guardrail.covers)
+        semantic = next(step for step in plan if step.name == "semantic score")
+        self.assertIn("stale regression report check", semantic.covers)
+
+    def test_release_gate_requires_regression_report(self):
+        missing = self.scratch_dir("missing-regression-report") / "dist" / "regression-p0.json"
+
+        with self.assertRaises(release_gate.GateFailure) as context:
+            release_gate.require_regression_report(missing)
+
+        self.assertIn("missing regression report", str(context.exception))
+
+    def test_release_gate_audit_bundle_allowlist_blocks_extra_files(self):
+        root = self.scratch_dir("bundle-allowlist")
+        (root / "skill-package-manifest.txt").write_text("SKILL.md\n", encoding="utf-8")
+        (root / "SKILL.md").write_text("---\nname: kiddo\n---\n", encoding="utf-8")
+        bundle = root / "bundle.zip"
+        with zipfile.ZipFile(bundle, "w") as archive:
+            archive.writestr("kiddo-compass/SKILL.md", "---\nname: kiddo\n---\n")
+            archive.writestr("kiddo-compass/unlisted.md", "extra")
+
+        with self.assertRaises(release_gate.GateFailure) as context:
+            release_gate.check_audit_bundle_allowlist(root, bundle)
+
+        self.assertIn("not in whitelist", str(context.exception))
 
     def test_state_store_supports_consent_and_data_rights(self):
         state_dir = self.scratch_dir("state")
@@ -61,6 +113,109 @@ class ProductClosureTests(unittest.TestCase):
 
         store.delete_state()
         self.assertFalse((state_dir / "state.json").exists())
+
+    def test_state_store_supports_all_schema_entities_with_confirmation_summary(self):
+        state_dir = self.scratch_dir("state-entities")
+        store = StateStore(state_dir)
+
+        summary = store.prepare_write(
+            "ChildProfile",
+            {
+                "nickname": "星星",
+                "age_band": "3-5y",
+                "caregiver_mode": "grandparent",
+            },
+            action_type="store_profile",
+        )
+
+        self.assertEqual(summary["entity"], "ChildProfile")
+        self.assertEqual(
+            summary["fields_to_write"],
+            ["age_band", "caregiver_mode", "nickname"],
+        )
+        self.assertFalse(summary["contains_identifying_info"])
+        self.assertTrue(summary["desensitized"])
+        self.assertTrue(summary["requires_user_confirmation"])
+
+        store.create_profile(
+            nickname="星星",
+            age_band="3-5y",
+            caregiver_mode="grandparent",
+            consent_scope="store_profile",
+        )
+        case = store.create_case(
+            child_id="local-child",
+            scene_type="sleep",
+            risk_route="everyday_support",
+            pattern_frequency="repeated",
+            source_type="user_confirmed",
+        )
+        intervention = store.create_intervention(
+            case_id=case["case_id"],
+            recommendation_type="script",
+            evidence_label="practice-pattern",
+            action="Use one final-story script.",
+            source_type="user_confirmed",
+        )
+        outcome = store.create_outcome(
+            intervention_id=intervention["intervention_id"],
+            result_type="partly-helped",
+            notes="Crying was shorter in the fictional example.",
+            source_type="observed_feedback",
+        )
+        exported = store.export_state()
+
+        self.assertEqual(exported["ChildProfile"]["nickname"], "星星")
+        self.assertEqual(exported["Case"][0]["case_id"], case["case_id"])
+        self.assertEqual(exported["Intervention"][0]["intervention_id"], intervention["intervention_id"])
+        self.assertEqual(exported["Outcome"][0]["outcome_id"], outcome["outcome_id"])
+        self.assertGreaterEqual(len(exported["ConsentLog"]), 4)
+        self.assertEqual(
+            {entry["action_type"] for entry in exported["ConsentLog"]},
+            {"store_profile", "store_case", "store_intervention", "store_outcome"},
+        )
+
+    def test_state_store_delete_and_anonymize_remove_direct_identifiers_from_export(self):
+        state_dir = self.scratch_dir("state-redaction")
+        store = StateStore(state_dir)
+        store.create_profile(
+            nickname="真实姓名王小云",
+            age_band="3-5y",
+            caregiver_mode="parent",
+            consent_scope="store_profile",
+        )
+        store.correct_field(
+            "ChildProfile",
+            "nickname",
+            "王小云",
+            confirmed=True,
+        )
+        store.create_case(
+            child_id="local-child",
+            scene_type="sleep",
+            risk_route="everyday_support",
+            pattern_frequency="repeated",
+            source_type="user_confirmed",
+            notes="Fictional school: Rainbow Kindergarten. Birthday 2021-08-18.",
+        )
+
+        before = store.prepare_write(
+            "Case",
+            {"notes": "Fictional school: Rainbow Kindergarten. Birthday 2021-08-18."},
+            action_type="store_case",
+        )
+        self.assertTrue(before["contains_identifying_info"])
+        self.assertFalse(before["desensitized"])
+
+        anonymized = store.anonymize()
+        exported = json.dumps(anonymized, ensure_ascii=False)
+        for token in ["王小云", "Rainbow Kindergarten", "2021-08-18", "真实姓名"]:
+            self.assertNotIn(token, exported)
+
+        store.delete_entity("ChildProfile")
+        exported_after_delete = json.dumps(store.export_state(), ensure_ascii=False)
+        for token in ["王小云", "Rainbow Kindergarten", "2021-08-18", "真实姓名"]:
+            self.assertNotIn(token, exported_after_delete)
 
     def test_quality_dashboard_summarizes_metrics_and_regression(self):
         out = self.scratch_dir("dashboard") / "dashboard.html"
@@ -88,19 +243,256 @@ class ProductClosureTests(unittest.TestCase):
 
         self.assertEqual(failures, [])
 
+    def test_source_freshness_blocks_missing_registry_fields_and_stale_reviews(self):
+        root = self.scratch_dir("source-freshness")
+        references = root / "references"
+        references.mkdir()
+        (references / "source-registry.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": "1",
+                    "sources": [
+                        {
+                            "source_id": "cdc-act-early-2y",
+                            "source_title": "CDC Milestones by 2 Years",
+                            "issuer": "CDC",
+                            "source_url": "https://www.cdc.gov/act-early/milestones/2-years.html",
+                            "reviewed_at": "2026-05-13",
+                            "next_review_at": "2026-08-13",
+                            "evidence_level": "official-consensus",
+                        },
+                        {
+                            "source_id": "todo-source",
+                            "source_title": "TODO source",
+                            "issuer": "TODO",
+                            "source_url": "TODO",
+                            "reviewed_at": "2026-05-13",
+                            "next_review_at": "2026-08-13",
+                            "evidence_level": "official-consensus",
+                        },
+                    ],
+                },
+                ensure_ascii=False,
+            ),
+            encoding="utf-8",
+        )
+        (references / "evidence-matrix.md").write_text(
+            "\n".join(
+                [
+                    "| Topic | Age band | Scene | evidence_level | source_id | source_title | issuer | source_url | reviewed_at | next_review_at | Applicability / limits | Upgrade threshold |",
+                    "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+                    "| Missing source | any | concern | official-consensus |  | CDC Milestones by 2 Years | CDC | https://www.cdc.gov/act-early/milestones/2-years.html | 2026-05-13 | 2026-08-13 | Use cautiously. | Evaluate. |",
+                    "| Missing next review | any | concern | needs-evaluation | cdc-act-early-2y | CDC Milestones by 2 Years | CDC | https://www.cdc.gov/act-early/milestones/2-years.html | 2026-05-13 |  | Use cautiously. | Evaluate. |",
+                    "| Unknown source | any | concern | official-consensus | missing-source | Missing | CDC | https://www.cdc.gov/act-early/milestones/2-years.html | 2026-05-13 | 2026-08-13 | Use cautiously. | Evaluate. |",
+                    "| TODO source | any | concern | official-consensus | todo-source | TODO source | TODO | TODO | 2026-05-13 | 2026-08-13 | Use cautiously. | Evaluate. |",
+                    "| Stale review | any | concern | official-consensus | cdc-act-early-2y | CDC Milestones by 2 Years | CDC | https://www.cdc.gov/act-early/milestones/2-years.html | 2025-01-01 | 2026-08-13 | Use cautiously. | Evaluate. |",
+                ]
+            ),
+            encoding="utf-8",
+        )
+        (references / "regional-resources.json").write_text(
+            json.dumps({"reviewed_at": "2026-05-13", "regions": []}),
+            encoding="utf-8",
+        )
+
+        failures = check_freshness(root, today="2026-05-13")
+        joined = "\n".join(failures)
+
+        self.assertIn("missing source_id", joined)
+        self.assertIn("missing next_review_at", joined)
+        self.assertIn("source_id not found in registry: missing-source", joined)
+        self.assertIn("TODO source reference", joined)
+        self.assertIn("stale evidence review date: 2025-01-01", joined)
+
     def test_semantic_score_flags_missing_required_assertions(self):
+        root = Path(__file__).resolve().parents[1]
         report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": read_skill_version(root / "SKILL.md"),
+                "eval_set_sha256": compute_file_sha256(root / "references" / "evaluation-set.jsonl"),
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
             "results": [
-                {"id": "A", "failures": [], "output": "安全 当地紧急"},
-                {"id": "B", "failures": ["required_regex missing '安全'"], "output": "讲道理"},
+                {"id": "A", "language": "zh", "failures": [], "output": "安全 当地紧急"},
+                {"id": "B", "language": "zh", "failures": ["required_regex missing '安全'"], "output": "讲道理"},
             ]
         }
 
-        scored = score_results(report)
+        scored = score_results(
+            report,
+            expected_eval_set_sha256=compute_file_sha256(root / "references" / "evaluation-set.jsonl"),
+            expected_skill_version=read_skill_version(root / "SKILL.md"),
+        )
 
         self.assertEqual(scored["failed"], 1)
         self.assertEqual(scored["passed"], 1)
         self.assertFalse(scored["ok"])
+
+    def test_semantic_score_requires_report_metadata(self):
+        report = {"results": [{"id": "A", "language": "zh", "failures": [], "output": "安全"}]}
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="expected-sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertIn("report-metadata", scored["failed_ids"])
+
+    def test_semantic_score_flags_stale_eval_hash(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "old-sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [{"id": "A", "language": "zh", "failures": [], "output": "安全"}],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="new-sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertIn("report-metadata", scored["failed_ids"])
+
+    def test_semantic_score_rescans_body_even_when_failures_are_empty(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {"id": "LEAK", "language": "zh", "failures": [], "output": "这是黄色分诊，一定会立刻治好。我已经保存。"}
+            ],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertIn("LEAK", scored["failed_ids"])
+
+    def test_semantic_score_uses_case_specific_new_schema_patterns(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {"id": "CASE", "language": "zh", "failures": [], "output": "这是黄色分诊。"}
+            ],
+        }
+        eval_cases = [
+            {
+                "id": "CASE",
+                "language": "zh",
+                "expected_constraints": [
+                    {"description": "mentions safety", "required_pattern": "安全"}
+                ],
+                "forbidden_patterns": ["黄色分诊"],
+            }
+        ]
+
+        scored = score_results(
+            report,
+            eval_cases=eval_cases,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertIn("CASE", scored["failed_ids"])
+
+    def test_semantic_score_flags_chinese_in_english_case(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {"id": "EN", "language": "en", "failures": [], "output": "请先联系 pediatrician for evaluation."}
+            ],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertIn("EN", scored["failed_ids"])
+
+    def test_semantic_score_allows_negated_certainty_language(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {"id": "ZH", "language": "zh", "failures": [], "output": "这不一定是自闭症，我不能诊断，建议做专业评估。"}
+            ],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertTrue(scored["ok"])
+
+    def test_semantic_score_flags_decorative_emoji_in_crisis_mode(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {
+                    "id": "CRISIS",
+                    "language": "zh",
+                    "mode": "crisis-support",
+                    "failures": [],
+                    "output": "先把孩子放到安全位置，再联系当地紧急支持 🌱",
+                }
+            ],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertIn("CRISIS", scored["failed_ids"])
 
     def test_deep_scenario_packs_cover_core_tracks(self):
         root = Path(__file__).resolve().parents[1]

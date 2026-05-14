@@ -13,22 +13,22 @@ created: 2026-05-10
 3. 用户纠正了画像中的信息
 
 ### 更新规则
-- **用户说管用** → 记录 ✅，下次同类场景优先推荐
-- **用户说不管用** → 记录 ❌，追问"当时具体怎么说的/做的"，分析失败原因
-- **用户说部分有效** → 记录 ⚠️，分析哪个环节出了问题，调整建议
-- **用户描述了新场景** → 追加到"当前关注"和"实践历史"中
+- **用户说管用** → 用户确认后，可写入 Outcome: `helped`
+- **用户说不管用** → 先追问"当时具体怎么说的/做的"，用户确认后，可写入 Outcome: `not-helpful`
+- **用户说部分有效** → 用户确认后，可写入 Outcome: `partly-helped`，再建议只调整一个变量
+- **用户描述了新场景** → 先给当前回答；用户确认后，可写入 Case
 
-写入前先读 `references/state-schema.md`。用户确认的信息写入 facts；模型判断写入 hypotheses；方法写入 interventions；反馈写入 outcomes。状态文件缺失、损坏或不可写时，不阻断当前回答。
+写入前先读 `references/state-schema.md`，用 confirmation summary 说明将写入哪些字段、是否含可识别信息、是否已降敏，以及是否需要用户确认。用户确认的信息写入 facts / Case / Intervention / Outcome；模型判断只能写入 hypotheses。状态文件缺失、损坏或不可写时，不阻断当前回答。
 
 ### 建议前必查
-每次给出新建议前,先扫描实践记录：
+如果本地状态可读，给出新建议前可以参考最近实践记录：
 - 最近 7 天内 ❌ → 不再推荐同一个,换工具
 - 最近 7 天内 ✅ → 强化使用,可以进阶
 - 最近 7 天内 ⚠️ → 调整使用方式后再推荐
 
 ### 反馈追问
 用户只描述场景没反馈效果时,温和地问问：
-> "上次一起探索的那个方法,你有试过吗？想听听你的感受 🌱"
+> "上次一起探索的那个方法,你有试过吗？想听听你的感受。"
 
 ---
 
@@ -39,48 +39,40 @@ Status: Spec-only。HEARTBEAT 只是可选集成，不是核心流程依赖。�
 ### 巡检 1: 每周学习进度（每周日 20:00）
 
 1. 读取 `learning-progress.md`
-2. 如果用户正在学习某个自选练习路径：
-   - 计算当前应到第几天
-   - 检查实际完成天数
-   - 落后 ≥ 3 天 → 温和提醒：
-     > "积极育儿学习小提醒：你上次练到 [主题]。
-     > 不着急,学习节奏可以自己调整。今晚有空的话可以花 15 分钟复盘一个小场景。"
-   - 进度正常 → 不打扰
+2. 如果用户正在练习某个 goal-driven track：
+   - 检查 `goal_type`、`practice_action`、`review_metric` 和 `last_reviewed_at`
+   - 超过约定复盘时间 → 温和提醒：
+     > "积极育儿练习小提醒：你上次在练 [goal_type]。
+     > 不着急，今晚有空的话可以用 5 分钟看一下：结果、可能原因、要不要只调一个变量。"
+   - 还在约定观察期内 → 不打扰
 3. 用户还没开始学习 → 不提醒（不强迫）
 
-### 巡检 2: 每月实践回顾（每月 1 日）
+### 巡检 2: 每月实践回顾草案（每月 1 日）
 
-1. 读取 `practice-log.md` 和 `child-profile.md` 实践记录
-2. 统计本月实践次数、各工具使用效果
-3. 生成简要回顾：
-   > "[孩子名字] 的积极育儿月度回顾：
-   > 本月你实践了 X 次,最常使用的工具是 [工具名]。
-   > ✅ 效果最好的：[场景+工具]
-   > ⚠️ 还在调整的：[场景+工具]
-   > 💡 下个月建议重点关注：[基于实践数据推荐]"
-4. 写入 `practice-log.md` 月度回顾区域
+Status: Spec-only。当前 `scripts/state_service.py` 不会定时生成或写入月度回顾。若宿主平台实现 HEARTBEAT，可在用户明确开启后读取本地 state export，生成草案，并在用户确认后再写入 Outcome 或 LearningTrack 相关字段。
+
+草案可以包含：
+
+- 本月用户确认过的练习次数
+- 哪个 Intervention 反馈较好
+- 哪个 Outcome 仍需调整
+- 下个月只建议关注的一个变量
 
 ### 巡检 3: 场景关注更新（每两周）
 
-1. 读取 `child-profile.md` 当前关注
-2. 检查实践记录中是否有新的场景出现
-3. 发现新困扰但没更新到当前关注 → 追加更新
-4. 某个困扰连续 3 次实践标记为 ✅ → 从"当前关注"移到"已改善",并发送：
-   > "好消息！之前让你头疼的 [场景] 看起来已经好了很多。
-   > 你的坚持真的有效果。🎉"
+Status: Spec-only。当前仓库不自动更新"当前关注"。若宿主平台实现该巡检，必须先生成 confirmation summary，并在用户确认后写入 Case / Outcome / LearningTrack。
 
 ---
 
 ## 本地档案更新规则
 
-Status: Implemented as an operating rule; actual writes still require user-confirmed facts and a host storage path. If storage is missing, damaged, or unsupported, continue answering and do not claim a write happened.
+Status: Implemented locally through `scripts/state_service.py` as a reference implementation; actual product storage still requires a host platform. If storage is missing, damaged, or unsupported, continue answering and do not claim a write happened.
 
 | 用户行为 | 更新动作 |
 |---------|---------|
-| 提到孩子长大或年龄段变化 | 更新 child-profile.md 年龄段和阶段；不默认保存精确生日 |
-| 描述了育儿场景 | 追加 practice-log.md 记录 |
-| 反馈了方法效果 | 更新 child-profile.md 实践记录 + practice-log.md |
-| 纠正了信息 | 更新 child-profile.md 对应字段 |
-| 完成了某天学习 | 更新 learning-progress.md 进度 |
-| 分享了学习感悟 | 追加 learning-progress.md 学习笔记 |
-| 描述了全新类别的困扰 | 追加 child-profile.md "当前关注" |
+| 提到孩子长大或年龄段变化 | 用户确认后，更新 ChildProfile.age_band；不默认保存精确生日 |
+| 描述了育儿场景 | 用户确认后，写入 Case |
+| 给出一个建议或脚本 | 用户确认后，可写入 Intervention |
+| 反馈了方法效果 | 用户确认后，写入 Outcome |
+| 纠正了信息 | 用户确认后，correct ChildProfile 或相关实体字段 |
+| 要求删除或匿名化 | 使用 delete / anonymize；完成后 export 不应残留 direct identifier |

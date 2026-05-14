@@ -3,19 +3,39 @@
   "reviewed_at": "2026-05-13",
   "regions": [
     {
-      "region": "generic",
+      "region": "generic-zh",
       "language": "zh",
+      "resource_slot": "generic emergency / pediatric / child protection routing in Chinese",
       "verified": true,
       "reviewed_at": "2026-05-13",
-      "emergency_guidance": "Use local emergency medical services, nearest hospital emergency department, or trusted local child protection/domestic violence resources.",
+      "emergency_guidance": "联系当地紧急服务、最近医院急诊或儿科急诊、可信成年人、本地儿童保护或家暴支持资源。未配置已验证号码时，只输出机构类型和就医路径。",
       "publishable_phone_numbers": []
     },
     {
-      "region": "generic",
+      "region": "generic-en",
       "language": "en",
+      "resource_slot": "generic emergency / pediatric / child protection routing in English",
       "verified": true,
       "reviewed_at": "2026-05-13",
-      "emergency_guidance": "Use local emergency services, nearest emergency department, or trusted local child protection/domestic violence resources.",
+      "emergency_guidance": "Use local emergency services, the nearest emergency department or pediatric emergency care, a trusted safe adult, local child protection, or domestic-violence support resources. If no verified number is configured, output institution types and care pathways only.",
+      "publishable_phone_numbers": []
+    },
+    {
+      "region": "CN",
+      "language": "zh",
+      "resource_slot": "China mainland generic emergency / pediatric / child protection routing",
+      "verified": true,
+      "reviewed_at": "2026-05-13",
+      "emergency_guidance": "建议走当地急救或医院急诊/儿科急诊路径；涉及儿童安全或家庭暴力风险时，联系可信成年人、当地社区/妇幼/儿童保护相关支持。当前未配置可发布的已验证电话号码，因此不要输出具体号码。",
+      "publishable_phone_numbers": []
+    },
+    {
+      "region": "SG",
+      "language": "en",
+      "resource_slot": "Singapore generic emergency / pediatric / child protection routing",
+      "verified": true,
+      "reviewed_at": "2026-05-13",
+      "emergency_guidance": "Use local emergency services, the nearest hospital emergency department or pediatric emergency care, a trusted safe adult, and local child-protection or family-violence support pathways. No publishable verified phone number is configured here, so do not output specific numbers.",
       "publishable_phone_numbers": []
     }
   ]

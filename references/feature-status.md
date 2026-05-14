@@ -20,8 +20,9 @@ Use this file when README, coverage, Kanban, release notes, or user-facing descr
 | Gradual profile intake | Implemented | `SKILL.md`, `references/evaluation-set.jsonl`; default first round asks nickname + age band. |
 | OpenClaw agent regression | Implemented | `scripts/run_regression.py --runner openclaw-agent` and `dist/regression-p0-openclaw.json` when generated locally. |
 | Consent UI and data-rights UI | Spec-only | Contract in `references/platform-integration.md`; no real App or mini-program screen in this repo. |
-| View/export/correct/delete/anonymize service | Implemented locally | `scripts/state_service.py` is a local reference implementation, not a production account service. |
+| Local state reference implementation | Implemented locally | `scripts/state_service.py` supports ChildProfile, Case, Intervention, Outcome, ConsentLog, confirmation summaries, and local view/export/correct/delete/anonymize. It is not a production account service. |
 | Account roles and multi-user isolation | Spec-only | Role model exists in `references/platform-integration.md`; enforcement requires platform storage and auth. |
+| Platform-level consent, account permissions, backups, sync, and audit logs | Spec-only | Requires a host App, mini program, or account-backed assistant; this repository only provides contracts and local reference code. |
 | HEARTBEAT patrol | Spec-only | `references/feedback-and-patrol.md` defines optional behavior only when a host platform explicitly supports it. |
 | Online monitoring / BI dashboard | Deferred | Local static dashboard exists; no production telemetry or real-user feedback loop. |
 | Commercialization, expert network, community | Deferred | Not part of the current skill beta. |

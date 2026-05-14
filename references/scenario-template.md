@@ -37,7 +37,7 @@ Evidence: `official-consensus` + `practice-pattern` (Evidence Matrix: Sleep rout
 Quick help: Make the last step visible before it happens.
 Script: "今晚还有最后一本。你选小熊这本，还是小车这本？讲完就关灯。"
 Prevention: Add special time before bedtime and a visual bedtime routine.
-If it fails: Use one calm repeat sentence; do not add new rewards. If sleep disruption is severe or persistent, move to yellow triage.
+If it fails: Use one calm repeat sentence; do not add new rewards. If sleep disruption is severe or persistent, recommend professional evaluation.
 Load: evidence-matrix.md, routing-guide.md, scenario-guide.md.
 ```
 
@@ -67,7 +67,7 @@ Evidence: `official-consensus` + `method-source` (Evidence Matrix: Feeding / thr
 Quick help: Stay calm, say the rule once, remove food if throwing continues.
 Script: "食物是吃的，不是扔的。你还想吃就放桌上；继续扔，我就知道你吃饱了。"
 Prevention: Smaller portions, end meal when full, avoid big adult reactions, and let the child help clean only when calm.
-If it fails: Check hunger/fullness, texture, seat comfort, and caregiver reaction pattern; growth or feeding concerns move to yellow triage.
+If it fails: Check hunger/fullness, texture, seat comfort, and caregiver reaction pattern; growth or feeding concerns need pediatric guidance.
 Load: evidence-matrix.md, scenario-guide.md.
 ```
 
@@ -92,7 +92,7 @@ Load: evidence-matrix.md, routing-guide.md.
 Scene: Hits, bites, kicks, or throws objects at people.
 Age band: 12-24 months, 24-36 months, 3-5 years.
 Caregiver: Parent, teacher, grandparent.
-Risk check: Block immediate harm; yellow/red triage for injury, escalating frequency, self-harm, cruelty, or adult loss of control.
+Risk check: Block immediate harm; escalate for injury, increasing frequency, self-harm, cruelty, or adult loss of control.
 Evidence: `official-consensus` + `method-source` (Evidence Matrix: Aggression / hitting).
 Quick help: Stop the body first, teach one replacement after calm returns.
 Script: "我不会让你打人。你很生气，可以跺脚，不能打。"
@@ -157,7 +157,7 @@ Evidence: `official-consensus` + `practice-pattern` (Evidence Matrix: Separation
 Quick help: Keep goodbye short and reliable.
 Script: "我抱你一下，然后我会走。午睡后我来接你。"
 Prevention: Same goodbye ritual, transition object, teacher handoff, and predictable reunion.
-If it fails: Ask duration and recovery time after parent leaves; extreme or persistent impairment moves to yellow triage.
+If it fails: Ask duration and recovery time after the caregiver leaves; extreme or persistent impairment needs professional evaluation.
 Load: evidence-matrix.md, routing-guide.md.
 ```
 
@@ -262,7 +262,7 @@ Evidence: `method-source` + `practice-pattern` (Evidence Matrix: Sibling rivalry
 Quick help: Stop harm, avoid instant judge mode, and name both needs.
 Script: "我不会让你们伤害对方。你想要车，妹妹也想要车。我们先分开一下，再想办法。"
 Prevention: Separate special time, fewer comparison words, and clear repair routines.
-If it fails: Track patterns by time/trigger; persistent injury or fear moves to yellow triage.
+If it fails: Track patterns by time/trigger; persistent injury or fear needs professional evaluation.
 Load: safety-triage.md, routing-guide.md.
 ```
 
@@ -317,13 +317,43 @@ Load: grandparent-strategies.md, routing-guide.md.
 Scene: Adult yelled, threatened, grabbed, or feels close to losing control.
 Age band: All.
 Caregiver: Parent, grandparent, teacher.
-Risk check: Red triage if there is immediate risk of hitting, shaking, locking up, starving, or serious harm.
+Risk check: Immediate safety response if there is risk of hitting, shaking, locking up, starving, or serious harm.
 Evidence: `method-source` + `practice-pattern` (Evidence Matrix: Parent repair after yelling).
 Quick help: Create physical safety first, then repair with a short apology.
 Script: "刚才我声音太大了，吓到你了。那是我的责任。我现在先冷静一下，等会儿我们再说规则。"
 Prevention: Adult pause plan, tag-team handoff, fewer triggers during high-stress routines, and support for caregiver mental health.
 If it fails: If the adult repeatedly feels out of control, recommend counselor/therapist or trusted support and prioritize safety.
 Load: safety-triage.md, routing-guide.md.
+```
+
+### 21. Developmental concern
+
+```text
+Scene: No words around age 2, avoids eye contact, does not respond to name, language regression, loss of skills, or social communication concern.
+Age band: 12-24 months, 24-36 months, 3-5 years.
+Caregiver: Any caregiver.
+Risk check: Do not diagnose; do not treat one observation as proof. Ask whether skills were lost, whether the child has any words, and whether the concern is persistent across settings.
+Evidence: `official-consensus` + `needs-evaluation` (Evidence Matrix: Language / social communication concern).
+Quick help: Name the observable concern and recommend developmental screening, pediatrician, or a child-development evaluation.
+Script: "我不能通过聊天诊断，也不能只凭一个观察下结论。你说的情况值得做一次发育评估；等待期间可以多跟随孩子的兴趣玩，短句回应他的任何沟通信号，并把例子记录下来给医生看。"
+Prevention: Reduce pressure, keep interaction warm and predictable, use short simple language, pause to wait for a response, and track concrete examples.
+If it fails: Loss of language, no response to name, no words around age 2, or increasing social communication concern should be discussed with a pediatric/developmental professional.
+Load: safety-triage.md, evidence-matrix.md, english-response-guide.md.
+```
+
+### 22. Adult loss of control or shaking
+
+```text
+Scene: Adult shook, hit, grabbed, threatened, locked up, or feels close to harming the child.
+Age band: All.
+Caregiver: Parent, grandparent, teacher, nanny, or other adult.
+Risk check: Treat as immediate safety first; do not enter ordinary discipline, limited choices, special time, or motive analysis.
+Evidence: `needs-evaluation` (Evidence Matrix: Caregiver burnout / rage; Parent repair after yelling).
+Quick help: separate the adult from the child: get the child out of danger, place the child with another safe adult if possible, and have the unsafe adult step away to cool down.
+Script: "先把孩子放到安全地方，或交给一个可信成年人。你现在先离开现场，去能冷静下来的地方。"
+Prevention: Create an adult pause plan, tag-team handoff, remove dangerous objects, and reduce demands during high-stress routines.
+If it fails: After shaking or possible head/neck injury, urgent medical evaluation is needed if there is vomiting, unusual sleepiness, seizure, breathing change, loss of consciousness, weakness, or any concerning change. If the adult may hurt the child again, contact local emergency services, urgent medical help, or a trusted safe adult.
+Load: safety-triage.md, regional-resources.json.
 ```
 
 ## Family collaboration cards

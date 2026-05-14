@@ -2,6 +2,7 @@
 # Add files intentionally. Do not replace this with a broad directory include.
 
 SKILL.md
+Makefile
 README.md
 README.en.md
 CONTRIBUTING.md
@@ -16,22 +17,24 @@ LICENSE.md
 PUBLIC_BETA_COVERAGE.md
 PUBLIC_BETA_KANBAN.md
 
-child-profile.example.md
-practice-log.example.md
-learning-progress.example.md
+examples/child-profile.example.md
+examples/practice-log.example.md
+examples/learning-progress.example.md
 
+references/content-map.md
+references/methodology.md
 references/safety-triage.md
 references/routing-guide.md
 references/dialogue-modes.md
 references/accessibility-i18n.md
 references/evidence-matrix.md
+references/source-registry.json
 references/scenario-template.md
 references/scenario-guide.md
 references/grandparent-strategies.md
 references/sharing-note.md
 references/faq.md
 references/english-response-guide.md
-references/methodology.md
 references/state-schema.md
 references/feedback-and-patrol.md
 references/feature-status.md
@@ -45,9 +48,11 @@ references/evaluation-set.jsonl
 
 scripts/__init__.py
 scripts/beta_kpi_gate.py
+scripts/build_audit_bundle.py
 scripts/build_release_package.py
 scripts/quality_dashboard.py
 scripts/release_guardrails.py
+scripts/release_gate.py
 scripts/run_regression.py
 scripts/semantic_score.py
 scripts/source_freshness.py

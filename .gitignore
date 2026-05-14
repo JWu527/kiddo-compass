@@ -9,6 +9,7 @@ learning-progress.md
 .clawhub/
 .clawdhub/
 dist/
+audit-bundle/
 __pycache__/
 *.pyc
 .env

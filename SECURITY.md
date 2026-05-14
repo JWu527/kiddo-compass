@@ -31,9 +31,9 @@ Kiddo Compass 是本地运行的育儿知识 skill。它不需要 API key、外�
 维护者和贡献者应只提交：
 
 ```text
-child-profile.example.md
-practice-log.example.md
-learning-progress.example.md
+examples/child-profile.example.md
+examples/practice-log.example.md
+examples/learning-progress.example.md
 ```
 
 ## 专业边界

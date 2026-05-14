@@ -16,16 +16,19 @@ Owner fields may be filled by the maintainer before a public release. Empty owne
 
 - Official health/development sources: review monthly during beta, then at least quarterly.
 - Method and practice sources: review quarterly or when a user incident exposes ambiguity.
-- Update `reviewed_at` in `references/evidence-matrix.md` when the source check is complete.
+- Register or update official sources in `references/source-registry.json` before citing them from the evidence matrix.
+- Evidence rows must include `source_id`, `source_title`, `issuer`, `source_ref`, `reviewed_at`, `next_review_at`, and `evidence_level`.
+- `official-consensus` and `needs-evaluation` rows must resolve every `source_id` to `references/source-registry.json`; TODO source URLs/refs are release blockers.
+- Update `reviewed_at` and `next_review_at` in `references/evidence-matrix.md` when the source check is complete.
 - Update `references/regional-resources.json` when safety resource wording or availability changes.
 - If a source becomes stale or unavailable, mark the affected row `needs-evaluation` or remove the claim until reviewed.
 - Run `python3 scripts/source_freshness.py` before any public beta artifact is published.
 
 ## GitHub Actions
 
-`.github/workflows/public-beta.yml` runs the public-beta gate on pull requests, pushes to `main`, and manual dispatches. It must stay aligned with `PUBLISHING.md`: unit tests, release guardrails, beta KPI gate, whitelist package build, package inspection, and semantic regression scoring.
+`.github/workflows/public-beta.yml` runs `python3 scripts/release_gate.py` on pull requests, pushes to `main`, and manual dispatches. It must stay aligned with `PUBLISHING.md`: unit tests, release guardrails, beta KPI gate, source freshness, P0 regression, semantic regression scoring, whitelist audit-bundle build, package inspection, and bundle allowlist verification.
 
-If CI fails because a regression report is missing, generate it locally with `python3 scripts/run_regression.py --priority P0 --report dist/regression-p0.json` and push the code or fixture fix that makes the report pass.
+If CI fails because a regression report is missing, run `python3 scripts/release_gate.py` locally. The gate deletes stale reports before running P0 regression, then requires `dist/regression-p0.json` before semantic scoring.
 
 ## Quality dashboard
 
@@ -47,7 +50,7 @@ Use this flow for privacy leakage, wrong red/yellow triage, unsafe advice, or mi
 3. Classify severity: privacy, safety triage, medical/development boundary, copyright/source, or tone harm.
 4. Patch the rule, scenario card, regression case, or release guardrail.
 5. Add or update a regression case that would have caught the incident.
-6. Run `python3 scripts/release_guardrails.py check`, `python3 scripts/beta_kpi_gate.py`, `python3 scripts/source_freshness.py`, and the relevant regression command.
+6. Run `python3 scripts/release_gate.py` and, if needed for diagnosis, the narrower failing subcommand named in its output.
 7. Write the resolution in `CHANGELOG.md`.
 
 ## Rollback

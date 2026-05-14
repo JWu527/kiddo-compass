@@ -11,6 +11,9 @@ learning-progress.md
 .clawdhub/
 node_modules/
 dist/
+audit-bundle/
+study-private/
+archive/
 __pycache__/
 *.pyc
 

@@ -40,7 +40,7 @@
 .kiddo-compass-state/learning-progress.md
 ```
 
-如果需要展示结构，请修改对应的 `.example.md` 模板。
+如果需要展示结构，请修改 `examples/*.example.md` 脱敏模板，不要从真实 state 复制内容。
 
 ## 提交前检查
 

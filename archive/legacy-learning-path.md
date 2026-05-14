@@ -4,6 +4,8 @@ created: 2026-04-12
 ---
 # 📅 积极育儿 — 30天学习计划
 
+Archive status: legacy self-study reference only. This file is not the default Kiddo Compass learning path, not runtime material, and not included in public release bundles. The default product model is the goal-driven `LearningTrack` schema in `references/learning-tracks.md`.
+
 ## 🗓 第一周：理解基础（Day 1-7）
 | 天数 | 主题 | 笔记 | 状态 |
 |------|------|------|------|

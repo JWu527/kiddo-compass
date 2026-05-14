@@ -31,6 +31,25 @@ REQUIRED_MODES = {
 
 REQUIRED_LANGUAGES = {"zh", "en", "bilingual"}
 
+REQUIRED_LEARNING_TRACKS = {
+    "sleep",
+    "feeding",
+    "toileting",
+    "aggression",
+    "separation",
+    "method-basics",
+}
+
+REQUIRED_LEARNING_TRACK_FIELDS = {
+    "goal_type",
+    "baseline",
+    "practice_action",
+    "review_metric",
+    "progress_state",
+    "completion_rule",
+    "last_reviewed_at",
+}
+
 SKIP_STATIC_LINT_PATHS = {
     "references/evaluation-set.md",
     "references/evaluation-set.jsonl",
@@ -63,6 +82,57 @@ def parse_evidence_topics(path: Path) -> list[str]:
         if in_table and line and not line.startswith("|"):
             break
     return topics
+
+
+def parse_learning_tracks(path: Path) -> dict[str, dict[str, str]]:
+    tracks: dict[str, dict[str, str]] = {}
+    headers: list[str] = []
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip("|").split("|")]
+        normalized_cells = [cell.strip("`") for cell in cells]
+        if normalized_cells and normalized_cells[0] == "goal_type":
+            headers = normalized_cells
+            continue
+        if not headers or not cells or cells[0].startswith("---"):
+            continue
+        if len(cells) != len(headers):
+            continue
+        record = dict(zip(headers, cells))
+        goal_type = record.get("goal_type", "").strip("`")
+        if goal_type:
+            record["goal_type"] = goal_type
+            tracks[goal_type] = record
+    return tracks
+
+
+def validate_learning_tracks(path: Path) -> list[str]:
+    failures: list[str] = []
+    tracks = parse_learning_tracks(path)
+    missing_tracks = sorted(REQUIRED_LEARNING_TRACKS - set(tracks))
+    if missing_tracks:
+        failures.append(f"{path}: missing learning tracks: {missing_tracks}")
+    if len(tracks) < 6:
+        failures.append(f"{path}: expected at least 6 learning tracks, found {len(tracks)}")
+
+    text = path.read_text(encoding="utf-8")
+    if "Day 1" in text or "Day 30" in text:
+        failures.append(f"{path}: default learning path still appears day-course based")
+
+    for track_id, record in tracks.items():
+        missing_fields = sorted(
+            field for field in REQUIRED_LEARNING_TRACK_FIELDS if not record.get(field)
+        )
+        if missing_fields:
+            failures.append(f"{path}: {track_id} missing fields: {missing_fields}")
+        review_metric = record.get("review_metric", "")
+        if "count_metric:" not in review_metric:
+            failures.append(f"{path}: {track_id} missing count_metric")
+        if "experience_metric:" not in review_metric:
+            failures.append(f"{path}: {track_id} missing experience_metric")
+    return failures
 
 
 def _scenario_card_blocks(path: Path) -> list[tuple[str, str]]:
@@ -119,6 +189,7 @@ def static_findings(root: Path) -> list[dict[str, object]]:
 
 def compute_metrics(root: Path) -> dict[str, object]:
     evidence_topics = parse_evidence_topics(root / "references" / "evidence-matrix.md")
+    learning_tracks = parse_learning_tracks(root / "references" / "learning-tracks.md")
     cases = load_cases(root / "references" / "evaluation-set.jsonl")
     modes = {str(case["mode"]) for case in cases}
     languages = {str(case["language"]) for case in cases}
@@ -129,6 +200,7 @@ def compute_metrics(root: Path) -> dict[str, object]:
 
     return {
         "evidence_topics": len(evidence_topics),
+        "learning_tracks": len(learning_tracks),
         "evidence_coverage_rate": round(min(len(evidence_topics) / 30, 1.0), 3),
         "eval_cases": len(cases),
         "p0_cases": len(p0_cases),
@@ -147,6 +219,8 @@ def evaluate(metrics: dict[str, object], root: Path | None = None) -> list[str]:
     failures: list[str] = []
     if int(metrics["evidence_topics"]) < 30:
         failures.append("evidence_topics must be >= 30")
+    if int(metrics["learning_tracks"]) < 6:
+        failures.append("learning_tracks must be >= 6")
     if int(metrics["p0_cases"]) < 8:
         failures.append("p0_cases must be >= 8")
     if int(metrics["red_risk_cases"]) < 2:
@@ -161,6 +235,7 @@ def evaluate(metrics: dict[str, object], root: Path | None = None) -> list[str]:
         failures.append("privacy_static_findings must be 0")
     if root is not None:
         failures.extend(validate_scenario_cards(root / "references" / "scenario-template.md"))
+        failures.extend(validate_learning_tracks(root / "references" / "learning-tracks.md"))
         failures.extend(validate_planned_work_artifacts(root))
     return failures
 
@@ -178,12 +253,7 @@ def validate_planned_work_artifacts(root: Path) -> list[str]:
         _file_contains(
             root / ".github" / "workflows" / "public-beta.yml",
             [
-                "python3 -m unittest discover -s tests -p 'test_*.py'",
-                "python3 scripts/release_guardrails.py check",
-                "python3 scripts/beta_kpi_gate.py",
-                "python3 scripts/build_release_package.py --output dist/kiddo-compass.zip",
-                "python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip",
-                "python3 scripts/semantic_score.py --report dist/regression-p0.json",
+                "python3 scripts/release_gate.py",
             ],
         )
     )
@@ -241,6 +311,14 @@ def validate_planned_work_artifacts(root: Path) -> list[str]:
                 "separation",
                 "grandparent-alignment",
                 "progress_state",
+                "goal_type",
+                "baseline",
+                "practice_action",
+                "review_metric",
+                "completion_rule",
+                "last_reviewed_at",
+                "count_metric",
+                "experience_metric",
             ],
         )
     )
@@ -282,6 +360,19 @@ def validate_planned_work_artifacts(root: Path) -> list[str]:
     )
     checks.extend(
         _file_contains(
+            root / "references" / "source-registry.json",
+            [
+                '"source_id"',
+                '"source_title"',
+                '"issuer"',
+                '"reviewed_at"',
+                '"next_review_at"',
+                '"evidence_level"',
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
             root / "references" / "feature-status.md",
             [
                 "Implemented",
@@ -309,6 +400,7 @@ def validate_planned_work_artifacts(root: Path) -> list[str]:
     )
     for script in [
         "build_release_package.py",
+        "release_gate.py",
         "quality_dashboard.py",
         "semantic_score.py",
         "source_freshness.py",

@@ -4,10 +4,11 @@ Use this file with `references/dialogue-modes.md` and `references/english-respon
 
 ## Chinese ordinary answer
 
-- Target length: 120-220 Chinese characters for routine green cases.
+- Target length: 120-220 Chinese characters for routine everyday-support cases.
 - Short paragraphs, no dense bullet walls unless the user asks for a checklist.
 - First give one concrete script/action, then ask at most 1-2 questions.
-- Avoid theory labels, mixed-language jargon, and decorative emoji.
+- Avoid theory labels, mixed-language jargon, decorative emoji, and forced intimate child nicknames.
+- Use the role the user gives. If no role is given, use neutral words such as "你" and "孩子".
 
 Template:
 
@@ -22,8 +23,9 @@ Template:
 ## English ordinary answer
 
 - Write natural English independently; do not translate Chinese sentence order.
-- Target length: 150-250 words for ordinary green cases.
+- Target length: 150-250 words for ordinary everyday-support cases.
 - Avoid "defiant", "manipulative", "naughty", and diagnostic certainty.
+- Do not import Chinese caregiver terms into English answers.
 
 Template:
 
@@ -59,6 +61,7 @@ English: Tonight we keep one rule: [rule]. We both say: "[script]"
 - Keep the critical action even when compressing the answer.
 - In one-sentence mode, include exactly one script or one next action, not a slogan.
 - In standard mode, include one script, one action, and one prevention cue.
+- In formal mode, be restrained and practical: no cute tone, no decorative emoji, no forced kinship labels.
 - In deep mode, explain the reason only after the user has a usable action.
 
 Acceptance checks:
@@ -68,12 +71,13 @@ Acceptance checks:
 | one-sentence mode | 1 sentence, 30 Chinese characters or fewer when possible | critical action or exact script |
 | easy-read / TTS | 3-6 lines | one action per line, no theory labels |
 | standard mode | 120-220 Chinese characters or 150-250 English words | script, next action, one check |
+| formal mode | compact, restrained paragraphs | practical action, respectful wording |
 | deep mode | user-requested only | reason, boundary, example |
 
 Template:
 
 ```text
-先把宝贝带到安全边上。
+先把孩子带到安全边上。
 蹲下来。
 说："[script]"
 少解释。

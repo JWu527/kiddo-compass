@@ -2,12 +2,15 @@
 
 Use this file before reading or writing local runtime state. Missing, corrupted, or unwritable state must not block the first helpful answer.
 
+The current repository provides a local JSON reference implementation in `scripts/state_service.py`. It is not a complete SaaS data platform.
+
 ## Storage boundary
 
 - Prefer the platform-provided private storage directory.
 - If no platform storage exists, use `.kiddo-compass-state/` in the local workspace.
 - Do not place live runtime state in the skill root.
-- Keep root-level `child-profile.md`, `practice-log.md`, and `learning-progress.md` only as legacy local files; never package them.
+- Migrate any legacy root-level `child-profile.md`, `practice-log.md`, or `learning-progress.md` into `.kiddo-compass-state/` before release checks.
+- The repository may keep only sanitized `examples/*.example.md` templates; templates must use placeholders or fictional examples, not real child or family data.
 
 ## Write policy
 
@@ -17,7 +20,8 @@ Use this file before reading or writing local runtime state. Missing, corrupted,
 - Prefer age band over exact birthday.
 - Do not persist real name, exact birthday, phone, school, address, or medical identifiers by default.
 - If a precise date is necessary for a developmental threshold, explain why and let the user provide it voluntarily. Store the derived age band unless the user explicitly asks to save the exact date.
-- Before writing, show a short "I will record only these facts" summary and wait for confirmation.
+- Before writing, show a short confirmation summary and wait for confirmation.
+- A confirmation summary must include: fields to write, whether direct identifiers are present, whether the payload is desensitized, and whether user confirmation is required.
 
 ## Entities
 
@@ -54,7 +58,7 @@ Case:
   case_id: "local generated id"
   child_id: "ChildProfile.child_id"
   scene_type: "sleep|feeding|toileting|aggression|separation|screens|siblings|caregiver-alignment|other"
-  risk_level: "red|yellow|green|unknown"
+  risk_route: "immediate_safety|professional_evaluation|everyday_support|unknown"
   pattern_frequency: "first-time|repeated|escalating|unknown"
   source_type: "user_confirmed|assistant_inferred|observed_feedback"
   created_at: "YYYY-MM-DD"
@@ -81,16 +85,34 @@ Outcome:
 ConsentLog:
   schema_version: "1"
   consent_id: "local generated id"
-  action_type: "store_profile|store_sensitive_detail|export|delete|anonymize|share_family_card"
+  action_type: "store_profile|store_case|store_intervention|store_outcome|correct|delete|anonymize|export|share_family_card"
   confirmed_at: "YYYY-MM-DD"
   scope: "what the user allowed"
+  confirmation_summary:
+    entity: "ChildProfile|Case|Intervention|Outcome|State"
+    action_type: "same action as above"
+    fields_to_write: ["field names only"]
+    contains_identifying_info: false
+    desensitized: true
+    requires_user_confirmation: true
 
 LearningTrack:
   schema_version: "1"
   track_id: "local generated id"
   child_id: "ChildProfile.child_id"
   goal_type: "sleep|feeding|toileting|aggression|separation|grandparent-alignment|method-basics"
+  baseline:
+    scene: "minimized current scene"
+    frequency_count: "countable starting point"
+    safety_flags: "none reported|needs evaluation|paused"
+    caregiver_context: "generalized caregiver setup"
+  practice_action: "one small action to try"
+  review_metric:
+    count_metric: "number or frequency to count"
+    experience_metric: "subjective 1-5 or short user-reported experience"
   progress_state: "not-started|learning|practicing|reviewing|paused|completed"
+  completion_rule: "goal-specific stability rule"
+  last_reviewed_at: "YYYY-MM-DD or empty"
   practice_ref: "Case.case_id or Intervention.intervention_id"
   updated_at: "YYYY-MM-DD"
 ```
@@ -114,6 +136,23 @@ Support these user rights in text-only form until a product UI exists: `view/exp
 | Correct | Show the old value and proposed new value; write only after confirmation. |
 | Delete | Remove the requested field, case, or full profile after confirmation; add a ConsentLog delete entry if a log is kept. |
 | Anonymize | Replace direct identifiers with nickname/age band/scene labels and remove exact dates or locations. |
+
+## Local reference implementation
+
+`scripts/state_service.py` stores `.kiddo-compass-state/state.json` and supports:
+
+- `prepare_write(entity, fields, action_type)` / CLI `prepare-write`
+- `create_profile(...)` for ChildProfile
+- `create_case(...)` for Case
+- `create_intervention(...)` for Intervention
+- `create_outcome(...)` for Outcome
+- `view_state()` / CLI `view`
+- `export_state()` / CLI `export`
+- `correct_field(...)` / CLI `correct`
+- `delete_entity(...)` or `delete_state()` / CLI `delete`
+- `anonymize()` / CLI `anonymize`
+
+This is a local reference implementation for tests and host-platform mapping. Account UI, role-based permissions, sync, backups, and production audit logs remain platform responsibilities.
 
 ## Error handling
 

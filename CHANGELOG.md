@@ -20,6 +20,10 @@
 - `scripts/run_regression.py`：增加 OpenClaw infer / OpenClaw agent runner，支持 profile、model、agent 和逐 case session 前缀，作为 Hermes 不可用时的 P0 回归 fallback。
 - `references/feature-status.md`：用 Implemented / Spec-only / Deferred 标注真实能力状态，避免把平台契约写成已上线功能。
 - `scripts/weekly_quality_report.py`：从 beta KPI 和 OpenClaw 回归 JSON 生成本地 Markdown 周度质量报告。
+- `references/methodology.md`：新增压缩 runtime 方法论，只保留先安全、先行动、最少追问、不诊断不贴标签等行为规则。
+- `archive/legacy-learning-path.md`：迁移旧固定 30 天课程，明确仅作自学参考，不是默认学习路径。
+- `references/source-registry.json`：新增官方和内部来源注册表，为 evidence matrix 的 `source_id` 提供可追溯 URL 或内部引用。
+- `scripts/release_gate.py` 和 `make release-gate`：新增 public-beta 统一发布门禁，串联单元测试、guardrails、source freshness、P0 regression、semantic score、audit bundle 构建、inspect 和白名单比对。
 
 ### Changed
 
@@ -29,16 +33,22 @@
 - `references/state-schema.md` 升级为 Household / ChildProfile / Case / Intervention / Outcome / ConsentLog / LearningTrack schema，并补充查看、导出、更正、删除和匿名化操作。
 - `references/routing-guide.md` 增加 intent taxonomy、slot schema、route precedence 和 decision table。
 - `scripts/run_regression.py` 默认加载当前仓库路径的 skill，避免误测已安装副本；同时识别 provider/API 失败、支持 required regex 和 JSON 报告。
-- `references/evidence-matrix.md` 扩展到 30 个高频主题，并补充年龄段、证据等级、来源类别、reviewed_at、适用边界和升级阈值。
-- `references/chapter-03-birth-order.md` 与 `references/chapter-04-misbehavior.md` 将高风险定性表述改成非诊断、非定型的启发式镜头。
+- `references/evidence-matrix.md` 扩展到 30 个高频主题，并补充年龄段、证据等级、source_id、source_title、issuer、source_ref、reviewed_at、next_review_at、适用边界和升级阈值。
+- `study-private/chapter-03-birth-order.md` 与 `study-private/chapter-04-misbehavior.md` 将高风险定性表述改成非诊断、非定型的启发式镜头。
 - `references/scenario-template.md` 的 20 个公测场景卡补充显式 `Evidence:` 标签，并由 `scripts/beta_kpi_gate.py` 检查证据、风险、升级阈值和低负荷字段。
-- `references/methodology.md` 明确默认骨架为安全、发展/身体/环境校准、关系与边界、技能训练，并把“四个错误目的”降级为学习或深度复盘的可选解释层。
+- `archive/methodology.md` 明确默认骨架为安全、发展/身体/环境校准、关系与边界、技能训练，并把“四个错误目的”降级为学习或深度复盘的可选解释层。
 - `references/accessibility-i18n.md` 增加 one-sentence、easy-read / TTS、standard、deep mode 的低认知负荷验收标准。
 - 安全分诊补充诊断请求、攻击/自伤、睡眠、语言和如厕退行阈值；HEARTBEAT 巡检降级为可选集成。
 - README 和发布文档明确当前为内部测试 / public-beta candidate，公开发布必须通过白名单包和 P0 回归。
 - `scripts/beta_kpi_gate.py` 扩展为检查 CI、平台契约、深场景包、地区资源、状态服务、dashboard 和来源巡检脚本。
+- `.github/workflows/public-beta.yml` 收敛为调用 `scripts/release_gate.py`，避免 CI 与本地发布检查分叉。
 - `PUBLIC_BETA_COVERAGE.md` 和 `PUBLIC_BETA_KANBAN.md` 将剩余缺口重新区分为 skill beta 已覆盖、平台契约已覆盖和真实 App / 小程序延期项。
 - `references/evaluation-set.jsonl` 增强英文诊断、中文建档和热线红线断言，拦截内部过程话术、中文混入英文答案和未验证热线号码。
+- `archive/methodology.md` 保留旧长篇内部框架；runtime 不再使用强制称呼、固定结尾符号或单一照护者角色话术。
+- `references/learning-tracks.md` 和 `examples/learning-progress.example.md` 统一为目标驱动 `LearningTrack` schema，复盘输出固定为结果、可能原因、只调整一个变量、下次观察指标。
+- `references/safety-triage.md`、`references/evidence-matrix.md`、`references/scenario-template.md` 和 `references/evaluation-set.jsonl` 强化发展疑虑与成人失控场景边界：不诊断、不暴露内部分诊标签、不输出未验证号码，并按 generic-zh / generic-en / CN / SG 资源槽位给出本地路径。
+- `references/methodology.md`、`references/accessibility-i18n.md`、`references/dialogue-modes.md`、`references/scenario-guide.md`、`references/grandparent-strategies.md` 和 `references/evaluation-set.jsonl` 收敛硬编码称呼、亲昵称谓和装饰符号依赖，补齐多照护者、formal、one-sentence、TTS 与危机场景风格门禁。
+- `scripts/state_service.py`、`references/state-schema.md`、`references/platform-integration.md` 和 `references/feature-status.md` 对齐本地状态参考实现：支持 ChildProfile / Case / Intervention / Outcome / ConsentLog、写入确认摘要和 view/export/correct/delete/anonymize 数据权利操作，并明确平台级 UI、权限和账号能力仍为 Spec-only。
 
 ## 0.4.2 - 2026-05-13
 
@@ -51,7 +61,7 @@
 ### Changed
 
 - `SKILL.md` 前置证据与措辞红线，禁止固定天数见效、"一定有效"和单一归因式话术。
-- `references/methodology.md` 增加默认输出的结果承诺禁区，适配 Hermes one-shot 测试发现的问题。
+- `archive/methodology.md` 增加默认输出的结果承诺禁区，适配 Hermes one-shot 测试发现的问题。
 
 ## 0.4.0 - 2026-05-13
 
