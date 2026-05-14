@@ -18,7 +18,7 @@ Kiddo Compass 是一个 OpenClaw / AgentSkills 兼容的积极育儿陪伴 skill
 - 支持英文和中英双语积极育儿回答。
 - 增加 easy-read / TTS 友好模式，适合崩溃现场和朗读。
 - 根据用户意图按需读取安全、证据、场景、状态和语言指南。
-- 自动维护平台私有 storage 或 `.kiddo-compass-state/` 下的 `child-profile.md`、`practice-log.md` 和 `learning-progress.md`。
+- 在用户确认后，按平台私有 storage 或 `.kiddo-compass-state/` 维护 `child-profile.md`、`practice-log.md` 和 `learning-progress.md`；不可写时继续回答，不声称已记录。
 - 写状态前区分 facts、hypotheses、interventions、outcomes 和 consent_flags。
 - 对自伤、严重攻击、发展迟缓、疑似神经发育问题等高风险信号保留专业边界。
 
@@ -51,6 +51,7 @@ kiddo-compass/
 ├── scripts/semantic_score.py           # 回归报告语义/断言结果汇总
 ├── scripts/source_freshness.py         # 来源和地区资源巡检
 ├── scripts/state_service.py            # 本地状态服务参考实现
+├── scripts/weekly_quality_report.py    # 本地周度质量报告生成器
 ├── skill-package-manifest.txt          # 公开包文件白名单
 ├── child-profile.example.md         # 私人画像模板
 ├── practice-log.example.md          # 实践日志模板
@@ -145,6 +146,7 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 | `references/english-response-guide.md` | 英文和中英双语回应风格 |
 | `references/state-schema.md` | 本地状态 schema 与错误处理 |
 | `references/platform-integration.md` | App / 小程序接入的 consent UI、数据权利、账号权限和存储接口契约 |
+| `references/feature-status.md` | Implemented / Spec-only / Deferred 能力状态表，避免文档夸大 |
 | `references/quality-monitoring.md` | 公测质量事件、反馈分类和周报抽样 |
 | `references/learning-tracks.md` | 目标驱动学习路径 |
 | `references/deep-scenario-packs.md` | P1/P2 深层场景包、复盘问题和升级边界 |
@@ -173,7 +175,8 @@ python3 scripts/source_freshness.py
 python3 scripts/build_release_package.py --output dist/kiddo-compass.zip
 python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip
 python3 scripts/beta_kpi_gate.py --json > dist/beta-kpi.json
-python3 scripts/quality_dashboard.py --metrics dist/beta-kpi.json --regression dist/regression-p0.json --output dist/quality-dashboard.html
+python3 scripts/quality_dashboard.py --metrics dist/beta-kpi.json --regression dist/regression-p0-openclaw.json --output dist/quality-dashboard.html
+python3 scripts/weekly_quality_report.py --metrics dist/beta-kpi.json --regression dist/regression-p0-openclaw.json --output dist/weekly-quality-report.md
 python3 -m unittest tests/test_release_guardrails.py
 rg -n "child-profile.md|practice-log.md|learning-progress.md" .gitignore .clawhubignore README.md SKILL.md
 rg -n "^---|^name:|^version:|^description:|^metadata:" SKILL.md

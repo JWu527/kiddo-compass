@@ -36,6 +36,14 @@ SKIP_STATIC_LINT_PATHS = {
     "references/evaluation-set.jsonl",
 }
 
+EVIDENCE_LABELS = {
+    "official-consensus",
+    "method-source",
+    "practice-pattern",
+    "needs-evaluation",
+    "experience-only",
+}
+
 
 def parse_evidence_topics(path: Path) -> list[str]:
     topics: list[str] = []
@@ -55,6 +63,47 @@ def parse_evidence_topics(path: Path) -> list[str]:
         if in_table and line and not line.startswith("|"):
             break
     return topics
+
+
+def _scenario_card_blocks(path: Path) -> list[tuple[str, str]]:
+    cards: list[tuple[str, str]] = []
+    current_title: str | None = None
+    current_lines: list[str] = []
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        if raw_line.startswith("### ") and raw_line[4:6].strip(".").isdigit():
+            if current_title is not None:
+                cards.append((current_title, "\n".join(current_lines)))
+            current_title = raw_line.strip("# ").strip()
+            current_lines = []
+            continue
+        if current_title is not None:
+            current_lines.append(raw_line)
+    if current_title is not None:
+        cards.append((current_title, "\n".join(current_lines)))
+    return cards
+
+
+def validate_scenario_cards(path: Path) -> list[str]:
+    failures: list[str] = []
+    cards = _scenario_card_blocks(path)
+    if len(cards) < 20:
+        failures.append(f"{path}: expected at least 20 scenario cards, found {len(cards)}")
+    for title, body in cards:
+        if "Evidence:" not in body:
+            failures.append(f"{path}: {title} missing Evidence")
+        else:
+            evidence_line = next(
+                line for line in body.splitlines() if line.strip().startswith("Evidence:")
+            )
+            if not any(label in evidence_line for label in EVIDENCE_LABELS):
+                failures.append(f"{path}: {title} Evidence missing known label")
+        if "Risk check:" not in body:
+            failures.append(f"{path}: {title} missing Risk check")
+        if "If it fails:" not in body and "Escalation threshold:" not in body:
+            failures.append(f"{path}: {title} missing escalation threshold")
+        if "Load:" not in body:
+            failures.append(f"{path}: {title} missing Load")
+    return failures
 
 
 def static_findings(root: Path) -> list[dict[str, object]]:
@@ -111,6 +160,7 @@ def evaluate(metrics: dict[str, object], root: Path | None = None) -> list[str]:
     if int(metrics["privacy_static_findings"]) != 0:
         failures.append("privacy_static_findings must be 0")
     if root is not None:
+        failures.extend(validate_scenario_cards(root / "references" / "scenario-template.md"))
         failures.extend(validate_planned_work_artifacts(root))
     return failures
 
@@ -232,6 +282,18 @@ def validate_planned_work_artifacts(root: Path) -> list[str]:
     )
     checks.extend(
         _file_contains(
+            root / "references" / "feature-status.md",
+            [
+                "Implemented",
+                "Spec-only",
+                "Deferred",
+                "HEARTBEAT",
+                "OpenClaw agent regression",
+            ],
+        )
+    )
+    checks.extend(
+        _file_contains(
             root / "OPS.md",
             [
                 "release owner",
@@ -251,6 +313,7 @@ def validate_planned_work_artifacts(root: Path) -> list[str]:
         "semantic_score.py",
         "source_freshness.py",
         "state_service.py",
+        "weekly_quality_report.py",
     ]:
         if not (root / "scripts" / script).exists():
             checks.append(f"missing scripts/{script}")

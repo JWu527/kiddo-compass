@@ -31,7 +31,8 @@ ruby -e 'Dir["**/*.md"].each { |f| File.read(f).scan(/\[[^\]]+\]\(([^)]+)\)/).fl
 python3 scripts/build_release_package.py --output dist/kiddo-compass.zip
 python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip
 python3 scripts/beta_kpi_gate.py --json > dist/beta-kpi.json
-python3 scripts/quality_dashboard.py --metrics dist/beta-kpi.json --regression dist/regression-p0.json --output dist/quality-dashboard.html
+python3 scripts/quality_dashboard.py --metrics dist/beta-kpi.json --regression dist/regression-p0-openclaw.json --output dist/quality-dashboard.html
+python3 scripts/weekly_quality_report.py --metrics dist/beta-kpi.json --regression dist/regression-p0-openclaw.json --output dist/weekly-quality-report.md
 ```
 
 `git ls-files` 对私人文件应无输出。`release_guardrails.py` 会从白名单生成包文件列表，扫描 frontmatter、隐私过采集、近诊断词、固定天数承诺、未验证热线和单因果标签；`inspect` 会对实际 zip artifact 再扫一遍。失败时不要发布。

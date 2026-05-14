@@ -56,6 +56,19 @@ English: Tonight we keep one rule: [rule]. We both say: "[script]"
 - No parenthetical theory.
 - No mixed Chinese-English unless requested.
 - Prefer verbs: "抱开", "蹲下", "说", "等", "记录".
+- Keep the critical action even when compressing the answer.
+- In one-sentence mode, include exactly one script or one next action, not a slogan.
+- In standard mode, include one script, one action, and one prevention cue.
+- In deep mode, explain the reason only after the user has a usable action.
+
+Acceptance checks:
+
+| Mode | Length target | Must contain |
+| --- | --- | --- |
+| one-sentence mode | 1 sentence, 30 Chinese characters or fewer when possible | critical action or exact script |
+| easy-read / TTS | 3-6 lines | one action per line, no theory labels |
+| standard mode | 120-220 Chinese characters or 150-250 English words | script, next action, one check |
+| deep mode | user-requested only | reason, boundary, example |
 
 Template:
 

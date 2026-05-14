@@ -34,7 +34,7 @@ created: 2026-05-10
 
 ## 可选 HEARTBEAT 巡检协议
 
-HEARTBEAT 只是可选集成，不是核心流程依赖。只有用户明确开启，并且目标平台支持时，才在用户的 HEARTBEAT.md 中注册巡检项。
+Status: Spec-only。HEARTBEAT 只是可选集成，不是核心流程依赖。只有用户明确开启，并且目标平台支持时，才在用户的 HEARTBEAT.md 中注册巡检项。
 
 ### 巡检 1: 每周学习进度（每周日 20:00）
 
@@ -71,7 +71,9 @@ HEARTBEAT 只是可选集成，不是核心流程依赖。只有用户明确开�
 
 ---
 
-## 本地档案自动更新规则
+## 本地档案更新规则
+
+Status: Implemented as an operating rule; actual writes still require user-confirmed facts and a host storage path. If storage is missing, damaged, or unsupported, continue answering and do not claim a write happened.
 
 | 用户行为 | 更新动作 |
 |---------|---------|

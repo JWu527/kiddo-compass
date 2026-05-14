@@ -9,6 +9,7 @@ from scripts.quality_dashboard import build_dashboard
 from scripts.semantic_score import score_results
 from scripts.source_freshness import check_freshness
 from scripts.state_service import StateStore
+from scripts.weekly_quality_report import build_weekly_report
 
 
 class ProductClosureTests(unittest.TestCase):
@@ -117,6 +118,33 @@ class ProductClosureTests(unittest.TestCase):
             "review prompt",
         ]:
             self.assertIn(token, text)
+
+    def test_weekly_quality_report_summarizes_gate_and_regression(self):
+        out = self.scratch_dir("weekly-report") / "weekly-quality.md"
+        metrics = {
+            "metrics": {"p0_cases": 8, "privacy_static_findings": 0},
+            "failures": [],
+        }
+        regression = {
+            "total": 2,
+            "failed": 1,
+            "results": [
+                {"id": "P0-RED-SELF-HARM-01", "failures": []},
+                {"id": "P1-EASY-READ-01", "failures": ["too long"]},
+            ],
+        }
+        cases = [
+            {"id": "P0-RED-SELF-HARM-01", "priority": "P0", "language": "zh", "mode": "crisis-support"},
+            {"id": "P1-EASY-READ-01", "priority": "P1", "language": "zh", "mode": "easy-read"},
+        ]
+
+        build_weekly_report(metrics, regression, cases, out)
+        text = out.read_text(encoding="utf-8")
+
+        self.assertIn("Kiddo Compass Weekly Quality Report", text)
+        self.assertIn("Regression: 1/2 passed", text)
+        self.assertIn("zh: 1/2 passed", text)
+        self.assertIn("High-Risk Failures", text)
 
 
 if __name__ == "__main__":

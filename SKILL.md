@@ -198,6 +198,7 @@ private-state-root/
 | easy-read / TTS / 无障碍文本 | `references/accessibility-i18n.md` |
 | 状态写入、事实/推断分离 | `references/state-schema.md` |
 | App / 小程序 consent UI、数据权利和账号权限 | `references/platform-integration.md` |
+| 判断能力是否已实现、仅规范或延期 | `references/feature-status.md` |
 | 目标驱动学习路径 | `references/learning-tracks.md` |
 | 质量事件、反馈分类、周报抽样 | `references/quality-monitoring.md` |
 | 地区安全资源占位与巡检 | `references/regional-resources.json` |

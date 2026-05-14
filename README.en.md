@@ -18,7 +18,7 @@ Current status: internal testing / public-beta candidate. Do not publish a publi
 - Adds `references/english-response-guide.md` for natural English and bilingual responses.
 - Adds easy-read / TTS-friendly mode for overwhelmed caregivers.
 - Loads safety, evidence, scenario, state, and language guides only when needed.
-- Maintains local runtime files under platform-private storage or `.kiddo-compass-state/`.
+- Maintains local runtime files under platform-private storage or `.kiddo-compass-state/` after user-confirmed writes; if storage is unavailable, it keeps answering without claiming a write happened.
 - Separates facts, hypotheses, interventions, outcomes, and consent flags before writing state.
 - Preserves clear professional boundaries for self-harm, severe aggression, developmental concerns, trauma, and parent mental-health risk signals.
 
@@ -51,6 +51,7 @@ kiddo-compass/
 ├── scripts/semantic_score.py           # Regression report assertion summary
 ├── scripts/source_freshness.py         # Source and regional-resource freshness checks
 ├── scripts/state_service.py            # Local state-service reference implementation
+├── scripts/weekly_quality_report.py    # Local weekly quality report generator
 ├── skill-package-manifest.txt          # Public package whitelist
 ├── child-profile.example.md         # Private profile template
 ├── practice-log.example.md          # Practice log template
@@ -139,6 +140,7 @@ Default intake asks only for an optional nickname and age band. Exact birthday, 
 | `references/english-response-guide.md` | English and bilingual response style |
 | `references/state-schema.md` | Local state schema and error handling |
 | `references/platform-integration.md` | Consent UI, data rights, account permissions, and storage contract for App / mini-program integration |
+| `references/feature-status.md` | Implemented / Spec-only / Deferred capability status so docs do not overstate behavior |
 | `references/quality-monitoring.md` | Beta-quality events, feedback taxonomy, and sample review |
 | `references/learning-tracks.md` | Goal-driven practice tracks |
 | `references/deep-scenario-packs.md` | Deeper P1/P2 scenario packs, review prompts, and escalation boundaries |
@@ -166,7 +168,8 @@ python3 scripts/source_freshness.py
 python3 scripts/build_release_package.py --output dist/kiddo-compass.zip
 python3 scripts/release_guardrails.py inspect dist/kiddo-compass.zip
 python3 scripts/beta_kpi_gate.py --json > dist/beta-kpi.json
-python3 scripts/quality_dashboard.py --metrics dist/beta-kpi.json --regression dist/regression-p0.json --output dist/quality-dashboard.html
+python3 scripts/quality_dashboard.py --metrics dist/beta-kpi.json --regression dist/regression-p0-openclaw.json --output dist/quality-dashboard.html
+python3 scripts/weekly_quality_report.py --metrics dist/beta-kpi.json --regression dist/regression-p0-openclaw.json --output dist/weekly-quality-report.md
 python3 -m unittest tests/test_release_guardrails.py
 rg -n "^---|^name:|^version:|^description:|^metadata:" SKILL.md
 ```

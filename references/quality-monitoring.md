@@ -46,6 +46,14 @@ Review at least 10 sampled conversations or test outputs before a public release
 
 Record: input, selected intent, selected mode, risk level, visible answer quality, privacy behavior, and next fix.
 
+When local regression JSON is available, generate the review artifact with:
+
+```bash
+python3 scripts/weekly_quality_report.py --metrics dist/beta-kpi.json --regression dist/regression-p0-openclaw.json --output dist/weekly-quality-report.md
+```
+
+The Markdown report is a local artifact, not a production dashboard. It summarizes gate failures, P0 coverage, privacy findings, and pass rates by language and response mode.
+
 ## Release metrics
 
 | Metric | Beta target | Gate |
@@ -62,3 +70,6 @@ Record: input, selected intent, selected mode, risk level, visible answer qualit
 - Static and package checks: `python3 scripts/release_guardrails.py check`
 - Machine-readable KPI gate: `python3 scripts/beta_kpi_gate.py --json`
 - Regression report: `python3 scripts/run_regression.py --priority P0 --report dist/regression-p0.json`
+- OpenClaw regression fallback: `python3 scripts/run_regression.py --priority P0 --runner openclaw-agent --report dist/regression-p0-openclaw.json`
+- Local dashboard: `python3 scripts/quality_dashboard.py --metrics dist/beta-kpi.json --regression dist/regression-p0-openclaw.json --output dist/quality-dashboard.html`
+- Weekly quality report: `python3 scripts/weekly_quality_report.py --metrics dist/beta-kpi.json --regression dist/regression-p0-openclaw.json --output dist/weekly-quality-report.md`

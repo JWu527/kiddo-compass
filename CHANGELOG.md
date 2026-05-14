@@ -18,6 +18,8 @@
 - `references/regional-resources.json`、`scripts/source_freshness.py`：补地区安全资源占位库和来源巡检门禁。
 - `references/deep-scenario-packs.md`、`scripts/semantic_score.py`、`scripts/quality_dashboard.py`：补 P1/P2 深场景包、回归报告断言汇总和本地 beta dashboard。
 - `scripts/run_regression.py`：增加 OpenClaw infer / OpenClaw agent runner，支持 profile、model、agent 和逐 case session 前缀，作为 Hermes 不可用时的 P0 回归 fallback。
+- `references/feature-status.md`：用 Implemented / Spec-only / Deferred 标注真实能力状态，避免把平台契约写成已上线功能。
+- `scripts/weekly_quality_report.py`：从 beta KPI 和 OpenClaw 回归 JSON 生成本地 Markdown 周度质量报告。
 
 ### Changed
 
@@ -29,6 +31,9 @@
 - `scripts/run_regression.py` 默认加载当前仓库路径的 skill，避免误测已安装副本；同时识别 provider/API 失败、支持 required regex 和 JSON 报告。
 - `references/evidence-matrix.md` 扩展到 30 个高频主题，并补充年龄段、证据等级、来源类别、reviewed_at、适用边界和升级阈值。
 - `references/chapter-03-birth-order.md` 与 `references/chapter-04-misbehavior.md` 将高风险定性表述改成非诊断、非定型的启发式镜头。
+- `references/scenario-template.md` 的 20 个公测场景卡补充显式 `Evidence:` 标签，并由 `scripts/beta_kpi_gate.py` 检查证据、风险、升级阈值和低负荷字段。
+- `references/methodology.md` 明确默认骨架为安全、发展/身体/环境校准、关系与边界、技能训练，并把“四个错误目的”降级为学习或深度复盘的可选解释层。
+- `references/accessibility-i18n.md` 增加 one-sentence、easy-read / TTS、standard、deep mode 的低认知负荷验收标准。
 - 安全分诊补充诊断请求、攻击/自伤、睡眠、语言和如厕退行阈值；HEARTBEAT 巡检降级为可选集成。
 - README 和发布文档明确当前为内部测试 / public-beta candidate，公开发布必须通过白名单包和 P0 回归。
 - `scripts/beta_kpi_gate.py` 扩展为检查 CI、平台契约、深场景包、地区资源、状态服务、dashboard 和来源巡检脚本。

@@ -34,6 +34,7 @@ references/english-response-guide.md
 references/methodology.md
 references/state-schema.md
 references/feedback-and-patrol.md
+references/feature-status.md
 references/quality-monitoring.md
 references/learning-tracks.md
 references/deep-scenario-packs.md
@@ -51,3 +52,4 @@ scripts/run_regression.py
 scripts/semantic_score.py
 scripts/source_freshness.py
 scripts/state_service.py
+scripts/weekly_quality_report.py
