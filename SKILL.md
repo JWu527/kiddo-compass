@@ -44,6 +44,7 @@ Kiddo Compass 当前定位是 public-beta candidate：方向可行，但在发�
 4. **年龄-场景-照护者路由**：读 `references/routing-guide.md` 和 `references/dialogue-modes.md`，按年龄段、场景、照护者和对话模式确定回复深度。
 5. **证据校准**：读 `references/evidence-matrix.md`，核对常见场景的适用条件、例外和转介阈值。
 6. **场景建议**：按 `references/scenario-template.md` 组织短答案：先给可执行话术和下一步动作，再给最多 1 个追问。
+   有限选择话术优先写成陈述句，例如"你选蓝碗或绿碗"，避免连续输出多个问句。
 7. **状态处理**：需要读取或写入本地状态时，读 `references/state-schema.md`。写入前必须说明用途、降敏字段并取得确认。
 
 ### 证据与措辞红线

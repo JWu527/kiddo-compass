@@ -18,6 +18,7 @@ from scripts.run_regression import (
     case_forbidden_patterns,
     case_required_patterns,
     compute_file_sha256,
+    is_allowed_negated_privacy_refusal,
     load_cases,
     read_skill_version,
 )
@@ -47,7 +48,7 @@ BODY_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
             r"(<scratchpad>|</scratchpad>|scratchpad|safety triage|"
             r"safety[- ]triage\.md|evidence[- ]matrix|routing guide|"
             r"The user is asking|I need to follow|Here'?s my response|Here is my response|"
-            r"Now I have all the context I need|Let me (?:read|check|write|follow)|"
+            r"Now I have all the (?:context|information) I need|Let me (?:read|check|write|follow)|"
             r"Based on the routing guide|per my guidelines|my guidelines|output guidelines|"
             r"\[Metrics:|Tool Calls:|Est\. Tokens:)",
             re.IGNORECASE,
@@ -129,7 +130,7 @@ def _semantic_body_failures(
                 failures.append(f"required_pattern missing {pattern!r}")
         for pattern in case_forbidden_patterns(case):
             match = re.search(str(pattern), output, flags=re.IGNORECASE | re.MULTILINE)
-            if match:
+            if match and not is_allowed_negated_privacy_refusal(str(pattern), output, match):
                 failures.append(f"forbidden_pattern matched {pattern!r}: {match.group(0)}")
 
     if language == "en" and CHINESE_TEXT.search(output):

@@ -190,6 +190,14 @@ LINT_RULES = (
         re.compile(r"(热线|电话|拨打|打)[^\n\d]{0,40}\d{5,}"),
         "Do not publish unverified hotline or agency numbers.",
     ),
+    LintRule(
+        "unimplemented-automation-claim",
+        re.compile(
+            r"(Agent\s*)?自动(维护|整理写入|保存|生成|追加|更新)|"
+            r"巡检自动生成|每月\s*1\s*日由巡检"
+        ),
+        "Do not claim unimplemented automatic state maintenance or patrol behavior.",
+    ),
 )
 
 LIVE_STATE_CONTENT_RULES = (
@@ -241,6 +249,11 @@ NEGATIVE_CONTEXT_MARKERS = (
     "禁止",
     "避免",
     "不得",
+    "不能",
+    "不会",
+    "未实现",
+    "Spec-only",
+    "spec-only",
     "Fail if",
     "fail if",
     "Do not",
