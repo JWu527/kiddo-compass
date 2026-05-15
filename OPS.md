@@ -17,6 +17,7 @@ Owner fields may be filled by the maintainer before a public release. Empty owne
 - Official health/development sources: review monthly during beta, then at least quarterly.
 - Method and practice sources: review quarterly or when a user incident exposes ambiguity.
 - Register or update official sources in `references/source-registry.json` before citing them from the evidence matrix.
+- Prefer official editorial, theory, or methodology pages over shop/product pages for broad method claims; use commerce/product pages only for a specific tool or product reference.
 - Evidence rows must include `source_id`, `source_title`, `issuer`, `source_ref`, `reviewed_at`, `next_review_at`, and `evidence_level`.
 - `official-consensus` and `needs-evaluation` rows must resolve every `source_id` to `references/source-registry.json`; TODO source URLs/refs are release blockers.
 - Update `reviewed_at` and `next_review_at` in `references/evidence-matrix.md` when the source check is complete.

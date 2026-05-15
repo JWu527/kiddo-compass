@@ -12,6 +12,22 @@ python3 scripts/release_gate.py
 
 该命令会先清理旧的 regression report 和旧 audit bundle，随后依次运行单元测试、release guardrails、beta KPI、source freshness、P0 regression、semantic score、audit bundle 构建、artifact inspect 和白名单内容比对。只有所有 hard-fail 检查通过后，`audit-bundle/kiddo-compass-audit-bundle.zip` 才可作为 public-beta candidate。
 
+对外评审只分享白名单产物，不分享工作区快照。需要给外部评审者生成分享包时运行：
+
+```bash
+make review-snapshot BUNDLE_ONLY=1
+```
+
+该命令先执行 release guardrails，再生成 `audit-bundle/kiddo-compass-audit-bundle.zip`，并打印唯一可分享路径。默认 `make review-snapshot` 会在 `.kiddo-compass-state/` 非空时失败，防止把含有本地 live state 的工作区误当成评审快照。
+
+清理旧 release 产物：
+
+```bash
+make clean-release-artifacts
+```
+
+`dist/*.zip` 不是 canonical public-beta artifact。不要从 `dist/` 取旧 zip 外发；public-beta 的 canonical artifact 只能是 release gate 生成的 `audit-bundle/kiddo-compass-audit-bundle.zip`。
+
 只需要构建白名单 audit bundle 时，也可以运行：
 
 ```bash
@@ -61,6 +77,17 @@ make audit-bundle
 GitHub Actions 中的 `Public Beta Gate` 直接调用 `python3 scripts/release_gate.py`，与本地 public-beta release gate 是同一入口。它不是线上监控替代品；线上 dashboard、真实用户反馈闭环和账号权限执行仍属于 App / 小程序平台层。
 
 OpenClaw agent 回归是 Hermes 不可用时的本地 fallback。运行前把当前 skill 复制到目标 profile 的 workspace，例如 `~/.openclaw/workspace-kiddo-regression/skills/kiddo-compass/`。不要使用指向仓库外部的 symlink；OpenClaw 会因为 `symlink-escape` 跳过该 skill。
+
+Hermes 不可用时，可用同一 release gate 结构跑 OpenClaw agent：
+
+```bash
+python3 scripts/release_gate.py \
+  --regression-runner openclaw-agent \
+  --openclaw-profile kiddo-regression \
+  --openclaw-model zai/glm-5.1 \
+  --openclaw-agent main \
+  --openclaw-session-prefix kiddo-p0
+```
 
 ## 版本规则
 

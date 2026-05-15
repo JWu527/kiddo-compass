@@ -19,6 +19,13 @@ from scripts.release_guardrails import build_package_file_list, load_manifest
 
 DEFAULT_REPORT = Path("dist/regression-p0.json")
 DEFAULT_BUNDLE = Path("audit-bundle/kiddo-compass-audit-bundle.zip")
+STALE_RELEASE_ARTIFACT_PATTERNS = (
+    "dist/*.zip",
+    "dist/regression-*.json",
+    "dist/beta-kpi.json",
+    "dist/quality-dashboard.html",
+    "dist/weekly-quality-report.md",
+)
 
 
 class GateFailure(RuntimeError):
@@ -105,6 +112,11 @@ def build_gate_plan(
             covers=("stale regression report prevention", "stale public-beta candidate prevention"),
         ),
         GateStep(
+            "clean stale release artifacts",
+            action="clear_stale_release_artifacts",
+            covers=("stale local release package prevention", "stale regression report prevention"),
+        ),
+        GateStep(
             "unit tests",
             command=(sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"),
             covers=("unit tests",),
@@ -167,6 +179,11 @@ def build_gate_plan(
             action="check_audit_bundle_allowlist",
             covers=("audit bundle content whitelist check",),
         ),
+        GateStep(
+            "no stale dist zips",
+            action="assert_no_stale_dist_zips",
+            covers=("stale local release package prevention",),
+        ),
     ]
 
 
@@ -174,6 +191,23 @@ def clear_previous_artifacts(*, report: Path, bundle: Path) -> None:
     for path in [report, bundle]:
         if path.exists():
             path.unlink()
+
+
+def clear_stale_release_artifacts(root: Path) -> list[Path]:
+    removed: list[Path] = []
+    for pattern in STALE_RELEASE_ARTIFACT_PATTERNS:
+        for path in sorted(root.glob(pattern)):
+            if path.is_file():
+                path.unlink()
+                removed.append(path)
+    return removed
+
+
+def assert_no_stale_dist_zips(root: Path) -> None:
+    stale = sorted(path for path in (root / "dist").glob("*.zip") if path.is_file())
+    if stale:
+        listed = ", ".join(path.relative_to(root).as_posix() for path in stale)
+        raise GateFailure(f"stale dist zip remains after release gate: {listed}")
 
 
 def require_regression_report(report: Path) -> None:
@@ -256,12 +290,24 @@ def run_gate(
             if step.action == "clear_artifacts":
                 print(f"\n==> {step.name}", flush=True)
                 clear_previous_artifacts(report=report_path, bundle=bundle_path)
+            elif step.action == "clear_stale_release_artifacts":
+                print(f"\n==> {step.name}", flush=True)
+                removed = clear_stale_release_artifacts(root)
+                if removed:
+                    print(
+                        "removed: "
+                        + ", ".join(path.relative_to(root).as_posix() for path in removed),
+                        flush=True,
+                    )
             elif step.action == "require_regression_report":
                 print(f"\n==> {step.name}", flush=True)
                 require_regression_report(report_path)
             elif step.action == "check_audit_bundle_allowlist":
                 print(f"\n==> {step.name}", flush=True)
                 check_audit_bundle_allowlist(root, bundle_path)
+            elif step.action == "assert_no_stale_dist_zips":
+                print(f"\n==> {step.name}", flush=True)
+                assert_no_stale_dist_zips(root)
             else:
                 _run_command(step, root=root)
         except GateFailure:
@@ -286,9 +332,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--openclaw-agent", default="main")
     parser.add_argument("--openclaw-session-prefix", default="public-beta")
     parser.add_argument("--print-plan", action="store_true")
+    parser.add_argument("--clean-release-artifacts", action="store_true")
     args = parser.parse_args(argv)
 
     root = args.root.resolve()
+    if args.clean_release_artifacts:
+        removed = clear_stale_release_artifacts(root)
+        for path in removed:
+            print(f"removed {path.relative_to(root).as_posix()}")
+        print(f"clean release artifacts complete: {len(removed)} removed")
+        return 0
+
     if args.print_plan:
         for step in build_gate_plan(
             root,

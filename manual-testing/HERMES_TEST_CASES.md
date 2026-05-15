@@ -1,5 +1,10 @@
 # Hermes Manual Test Cases
 
+Scope: non-runtime, non-release manual guardrail testing material. This file may
+intentionally contain red-flag phrases, unsafe examples, and identifier-like
+fixtures so humans can test scanners and model behavior. Do not use this file as
+release evidence, and do not include it in public artifacts.
+
 Use this file to test Kiddo Compass inside Hermes after local edits or before a public beta release.
 
 ## How to Run

@@ -18,6 +18,7 @@ from scripts.run_regression import (
     case_forbidden_patterns,
     case_required_patterns,
     compute_file_sha256,
+    find_fixed_day_promise,
     is_allowed_negated_privacy_refusal,
     load_cases,
     read_skill_version,
@@ -123,6 +124,9 @@ def _semantic_body_failures(
         match = pattern.search(output)
         if match:
             failures.append(f"{rule_name}: {match.group(0)}")
+    fixed_day_match = find_fixed_day_promise(output)
+    if fixed_day_match:
+        failures.append(f"fixed-day-promise: {fixed_day_match.group(0)}")
 
     if case:
         for pattern in case_required_patterns(case):

@@ -7,6 +7,7 @@ README.md
 README.en.md
 CONTRIBUTING.md
 SECURITY.md
+SHARING.md
 PUBLISHING.md
 OPS.md
 CHANGELOG.md
@@ -53,6 +54,7 @@ scripts/build_release_package.py
 scripts/quality_dashboard.py
 scripts/release_guardrails.py
 scripts/release_gate.py
+scripts/review_snapshot.py
 scripts/run_regression.py
 scripts/semantic_score.py
 scripts/source_freshness.py

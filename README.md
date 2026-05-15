@@ -73,7 +73,7 @@ kiddo-compass/
 ├── PUBLISHING.md
 ├── CODE_OF_CONDUCT.md
 ├── CHANGELOG.md
-├── HERMES_TEST_CASES.md             # Hermes 手动测试案例
+├── manual-testing/HERMES_TEST_CASES.md # Hermes 非发布手动测试案例
 ├── LICENSE
 └── .clawhubignore
 ```
@@ -143,7 +143,7 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 
 | 文件 | 用途 |
 | --- | --- |
-| `HERMES_TEST_CASES.md` | Hermes 手动测试案例与发布前抽样建议 |
+| `manual-testing/HERMES_TEST_CASES.md` | Hermes 非 runtime、非发布手动测试案例与发布前抽样建议 |
 | `PUBLIC_BETA_KANBAN.md` | 公测版分阶段优化看板 |
 | `PUBLIC_BETA_COVERAGE.md` | deep research 报告覆盖矩阵 |
 | `references/content-map.md` | 内容分层地图，定义 runtime-core、support、study-private 和 archive |
@@ -182,6 +182,7 @@ Kiddo Compass, my 3-year-old keeps asking for more stories at bedtime and cries 
 git status --short
 python3 scripts/release_guardrails.py check
 python3 scripts/release_gate.py
+python3 scripts/release_gate.py --regression-runner openclaw-agent --openclaw-profile kiddo-regression --openclaw-model zai/glm-5.1 --openclaw-agent main --openclaw-session-prefix kiddo-p0
 python3 scripts/beta_kpi_gate.py
 python3 scripts/run_regression.py --priority P0
 python3 scripts/run_regression.py --priority P0 --report dist/regression-p0.json

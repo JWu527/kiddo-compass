@@ -1,6 +1,8 @@
 import sys
 import unittest
 import json
+import io
+import contextlib
 import zipfile
 from pathlib import Path
 
@@ -55,6 +57,7 @@ class ProductClosureTests(unittest.TestCase):
             "run P0 regression",
             "require regression report",
             "semantic score",
+            "no stale dist zips",
         ]:
             self.assertIn(expected, names)
 
@@ -66,6 +69,84 @@ class ProductClosureTests(unittest.TestCase):
         self.assertIn("live state leak check", guardrail.covers)
         semantic = next(step for step in plan if step.name == "semantic score")
         self.assertIn("stale regression report check", semantic.covers)
+        stale_zip = next(step for step in plan if step.name == "no stale dist zips")
+        self.assertIn("stale local release package prevention", stale_zip.covers)
+
+    def test_release_gate_plan_passes_openclaw_agent_reproduction_flags(self):
+        plan = release_gate.build_gate_plan(
+            ROOT,
+            report=Path("dist/regression-p0-openclaw.json"),
+            regression_runner="openclaw-agent",
+            openclaw_profile="kiddo-regression",
+            openclaw_model="zai/glm-5.1",
+            openclaw_agent="main",
+            openclaw_session_prefix="kiddo-p0",
+        )
+        regression = next(step for step in plan if step.name == "run P0 regression")
+
+        self.assertIn("--runner", regression.command)
+        self.assertIn("openclaw-agent", regression.command)
+        self.assertIn("--openclaw-profile", regression.command)
+        self.assertIn("kiddo-regression", regression.command)
+        self.assertIn("--openclaw-model", regression.command)
+        self.assertIn("zai/glm-5.1", regression.command)
+        self.assertIn("--openclaw-session-prefix", regression.command)
+        self.assertIn("kiddo-p0", regression.command)
+
+    def test_release_gate_cleans_stale_release_artifacts_and_blocks_leftover_dist_zips(self):
+        root = self.scratch_dir("stale-release-artifacts")
+        dist = root / "dist"
+        dist.mkdir()
+        stale_zip = dist / "kiddo-compass.zip"
+        stale_report = dist / "regression-old.json"
+        stale_dashboard = dist / "quality-dashboard.html"
+        stale_weekly = dist / "weekly-quality-report.md"
+        for path in [stale_zip, stale_report, stale_dashboard, stale_weekly]:
+            path.write_text("stale", encoding="utf-8")
+
+        removed = release_gate.clear_stale_release_artifacts(root)
+
+        self.assertIn(stale_zip, removed)
+        self.assertIn(stale_report, removed)
+        self.assertIn(stale_dashboard, removed)
+        self.assertIn(stale_weekly, removed)
+        for path in [stale_zip, stale_report, stale_dashboard, stale_weekly]:
+            self.assertFalse(path.exists(), path)
+
+        stale_zip.write_text("stale", encoding="utf-8")
+        with self.assertRaises(release_gate.GateFailure) as context:
+            release_gate.assert_no_stale_dist_zips(root)
+
+        self.assertIn("stale dist zip", str(context.exception))
+
+    def test_review_snapshot_blocks_private_state_unless_bundle_only_and_prints_safe_path(self):
+        from scripts import review_snapshot
+
+        root = self.scratch_dir("review-snapshot")
+        state = root / ".kiddo-compass-state"
+        state.mkdir()
+        (state / "child-profile.md").write_text("姓名：张三", encoding="utf-8")
+
+        with self.assertRaises(review_snapshot.ReviewSnapshotError) as context:
+            review_snapshot.ensure_share_safe_root(root, bundle_only=False)
+
+        self.assertIn(".kiddo-compass-state", str(context.exception))
+        review_snapshot.ensure_share_safe_root(root, bundle_only=True)
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            review_snapshot.print_share_instructions(Path("audit-bundle/kiddo-compass-audit-bundle.zip"))
+
+        self.assertIn("Share only audit-bundle/kiddo-compass-audit-bundle.zip", output.getvalue())
+
+    def test_manual_hermes_cases_are_non_runtime_material(self):
+        self.assertFalse((ROOT / "HERMES_TEST_CASES.md").exists())
+        manual_file = ROOT / "manual-testing" / "HERMES_TEST_CASES.md"
+        self.assertTrue(manual_file.exists())
+        text = manual_file.read_text(encoding="utf-8")
+
+        self.assertIn("non-runtime", text.lower())
+        self.assertIn("non-release", text.lower())
 
     def test_release_gate_requires_regression_report(self):
         missing = self.scratch_dir("missing-regression-report") / "dist" / "regression-p0.json"
@@ -243,6 +324,14 @@ class ProductClosureTests(unittest.TestCase):
 
         self.assertEqual(failures, [])
 
+    def test_method_source_registry_prefers_non_commerce_positive_discipline_overview(self):
+        registry = json.loads((ROOT / "references" / "source-registry.json").read_text(encoding="utf-8"))
+        sources = {source["source_id"]: source for source in registry["sources"]}
+        overview = sources["pd-positive-discipline-overview"]
+
+        self.assertIn("About Positive Discipline", overview["source_title"])
+        self.assertNotRegex(overview["source_url"], r"/(?:store|shop|products?)(?:/|$)")
+
     def test_source_freshness_blocks_missing_registry_fields_and_stale_reviews(self):
         root = self.scratch_dir("source-freshness")
         references = root / "references"
@@ -385,6 +474,90 @@ class ProductClosureTests(unittest.TestCase):
 
         self.assertFalse(scored["ok"])
         self.assertIn("LEAK", scored["failed_ids"])
+
+    def test_semantic_score_flags_fixed_day_promises(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {
+                    "id": "FIXED-DAY",
+                    "language": "zh",
+                    "failures": [],
+                    "output": "坚持三天见效果，哭闹会明显减少。几晚会习惯。",
+                }
+            ],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertIn("FIXED-DAY", scored["failed_ids"])
+
+    def test_semantic_score_flags_fixed_repetition_promises(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {
+                    "id": "FIXED-REPETITION",
+                    "language": "en",
+                    "failures": [],
+                    "output": "Consistency across a few weeks usually shows clear improvement.",
+                }
+            ],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertIn("FIXED-REPETITION", scored["failed_ids"])
+
+    def test_semantic_score_allows_review_window_without_outcome_promise(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {
+                    "id": "REVIEW-WINDOW",
+                    "language": "zh",
+                    "failures": [],
+                    "output": "连续观察几天，记录每次吃饭有没有进步。下次看哭闹时长有没有变化。",
+                }
+            ],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertTrue(scored["ok"])
+
 
     def test_semantic_score_flags_information_preface_process_leak(self):
         report = {

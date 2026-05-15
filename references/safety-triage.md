@@ -101,3 +101,4 @@ Current public-beta skill does not include a verified region resource database. 
 2. Ask for the user's country/region only if the next step depends on it and the user is safe enough to answer.
 3. Do not provide phone numbers from memory. Add numbers only after maintainers verify and record them in a dedicated region resource file.
 4. Supported resource slots are `generic-zh`, `generic-en`, `CN`, and `SG`. If a slot has no verified publishable phone number, output institution types and care pathways only, not numbers.
+5. If the user explicitly asks for a hotline/phone number and the slot has no verified publishable phone number, say this before the resource list: `当前没有已验证号码配置，我不提供具体号码。` / `I will not provide a number because no verified number is configured.`
