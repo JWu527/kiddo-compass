@@ -558,6 +558,32 @@ class ProductClosureTests(unittest.TestCase):
 
         self.assertTrue(scored["ok"])
 
+    def test_semantic_score_allows_observation_frequency_metrics(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {
+                    "id": "OBSERVATION-FREQUENCY",
+                    "language": "zh",
+                    "failures": [],
+                    "output": "记录孩子每晚醒几次、打鼾是否伴随呼吸停顿或明显费力翻身。",
+                }
+            ],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertTrue(scored["ok"])
 
     def test_semantic_score_flags_information_preface_process_leak(self):
         report = {
@@ -764,6 +790,80 @@ class ProductClosureTests(unittest.TestCase):
         self.assertFalse(scored["ok"])
         self.assertIn("UNSAFE", scored["failed_ids"])
         self.assertNotIn("SAFE", scored["failed_ids"])
+
+    def test_semantic_score_flags_role_placeholder_and_meal_health_claims(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {
+                    "id": "ROLE",
+                    "language": "zh",
+                    "failures": [],
+                    "output": "跟孩子说：刚才爸爸/妈妈声音太大了。",
+                },
+                {
+                    "id": "MEAL",
+                    "language": "zh",
+                    "failures": [],
+                    "output": "一顿不吃不会怎样，下一顿再吃。",
+                },
+            ],
+        }
+
+        scored = score_results(
+            report,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertEqual({"ROLE", "MEAL"}, set(scored["failed_ids"]))
+
+    def test_semantic_score_flags_unstated_parent_role_assumption(self):
+        report = {
+            "metadata": {
+                "generated_at": "2026-05-14T00:00:00Z",
+                "skill_version": "0.4.2",
+                "eval_set_sha256": "sha",
+                "runner": "test",
+                "model_placeholder": "unit-test",
+            },
+            "results": [
+                {
+                    "id": "GENERIC",
+                    "language": "zh",
+                    "failures": [],
+                    "output": "爸爸在，我们停一下。",
+                },
+                {
+                    "id": "FATHER",
+                    "language": "zh",
+                    "failures": [],
+                    "output": "爸爸在旁边，故事讲完就睡觉。",
+                },
+            ],
+        }
+        eval_cases = [
+            {"id": "GENERIC", "language": "zh", "input": "孩子商场哭闹，我现在很乱。"},
+            {"id": "FATHER", "language": "zh", "role": "father", "input": "我是爸爸，孩子睡前讨价还价。"},
+        ]
+
+        scored = score_results(
+            report,
+            eval_cases=eval_cases,
+            expected_eval_set_sha256="sha",
+            expected_skill_version="0.4.2",
+        )
+
+        self.assertFalse(scored["ok"])
+        self.assertIn("GENERIC", scored["failed_ids"])
+        self.assertNotIn("FATHER", scored["failed_ids"])
 
     def test_semantic_score_flags_chinese_in_english_case(self):
         report = {
