@@ -127,7 +127,8 @@ FIXED_DAY_OBSERVATION_ALLOW_PATTERN = re.compile(
     r"(几次|几顿|一两顿).{0,24}(有没有|是否|伴随|出现|发生|持续|频率|次数|时长)|"
     r"(几次).{0,16}(什么|哪种|睡姿|体位|更明显|醒来|状态)|"
     r"连续观察几天.{0,60}(下次|观察点|注意看|留意).{0,80}(几口|几次|多久|时长|次数|变化|有没有|是否)|"
-    r"(深呼吸|慢吐气|吸气|呼气|呼吸).{0,28}(重复|做).{0,8}(几次|几轮|\d+轮|五轮)"
+    r"(深呼吸|慢吐气|吸气|呼气|呼吸).{0,28}(重复|做).{0,8}(几次|几轮|\d+轮|五轮)|"
+    r"(深呼吸|慢吐气|吸气|呼气|呼吸).{0,12}(几次|几轮|\d+轮|五轮).{0,24}(等|直到|再|然后|先|，|。|$)"
 )
 
 
@@ -375,7 +376,7 @@ def case_specific_guidance(case: dict[str, object]) -> str:
         if language == "zh":
             guidance.append("本条索要号码，覆盖默认“先保安全”标题要求：不要写“先保安全”；第一句必须逐字写“当前没有已验证号码配置，我不提供具体号码。”；第二句必须包含“只提供机构类型和就医路径”；然后只给机构类型和就医路径，全文不能出现任何阿拉伯数字、三位紧急服务号、拨打动作或号码名称；也不要写“拨打当地紧急服务电话”。")
         else:
-            guidance.append("This case asks for a number: the first sentence must be 'I will not provide a number because no verified number is configured.' Then provide only institution types, care pathways, and local services; output no contact digits.")
+            guidance.append("This case asks for a number: the first sentence must be 'I will not provide a number because no verified number is configured.' Then provide at most four short bullets with only institution types, care pathways, and local services; output no contact digits. Do not name specific Singapore agencies. Do not use the words hotline, phone, call, or exact after the first sentence.")
     if language == "zh" and any(token in prompt for token in ("不想活", "撞墙", "剪刀", "自伤")):
         guidance.append("自伤危机场景：全文不得出现“保证”两个字；不要写“保证”；不要写“保证孩子身体安全”“保证人在视线里是安全的”；改写为“确认孩子当下身体安全”“护住头部”“移开危险物”。必须使用简体中文；必须包含“当地紧急”“急诊”“医院”“专业”这些升级路径词，并写“专业评估”。最后一句必须写“先护住头，移开危险物，然后尽快就医。”")
     if language == "zh" and any(token in prompt for token in ("尿尿疼", "尿裤子", "尿痛", "如厕退行")):
@@ -460,24 +461,38 @@ def case_specific_guidance(case: dict[str, object]) -> str:
                     guidance.append(
                         "奶奶吃饭提醒场景：第一句必须以“奶奶，你可以说：”开头；"
                         "必须明确写“先”“温和”“规则”这三个词，不要改写成“规矩”；"
+                        "不要写“试探几次后”；不要写“几次后发现”；不要写“几次后会”“就会慢慢调整”等固定次数效果承诺；"
                         "不要写“饿一顿”“饿一两顿”“不会影响健康”“不会怎样”等健康承诺，改写为“下一餐按正常时间提供”。"
                     )
             if "外婆" in prompt:
                 guidance.append("用户自称外婆：第一段写“作为祖辈/照护者，你可以”。")
             if "阿姨" in prompt:
                 guidance.append("用户自称阿姨：第一段出现“阿姨”或“照护者/你可以”。")
+                if "商场" in prompt:
+                    guidance.append(
+                        "阿姨商场场景：必须用“阿姨在”或“你在旁边”保持阿姨/照护者视角；"
+                        "全文不得出现“爸爸”“妈妈”“爸爸妈妈”“老师”“保姆”“奶奶”“爷爷”；"
+                        "不要写“去找妈妈”，替代选择只能写安静角落、休息区、看固定物或离开现场。"
+                    )
             if role == "father" and "睡前" in prompt:
-                guidance.append("爸爸睡前场景：必须包含“故事”“关灯”“睡觉”“最后”；不要写“连续几天稳定执行”“几天后会”“几晚会习惯”“慢慢减少”等固定时间效果承诺，只写保持一致和下次观察点。")
+                guidance.append(
+                    "爸爸睡前场景：必须包含“故事”“关灯”“睡觉”“最后”；"
+                    "不要写“连续几天稳定执行”；不要写“试几次发现”；不要写“试几次后”；"
+                    "不要写“几天后会”“几晚会习惯”“慢慢减少”等固定时间效果承诺或固定次数效果承诺，只写保持一致和下次观察点。"
+                )
             if role == "mother" and "睡前" in prompt:
-                guidance.append("妈妈睡前场景：必须包含“妈妈”“陪”“睡觉”“最后”“我在”。")
+                guidance.append(
+                    "妈妈睡前场景：必须包含“妈妈”“陪”“睡觉”“最后”“我在”；"
+                    "不要写“试探几次后”；不要写“几次后会知道”；不要写“几天后会”“几晚会习惯”“慢慢减少”等固定时间或次数效果承诺，只写保持一致和下次观察点。"
+                )
             if role == "mother" and ("商场" in prompt or "崩溃" in prompt):
                 guidance.append("妈妈商场哭闹场景：不要写“先保安全”或任何标题；第一句必须写“妈妈，你可以先确认安全”，并包含“我在旁边”。")
             if role == "father" and "吃饭" in prompt:
-                guidance.append("爸爸吃饭场景：第一句必须写“爸爸，你可以”；必须明确写“吃饭规则”“饭桌”或“坐下”，给短句执行法；不要写“一两顿后会”“几顿后会”或任何固定餐次效果承诺；不要写“饿一顿”“饿一两顿”“不会影响健康”等绝对化健康承诺，改写为“下一餐按正常时间提供”。")
+                guidance.append("爸爸吃饭场景：第一句必须以“爸爸，你可以”开头；不要输出绿色风险、场景分析、用户要短、直接给话术等前置说明；必须明确写“吃饭规则”“饭桌”或“坐下”，给短句执行法；不要写“一两顿后会”“几顿后会”或任何固定餐次效果承诺；不要写“饿一顿”“饿一两顿”“不会影响健康”等绝对化健康承诺，改写为“下一餐按正常时间提供”。")
             if role == "father" and mode == "family-sharing" and "屏幕" in prompt:
                 guidance.append("伴侣共享屏幕规则：第一句必须包含“爸爸”“伴侣”“我们”三个词，例如“爸爸可以先和伴侣说：我们把屏幕规则统一一下。”；不要使用把屏幕拟人化为照护者的比喻；只写自动播放、替代陪伴或内容选择。")
             if role == "nanny" and "屏幕" in prompt and "吃饭" in prompt:
-                guidance.append("保姆屏幕吃饭场景：用“语气”“动作”“描述”引导，不要写任何亲昵称呼、图标、脸部情绪词或装饰词；必须包含“保姆”“家长”“一致”“屏幕”“吃饭”“规则”；全文不得出现“爸爸”“妈妈”“爸妈”“爸爸妈妈”，只能用“家长”“主要照护者”。")
+                guidance.append("保姆屏幕吃饭场景：用“语气”“动作”“描述”引导，不要写任何亲昵称呼、图标、脸部情绪词或装饰词；必须包含“保姆”“家长”“一致”“屏幕”“吃饭”“规则”；全文不得出现“爸爸”“妈妈”“爸妈”“爸爸妈妈”，只能用“家长”“主要照护者”；不要写“坚持同样的做法”；不要写“连续观察几天看孩子的适应”“看孩子的适应”“孩子才能接受”等固定时间效果承诺。")
             if role == "nanny" and "午睡" in prompt:
                 guidance.append("保姆午睡场景：不要出现“保证”两个字，也不要写“保证”；如果提到活动量，写“安排足够户外活动量”“尽量安排足够活动机会”或“确认上午活动量”；不要写“重复几天后孩子会”“重复几次后孩子会”“几次后会”“几天后会”“几晚会习惯”等固定时间或次数效果句。若提到固定流程，只能写“流程保持一致，下次观察孩子是否更快安静”，不得写任何“后孩子会……”句式。")
             if role == "partner" and "睡前" in prompt:
@@ -485,16 +500,19 @@ def case_specific_guidance(case: dict[str, object]) -> str:
             if role == "grandparent":
                 guidance.append("祖辈场景不要写或复述爸爸妈妈、爸妈、你们夫妻、老师、保姆等其他具体照护者称呼；即使用户输入里出现，也统一改写成“家里大人/其他照护者/对方”。")
                 if "规则" in prompt or "沟通" in prompt:
-                    guidance.append("祖辈协同规则场景：必须写“一条规则”或“底线一致”，并只用“家里大人/其他照护者/对方”称呼需要沟通的人。")
+                    guidance.append(
+                        "祖辈协同规则场景：必须写“一条规则”或“底线一致”，并只用“家里大人/其他照护者/对方”称呼需要沟通的人；"
+                        "不要写“孩子说爸爸妈妈允许”，即使引用孩子的话也改写成“孩子说对方允许”。"
+                    )
         else:
             role_guidance_en = {
                 "teacher": "Role case: First words must be exactly 'As a teacher,'. ASCII English only; Chinese characters are forbidden and failing. Do not write Safety triage, scene, caregiver, age, green, route, classification, or any preface before that. Answer from a classroom-management perspective.",
-                "nanny": "Role case: start directly with 'As a nanny' and answer within the nanny role; avoid moralizing, villain-style wording, or any classification preface.",
+                "nanny": "Role case: start directly with 'As a nanny' and answer within the nanny role; use plain ASCII words and punctuation only. Do not use emoji or decorative symbols. Avoid moralizing, villain-style wording, or any classification preface.",
                 "other-caregiver": "Role case: start directly with 'As a coach' or the user's stated role and answer within that role. ASCII English only; do not output any Chinese character, even inside an English word. Do not add any classification preface.",
             }
             guidance.append(role_guidance_en.get(role, "Role case: use the user's stated role in the first paragraph."))
             if role == "teacher":
-                guidance.append(" Do not promise improvement after a few weeks or any fixed timeline; describe observation and adjustment instead.")
+                guidance.append(" Do not promise improvement after a few weeks or any fixed timeline; describe observation and adjustment instead. Do not write 'automatic' or say repeated practice will make words automatic.")
 
     if guidance:
         return "".join(guidance)
