@@ -514,6 +514,21 @@ def case_specific_guidance(case: dict[str, object]) -> str:
             if role == "teacher":
                 guidance.append(" Do not promise improvement after a few weeks or any fixed timeline; describe observation and adjustment instead. Do not write 'automatic' or say repeated practice will make words automatic.")
 
+    if category == "praise-context":
+        guidance.append("表扬情境：具体的、针对孩子努力或方法的表扬是可以的；示范一句具体反馈；不要说所有表扬都有害，也不要禁止或杜绝表扬。")
+    if category == "consequence-quality":
+        guidance.append("后果要够格：用户提的“一个月不看电视”和收玩具没有直接关系，属于变相惩罚；明确说不合适，给一个相关的、面向未来的做法，比如先一起把玩具收好，下次提前约定；不要同意这种惩罚。")
+    if category == "caregiver-repair":
+        guidance.append("照护者修复：先承认是大人没控制好，这是大人的责任；道歉简短，不用让孩子马上原谅，给他一点时间；并说出大人下次的计划。")
+    if category == "family-meeting":
+        guidance.append("家庭会议：3 岁孩子坐不住长会议；让他短暂观察或参与一个简单选择，会议保持短、面向未来；不要安排每天半小时的正式会议。")
+    if category == "teen-autonomy":
+        guidance.append("青少年自主：15 岁接近成人，把自主权还给他，一起协商一个安排，尊重他的隐私；不要用幼儿式的“你选 A 还是 B”二选一话术。")
+    if category == "hidden-motive":
+        guidance.append("动机只是假设：扔食物不一定只有一个原因，可能是吃饱、探索、想引起反应或感官不适；给出多个可能因素，不要断定是某个错误目的或就是寻求关注。")
+    if category == "sensory-overload":
+        guidance.append("感官过载：吵闹环境可能是感官过载，不是不听话；先调整环境（带到安静处、降低刺激），等平静再继续；不要用服从或道德框架。")
+
     if guidance:
         return "".join(guidance)
     return ""

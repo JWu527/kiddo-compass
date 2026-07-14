@@ -242,11 +242,11 @@ Load: routing-guide.md.
 Scene: Repeats "I want", whines, or escalates after a no.
 Age band: 24-36 months, 3-5 years, 6+ years.
 Caregiver: Parent, grandparent.
-Risk check: Check hunger, tiredness, illness, and whether the demand masks connection needs.
+Risk check: Check hunger, tiredness, illness, sensory load, or a connection need; do not assume a fixed attention-seeking motive.
 Evidence: `method-source` + `practice-pattern` (Evidence Matrix: Whining / repeated demands).
 Quick help: Acknowledge once, hold the limit, and show the acceptable way to ask.
 Script: "你很想要。现在不能买。你可以用普通声音说：我很失望。"
-Prevention: Predictable yes/no rules, special time, and practice asking when calm.
+Prevention: Predictable yes/no rules, special time, practice asking when calm, and give specific positive feedback when the child retries with the acceptable voice.
 If it fails: Track when whining works; if adults sometimes give in after escalation, align the adult response first.
 Load: routing-guide.md.
 ```
@@ -274,7 +274,7 @@ Age band: 3-5 years, 6+ years.
 Caregiver: Parent, teacher.
 Risk check: Check whether fear of punishment, shame, or unsafe adult reaction is driving hiding.
 Evidence: `method-source` + `practice-pattern` (Evidence Matrix: Lying / hiding mistakes).
-Quick help: Make truth safer than cover-up.
+Quick help: Make truth safer than concealment; do not label the child or infer a fixed motive, and prioritize repair and safety.
 Script: "我看到杯子碎了。我们先处理玻璃。你告诉我发生了什么，我会帮你一起想办法。"
 Prevention: Repair-focused consequences, adult apology modeling, and less interrogation.
 If it fails: Look at the adult response after mistakes; if lying protects the child from harsh reactions, change the repair routine first.
@@ -287,9 +287,9 @@ Load: routing-guide.md.
 Scene: Refuses homework, reading, piano, sports practice, or repeated learning tasks.
 Age band: 6+ years.
 Caregiver: Parent, teacher.
-Risk check: Check learning difficulty, anxiety, sleep, unrealistic load, or humiliation around performance.
+Risk check: Check task difficulty, learning concerns, anxiety, sleep, overload, or humiliation around performance.
 Evidence: `practice-pattern` + `needs-evaluation` (Evidence Matrix: Homework / practice resistance).
-Quick help: Shrink the first step and give agency inside the boundary.
+Quick help: Shrink the first step and give agency inside the boundary; school-age children get more shared planning and practice support, while adolescents get autonomy and collaborative agreements.
 Script: "今天先做 10 分钟。你选先写语文还是先读英语。10 分钟后我们看下一步。"
 Prevention: Predictable routine, visible progress, and problem-solving meeting when calm.
 If it fails: Check skill mismatch and workload; ongoing distress may need teacher or professional assessment.
@@ -319,10 +319,10 @@ Age band: All.
 Caregiver: Parent, grandparent, teacher.
 Risk check: Immediate safety response if there is risk of hitting, shaking, locking up, starving, or serious harm.
 Evidence: `method-source` + `practice-pattern` (Evidence Matrix: Parent repair after yelling).
-Quick help: Create physical safety first, then repair with a short apology.
-Script: "刚才我声音太大了，吓到你了。那是我的责任。我现在先冷静一下，等会儿我们再说规则。"
+Quick help: Create physical safety first, then repair: the adult owns the behavior without excuses, the apology is brief and does not demand forgiveness, and the adult names the next plan.
+Script: "刚才我声音太大了，吓到你了。那是我的责任，不是你的错，你不需要马上原谅我。我先冷静一下，等会儿我们一起说下一步怎么做。"
 Prevention: Adult pause plan, tag-team handoff, fewer triggers during high-stress routines, and support for caregiver mental health.
-If it fails: If the adult repeatedly feels out of control, recommend counselor/therapist or trusted support and prioritize safety.
+If it fails: If repeated loss of control or any violence occurs, route to immediate safety support and professional help; otherwise a counselor, therapist, or trusted support can help the adult repair.
 Load: safety-triage.md, routing-guide.md.
 ```
 
@@ -354,6 +354,21 @@ Script: "先把孩子放到安全地方，或交给一个可信成年人。你�
 Prevention: Create an adult pause plan, tag-team handoff, remove dangerous objects, and reduce demands during high-stress routines.
 If it fails: After shaking or possible head/neck injury, urgent medical evaluation is needed if there is vomiting, unusual sleepiness, seizure, breathing change, loss of consciousness, weakness, or any concerning change. If the adult may hurt the child again, contact local emergency services, urgent medical help, or a trusted safe adult.
 Load: safety-triage.md, regional-resources.json.
+```
+
+### 23. Family problem-solving meeting
+
+```text
+Scene: A repeated family friction point (screen rules, chores, sibling conflict, schedules) that needs a shared plan.
+Age band: 3-5 years (observe or join one simple part), 6+ years (full participation). Default full participation is age four and above; a younger child may observe or join only one simple part.
+Caregiver: Parent, grandparent, multiple caregivers, and the child when developmentally ready.
+Risk check: Pause the meeting for safety, coercion, abuse, severe distress, or any adult loss of control; do not use the meeting to lecture or enforce.
+Evidence: `official-consensus` + `research-review` + `method-source` (Evidence Matrix: Nonviolent discipline method selection).
+Quick help: Keep it short and future-focused: one agenda item, several ideas from everyone, one safe trial to try this week, and one review point to check it later.
+Script: "我们今天只解决一件事：睡前怎么收玩具。每个人说一个办法，我们选一个安全的这周试试，过几天再看要不要改。"
+Prevention: No lectures, no forced compliment, no copied nine-step sequence, and no branded acronym; include the child's voice at a level they can manage.
+If it fails: If coercion, fear, or repeated adult loss of control appears, stop the meeting format and route to safety support; otherwise choose a different tool after two review cycles with no usable agreement.
+Load: evidence-matrix.md, routing-guide.md, learning-tracks.md.
 ```
 
 ## Family collaboration cards

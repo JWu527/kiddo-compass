@@ -45,6 +45,49 @@ class ReleaseGuardrailTests(unittest.TestCase):
         self.assertFalse(any("__MACOSX" in path for path in file_list))
         self.assertFalse(any(Path(path).name.startswith("._") for path in file_list))
 
+    def test_package_blocks_handoff_research_bundle_and_source_pdfs(self):
+        root = Path(__file__).resolve().parents[1]
+        manifest = load_manifest(root / "skill-package-manifest.txt")
+        file_list = build_package_file_list(root, manifest)
+
+        # The local research bundle and any source PDF/text extract never ship.
+        self.assertFalse(any(".handoff/" in path for path in file_list))
+        self.assertFalse(any(path.endswith(".pdf") for path in file_list))
+        self.assertFalse(any("/sources/" in path for path in file_list))
+        # The private 52-card notes and archived method frame stay out too.
+        self.assertNotIn("study-private/tool-cards.md", file_list)
+        self.assertNotIn("archive/methodology.md", file_list)
+
+        # Defense in depth: even if a path reached the blocker, it is rejected.
+        self.assertTrue(
+            release_guardrails._is_blocked_package_path(
+                ".handoff/positive-discipline-v0.1/sources/evidence/who-parenting-guidelines-2023.pdf"
+            )
+        )
+        self.assertTrue(release_guardrails._is_blocked_package_path("references/some-source-extract.pdf"))
+        self.assertTrue(release_guardrails._is_blocked_package_path("study-private/tool-cards.md"))
+        self.assertTrue(release_guardrails._is_blocked_package_path("archive/methodology.md"))
+
+    def test_positive_discipline_is_a_source_not_the_product(self):
+        root = Path(__file__).resolve().parents[1]
+        skill = (root / "SKILL.md").read_text(encoding="utf-8")
+        # Product identity is Kiddo Compass, not Positive Discipline.
+        self.assertIn("name: kiddo-compass", skill)
+        self.assertNotIn("name: positive-discipline", skill.lower())
+
+        registry = json.loads((root / "references" / "source-registry.json").read_text(encoding="utf-8"))
+        pd_method_sources = [
+            source
+            for source in registry["sources"]
+            if source.get("evidence_level") == "method-source"
+            and "positive discipline"
+            in (str(source.get("issuer", "")) + " " + str(source.get("source_title", ""))).lower()
+        ]
+        self.assertTrue(
+            pd_method_sources,
+            "Positive Discipline must remain registered as a method source, not a product affiliation",
+        )
+
     def test_root_live_state_files_are_release_blockers(self):
         if not hasattr(release_guardrails, "find_root_live_state_files"):
             self.fail("find_root_live_state_files is required to block root live state")
@@ -78,7 +121,10 @@ class ReleaseGuardrailTests(unittest.TestCase):
         errors = validate_runtime_methodology(methodology)
 
         self.assertEqual(errors, [])
-        self.assertLess(len(methodology.read_text(encoding="utf-8")), 3000)
+        self.assertLess(
+            len(methodology.read_text(encoding="utf-8")),
+            release_guardrails.MAX_RUNTIME_METHODOLOGY_CHARS,
+        )
 
     def test_runtime_methodology_lint_blocks_forced_names_and_emoji(self):
         with tempfile.TemporaryDirectory() as tmpdir:

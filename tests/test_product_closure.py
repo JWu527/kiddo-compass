@@ -12,8 +12,8 @@ sys.path.insert(0, str(ROOT))
 from scripts import release_gate
 from scripts.quality_dashboard import build_dashboard
 from scripts.semantic_score import score_results
-from scripts.run_regression import compute_file_sha256, read_skill_version
-from scripts.source_freshness import check_freshness
+from scripts.run_regression import case_specific_guidance, check_output, compute_file_sha256, load_cases, read_skill_version
+from scripts.source_freshness import check_freshness, parse_evidence_rows
 from scripts.state_service import StateStore
 from scripts.weekly_quality_report import build_weekly_report
 
@@ -331,6 +331,170 @@ class ProductClosureTests(unittest.TestCase):
 
         self.assertIn("About Positive Discipline", overview["source_title"])
         self.assertNotRegex(overview["source_url"], r"/(?:store|shop|products?)(?:/|$)")
+
+    def test_registry_carries_independent_evidence_sources(self):
+        registry = json.loads((ROOT / "references" / "source-registry.json").read_text(encoding="utf-8"))
+        sources = {source["source_id"]: source for source in registry["sources"]}
+
+        required = {
+            "who-parenting-interventions-2023",
+            "research-nonviolent-discipline-overview-2022",
+            "research-nonviolent-discipline-attunement-2023",
+            "cebc-positive-discipline-parent-education",
+            "pdep-everyday-parenting-2016",
+        }
+        self.assertTrue(
+            required.issubset(sources),
+            f"missing independent evidence sources: {sorted(required - set(sources))}",
+        )
+
+        # Independent evidence must not be relabeled as branded method material.
+        self.assertEqual(
+            sources["who-parenting-interventions-2023"]["evidence_level"], "official-consensus"
+        )
+        self.assertEqual(
+            sources["research-nonviolent-discipline-overview-2022"]["evidence_level"], "research-review"
+        )
+        self.assertEqual(
+            sources["research-nonviolent-discipline-attunement-2023"]["evidence_level"], "research-review"
+        )
+        self.assertEqual(
+            sources["cebc-positive-discipline-parent-education"]["evidence_level"],
+            "evidence-clearinghouse",
+        )
+        self.assertEqual(
+            sources["pdep-everyday-parenting-2016"]["evidence_level"], "method-source"
+        )
+
+        # Every independent source cites its original online URL, never the local handoff path.
+        for source_id in sorted(required):
+            url = sources[source_id].get("source_url", "")
+            self.assertTrue(url.startswith(("http://", "https://")), f"{source_id}: missing online source_url")
+            self.assertNotIn(".handoff", url, f"{source_id}: must not cite the local handoff path")
+
+        # PDEP is a distinct program from Jane Nelsen's branded Positive Discipline.
+        pdep_notes = sources["pdep-everyday-parenting-2016"].get("notes", "").lower()
+        self.assertIn("not jane nelsen", pdep_notes)
+        self.assertIn("separate program", pdep_notes)
+
+    def test_positive_discipline_sources_remain_method_source(self):
+        registry = json.loads((ROOT / "references" / "source-registry.json").read_text(encoding="utf-8"))
+        sources = {source["source_id"]: source for source in registry["sources"]}
+        for source_id in ["pd-positive-discipline-overview", "pd-positive-discipline-tools-book"]:
+            self.assertIn(source_id, sources)
+            self.assertEqual(sources[source_id]["evidence_level"], "method-source")
+
+    def test_evidence_matrix_has_method_level_nonviolent_discipline_row(self):
+        rows = parse_evidence_rows(ROOT / "references" / "evidence-matrix.md")
+
+        method_rows = [
+            row
+            for row in rows
+            if "nonviolent" in row.get("topic", "").lower()
+            or "discipline method selection" in row.get("topic", "").lower()
+        ]
+        self.assertTrue(method_rows, "no method-level nonviolent discipline selection row found")
+
+        row = method_rows[0]
+        # Traceable: a traceable evidence level plus a non-empty source bundle.
+        self.assertIn("official-consensus", row.get("evidence_level", ""))
+        self.assertIn("research-review", row.get("evidence_level", ""))
+
+        source_ids = row.get("source_id", "")
+        for required_id in [
+            "who-parenting-interventions-2023",
+            "research-nonviolent-discipline-overview-2022",
+            "research-nonviolent-discipline-attunement-2023",
+            "cebc-positive-discipline-parent-education",
+            "pdep-everyday-parenting-2016",
+            "pd-positive-discipline-overview",
+        ]:
+            self.assertIn(required_id, source_ids, f"method row missing source {required_id}")
+
+        # The broad independent-evidence bundle must not be sprayed across scene rows.
+        bundle = {
+            "who-parenting-interventions-2023",
+            "research-nonviolent-discipline-overview-2022",
+            "research-nonviolent-discipline-attunement-2023",
+            "cebc-positive-discipline-parent-education",
+            "pdep-everyday-parenting-2016",
+        }
+        sprayed = [
+            row.get("topic", "<unknown>")
+            for row in rows
+            if all(identifier in row.get("source_id", "") for identifier in bundle)
+        ]
+        self.assertEqual(
+            len(sprayed),
+            1,
+            f"broad evidence bundle must live in exactly one method-level row, found in: {sprayed}",
+        )
+
+    def test_new_behavior_regression_cases_are_deterministic(self):
+        cases = {
+            case["id"]: case
+            for case in load_cases(ROOT / "references" / "evaluation-set.jsonl")
+        }
+
+        # (case id, correct caregiver-facing output, wrong output that must be flagged)
+        specs = [
+            (
+                "P1-PRAISE-CONTEXT-01",
+                "具体的、针对孩子努力的表扬是可以的；比如肯定他刚才坚持把积木搭完。",
+                "表扬都有害，应该禁止表扬，少夸孩子。",
+            ),
+            (
+                "P1-CONSEQUENCE-QUALITY-01",
+                "一个月不看电视和收玩具没有直接关系；用相关的、面向未来的做法，比如先一起把玩具收好。",
+                "可以，这样可以罚他一个月不看电视。",
+            ),
+            (
+                "P1-CAREGIVER-REPAIR-01",
+                "先承认是大人没控制好，这是大人的责任；道歉简短，不用让孩子马上原谅，给他一点时间。",
+                "你要让他马上接受道歉，要求他原谅你。",
+            ),
+            (
+                "P1-FAMILY-MEETING-01",
+                "3 岁孩子还坐不住长会议；让他短暂观察，或参与一个简单选择，整体保持短、面向未来。",
+                "每天开半小时正式会议，让他完整参与。",
+            ),
+            (
+                "P1-TEEN-AUTONOMY-01",
+                "15 岁接近成人，把自主权还给他，一起协商一个安排，也尊重他的隐私。",
+                "你选先写数学还是先写英语。",
+            ),
+            (
+                "P1-HIDDEN-MOTIVE-01",
+                "扔食物不一定只有一个原因，可能是吃饱、探索、想引起反应或感官不适；很难断定是某个动机。",
+                "就是寻求关注，没错。",
+            ),
+            (
+                "P1-SENSORY-OVERLOAD-01",
+                "商场太吵可能是感官过载；先调整环境，带到安静处，等平静再继续。",
+                "他不听话，必须服从，让他服从。",
+            ),
+        ]
+
+        for case_id, good_output, bad_output in specs:
+            self.assertIn(case_id, cases, f"missing regression case {case_id}")
+            case = cases[case_id]
+            # The runner is instructed how to answer this case.
+            self.assertTrue(
+                case_specific_guidance(case),
+                f"{case_id} is missing case-specific guidance",
+            )
+            # A correct answer is accepted.
+            good_failures = check_output(case, good_output)
+            self.assertEqual(
+                good_failures,
+                [],
+                f"{case_id} correct output was rejected: {good_failures}",
+            )
+            # A wrong answer is flagged (missing required contract or matched forbidden behavior).
+            self.assertTrue(
+                check_output(case, bad_output),
+                f"{case_id} wrong output was not flagged",
+            )
 
     def test_source_freshness_blocks_missing_registry_fields_and_stale_reviews(self):
         root = self.scratch_dir("source-freshness")

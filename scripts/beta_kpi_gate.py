@@ -57,6 +57,8 @@ SKIP_STATIC_LINT_PATHS = {
 
 EVIDENCE_LABELS = {
     "official-consensus",
+    "research-review",
+    "evidence-clearinghouse",
     "method-source",
     "practice-pattern",
     "needs-evaluation",

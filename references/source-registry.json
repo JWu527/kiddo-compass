@@ -264,7 +264,57 @@
       "reviewed_at": "2026-05-13",
       "next_review_at": "2026-08-13",
       "evidence_level": "method-source",
-      "notes": "Official Positive Discipline tool source for method calibration."
+      "notes": "Official Positive Discipline tool source for method calibration. Official Positive Discipline materials are method sources, not independent consensus."
+    },
+    {
+      "source_id": "who-parenting-interventions-2023",
+      "source_title": "Guidelines on parenting interventions to prevent maltreatment and enhance parent-child relationships with children aged 0-17 years",
+      "issuer": "World Health Organization",
+      "source_url": "https://www.who.int/publications/i/item/9789240065505",
+      "reviewed_at": "2026-07-13",
+      "next_review_at": "2026-10-13",
+      "evidence_level": "official-consensus",
+      "notes": "Official consensus baseline for evidence-based parenting interventions: reduce maltreatment and harsh parenting, strengthen parent-child relationships, reduce child and caregiver mental-health problems. Broad parenting evidence does not validate every branded tool."
+    },
+    {
+      "source_id": "research-nonviolent-discipline-overview-2022",
+      "source_title": "Nonviolent discipline tools: systematic overview of reviews (Quail & Ward, 2022)",
+      "issuer": "Quail & Ward (Trauma, Violence, & Abuse)",
+      "source_url": "https://doi.org/10.1177/1524838020967340",
+      "reviewed_at": "2026-07-13",
+      "next_review_at": "2026-10-13",
+      "evidence_level": "research-review",
+      "notes": "Peer-reviewed systematic overview covering hundreds of reviews and thousands of primary studies. Supports a broad nonviolent-discipline tool category; does not imply every branded tool has equal evidence. Gaps remain in home implementation and de-escalation research."
+    },
+    {
+      "source_id": "research-nonviolent-discipline-attunement-2023",
+      "source_title": "Attunement and context-sensitive discipline tool selection (Quail & Ward, 2023)",
+      "issuer": "Quail & Ward (International Journal of Environmental Research and Public Health)",
+      "source_url": "https://doi.org/10.3390/ijerph20247187",
+      "reviewed_at": "2026-07-13",
+      "next_review_at": "2026-10-13",
+      "evidence_level": "research-review",
+      "notes": "Peer-reviewed review arguing that sensitively matching a response to the child's signals and context may matter more than any single tool. Attunement evidence is suggestive and the authors state direct research is still needed."
+    },
+    {
+      "source_id": "cebc-positive-discipline-parent-education",
+      "source_title": "Positive Discipline Parent Education (CEBC program review)",
+      "issuer": "California Evidence-Based Clearinghouse for Child Welfare (CEBC)",
+      "source_url": "https://www.cebc4cw.org/program/positive-discipline-parent-education/",
+      "reviewed_at": "2026-07-13",
+      "next_review_at": "2026-10-13",
+      "evidence_level": "evidence-clearinghouse",
+      "notes": "Independent program-evidence rating. CEBC scientific rating is 3 (Promising Research Evidence); lower numbers are stronger, so this is promising evidence, not the strongest tier. Studies show positive outcomes but with small samples, parent-reported measures, attrition, and short or absent controlled follow-up."
+    },
+    {
+      "source_id": "pdep-everyday-parenting-2016",
+      "source_title": "Positive Discipline in Everyday Parenting (PDEP), Fourth Edition",
+      "issuer": "Joan E. Durrant / Save the Children Sweden",
+      "source_url": "https://resourcecentre.savethechildren.net/document/positive-discipline-everyday-parenting-pdep-fourth-edition",
+      "reviewed_at": "2026-07-13",
+      "next_review_at": "2026-10-13",
+      "evidence_level": "method-source",
+      "notes": "Rights-based parenting manual offering structure around long-term goals, warmth and structure, child development, and problem solving. PDEP is a separate program and is not Jane Nelsen's branded Positive Discipline program."
     },
     {
       "source_id": "internal-scenario-library",

@@ -24,6 +24,11 @@
 - `archive/legacy-learning-path.md`：迁移旧固定 30 天课程，明确仅作自学参考，不是默认学习路径。
 - `references/source-registry.json`：新增官方和内部来源注册表，为 evidence matrix 的 `source_id` 提供可追溯 URL 或内部引用。
 - `scripts/release_gate.py` 和 `make release-gate`：新增 public-beta 统一发布门禁，串联单元测试、guardrails、source freshness、P0 regression、semantic score、audit bundle 构建、inspect 和白名单比对。
+- `references/source-registry.json`：新增 WHO 育儿干预指南、Quail & Ward 2022/2023 研究综述、CEBC 项目证据评估、PDEP 第四版手册五条独立证据来源；独立证据与 Positive Discipline 品牌方法来源分流，PDEP 标注为独立项目。
+- `references/evidence-matrix.md` + `scripts/beta_kpi_gate.py`：证据分类新增 `research-review`、`evidence-clearinghouse`，并补一条可追溯的“非暴力管教方法选择”方法级行。
+- `references/scenario-template.md`：新增“家庭问题解决会议”场景卡；`references/learning-tracks.md`：新增 `family-problem-solving` 目标驱动 track。
+- `references/evaluation-set.jsonl` + `scripts/run_regression.py`：新增 7 条确定性行为回归用例（表扬情境、变相惩罚、照护者修复、幼儿家庭会议、青少年自主、动机假设、感官过载）及对应 case 指引。
+- `scripts/release_guardrails.py`：打包黑名单增加 `.handoff/` 与 `.pdf`，防止本地研究资料或 PDF 进入发布包。
 
 ### Changed
 
@@ -49,6 +54,9 @@
 - `references/safety-triage.md`、`references/evidence-matrix.md`、`references/scenario-template.md` 和 `references/evaluation-set.jsonl` 强化发展疑虑与成人失控场景边界：不诊断、不暴露内部分诊标签、不输出未验证号码，并按 generic-zh / generic-en / CN / SG 资源槽位给出本地路径。
 - `references/methodology.md`、`references/accessibility-i18n.md`、`references/dialogue-modes.md`、`references/scenario-guide.md`、`references/grandparent-strategies.md` 和 `references/evaluation-set.jsonl` 收敛硬编码称呼、亲昵称谓和装饰符号依赖，补齐多照护者、formal、one-sentence、TTS 与危机场景风格门禁。
 - `scripts/state_service.py`、`references/state-schema.md`、`references/platform-integration.md` 和 `references/feature-status.md` 对齐本地状态参考实现：支持 ChildProfile / Case / Intervention / Outcome / ConsentLog、写入确认摘要和 view/export/correct/delete/anonymize 数据权利操作，并明确平台级 UI、权限和账号能力仍为 Spec-only。
+- `references/methodology.md`：强化先校准再用工具、动机只是假设、赞美看情境、后果要够格、内部术语不外露五条运行规则。
+- `references/routing-guide.md`：`6+y` 区分学龄与青少年，仅在用户给出明确年龄或情境时按青少年引导，不改动持久年龄段取值。
+- `references/scenario-template.md`：修订撒娇/重复要求、说谎/隐瞒、作业/练习抗拒、照护者吼叫与修复四张卡，去除固定动机归因，补充具体正向反馈与不强迫原谅。
 
 ## 0.4.2 - 2026-05-13
 

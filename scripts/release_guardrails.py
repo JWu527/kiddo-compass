@@ -45,6 +45,8 @@ BLOCKED_PACKAGE_PATTERNS = (
     re.compile(r"\.private\.md$"),
     re.compile(r"\.local\.md$"),
     re.compile(r"\.pyc$"),
+    re.compile(r"(^|/)\.handoff(/|$)"),
+    re.compile(r"\.pdf$"),
 )
 
 INTERNAL_STUDY_NOTES_REQUIRING_COPYRIGHT_REVIEW = {
@@ -79,7 +81,10 @@ SKIP_STATIC_LINT_PATHS = {
 }
 
 MAX_DESCRIPTION_CHARS = 220
-MAX_RUNTIME_METHODOLOGY_CHARS = 3000
+# Accommodates the required runtime contract set (safety triage, action-first
+# output, context-before-tool, motive/praise/consequence boundaries). Deep
+# content stays in study-private/archive; raise only when adding a mandated rule.
+MAX_RUNTIME_METHODOLOGY_CHARS = 4000
 REQUIRED_FRONTMATTER_FIELDS = {
     "name",
     "version",

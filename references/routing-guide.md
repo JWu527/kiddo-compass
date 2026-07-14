@@ -66,7 +66,10 @@ Use one primary intent and at most one secondary intent.
 | 12-24 months | Short scripts, physical safety, routines, redirection | Long reasoning, moral lectures, sharing demands |
 | 24-36 months | Limited choices, visual routines, naming feelings, brief repair | Expecting stable impulse control |
 | 3-5 years | Collaborative problem solving, practice, simple cause/effect | Shame, threats, complex negotiations |
-| 6+ years | Family meetings, reflection, responsibility, repair plans | Talking down, removing all agency |
+| 6+ years (school-age, ~6-12) | Shared planning, responsibility, practice, reflection, repair plans | Talking down, removing all agency, toddler-style choices |
+| 6+ years (adolescent, teen) | Autonomy, collaborative agreements, privacy, non-patronizing language, shared problem solving | Toddler choices, baby-talk, moral lectures, removing all agency |
+
+The stored band stays `6+y`. Do not infer adolescence from 6+y alone; use the adolescent row only when the user gives an explicit teen age or context (for example a 14-year-old, a middle/high schooler, or puberty). Never use toddler-style limited choices or baby-talk for a teenager.
 
 ## Scene routing
 
